@@ -1,0 +1,86 @@
+// =============================================================================
+// PRISMA SCHEMA — Port Freight & Container Routing Optimizer
+// =============================================================================
+// SQLite for local hackathon; swap datasource to postgresql for production.
+// Event-sourced ledger pattern: ContainerEvent is append-only (immutable).
+// =============================================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── Vessel ──────────────────────────────────────────────────────────────────
+// Represents a ship docked at or approaching the port.
+model Vessel {
+  id          String   @id @default(cuid())
+  name        String
+  callSign    String   @unique
+  eta         DateTime
+  berthNumber Int
+  berthStatus String   @default("APPROACHING") // APPROACHING | DOCKED | DEPARTING
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  containers Container[]
+}
+
+// ─── YardSlot ────────────────────────────────────────────────────────────────
+// A physical location in the container yard, addressed by Bay(X), Row(Y), Tier(Z).
+// Each slot can hold exactly 0 or 1 container at a time.
+model YardSlot {
+  id         String  @id @default(cuid())
+  bay        Int     // X coordinate (along the quay)
+  row        Int     // Y coordinate (perpendicular to quay)
+  tier       Int     // Z coordinate (stack height, 1 = ground)
+  isOccupied Boolean @default(false)
+
+  currentContainer Container? // 0 or 1 container via relation
+
+  @@unique([bay, row, tier]) // No two slots share the same physical address
+}
+
+// ─── Container ───────────────────────────────────────────────────────────────
+// The core entity. Each container has a lifecycle from vessel to truck gate.
+model Container {
+  id             String   @id // Industry-standard ID e.g. "MSCU-928374"
+  type           String   // DRY | REEFER | HAZMAT
+  weightKg       Float
+  dwellTimeHours Float    @default(0)
+  priorityLevel  String   @default("MEDIUM") // HIGH | MEDIUM | LOW
+  status         String   @default("INBOUND") // INBOUND | YARD_STACKED | READY_FOR_PICKUP | DISPATCHED
+  carbonSavedKg  Float    @default(0)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  // Relations
+  vesselId       String?
+  vessel         Vessel?   @relation(fields: [vesselId], references: [id])
+
+  currentSlotId  String?   @unique // 1:1 — a container occupies at most one slot
+  currentSlot    YardSlot? @relation(fields: [currentSlotId], references: [id])
+
+  events         ContainerEvent[]
+}
+
+// ─── ContainerEvent (Immutable Ledger) ───────────────────────────────────────
+// Append-only audit log. Every movement, inspection, or status change is a new
+// row — never updated or deleted. This is "Git for containers".
+model ContainerEvent {
+  id              String   @id @default(cuid())
+  containerId     String
+  eventType       String   // DISCHARGED | MOVED_IN_YARD | INSPECTED | LOADED_ON_TRUCK
+  sourceLocation  String?  // e.g. "Vessel:VSL-001" or "Bay:3,Row:2,Tier:1"
+  targetLocation  String?  // e.g. "Bay:5,Row:1,Tier:2"
+  craneOperatorId String?  // Operator badge ID for accountability
+  timestamp       DateTime @default(now())
+  metadata        String?  // JSON string for sensor logs, temperature readings, notes
+
+  container       Container @relation(fields: [containerId], references: [id])
+
+  @@index([containerId, timestamp]) // Fast lookups for container history
+}

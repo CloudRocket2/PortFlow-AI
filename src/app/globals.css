@@ -1,0 +1,70 @@
+@import "tailwindcss";
+
+:root {
+  --background: #000000;
+  --foreground: #ffffff;
+  --sidebar-bg: #000000;
+  --card-bg: #000000;
+  --card-border: #262626; /* neutral-800 */
+  --accent-blue: #ffffff;
+  --accent-green: #ffffff;
+  --accent-red: #ffffff;
+  --accent-amber: #ffffff;
+  --text-muted: #737373; /* neutral-500 */
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans, Arial, Helvetica, sans-serif);
+}
+
+/* Custom scrollbar for minimalist theme */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: #000000;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #262626;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #525252;
+}
+
+/* Minimalist Panel Utility */
+.minimal-panel {
+  background: #000000;
+  border: 1px solid #262626;
+  border-radius: 4px; /* subtle rounding */
+}
+
+/* Minimal Scrollbar for lists */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+@keyframes slide-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-slide-in {
+  animation: slide-in 0.3s ease-out forwards;
+}
