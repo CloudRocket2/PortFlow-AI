@@ -7,17 +7,19 @@
 // =============================================================================
 
 import { PrismaClient } from "@prisma/client";
+import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log("🚢 Seeding PortFlow AI database...\n");
+  console.log("⚓ Seeding PortFlow AI database...\n");
 
-  // ─── Clear existing data ────────────────────────────────────────────────
+  // 🧹 Clear existing data --------------------------------------------------
   await prisma.containerEvent.deleteMany();
   await prisma.container.deleteMany();
   await prisma.yardSlot.deleteMany();
   await prisma.vessel.deleteMany();
+  await prisma.user.deleteMany();
 
   // ─── 1. Create Vessels ──────────────────────────────────────────────────
   console.log("  Creating vessels...");
@@ -283,9 +285,22 @@ async function main() {
     }
   }
 
-  console.log(`  ✓ ${totalEvents} container events created across ${eventHistories.length} containers\n`);
+  console.log(`  📝 ${totalEvents} container events created across ${eventHistories.length} containers\n`);
 
-  // ─── Summary ────────────────────────────────────────────────────────────
+  // 🔐 5. Create Authentication Users ---------------------------------------
+  console.log("  Creating users...");
+  const hashedPassword = await bcrypt.hash("admin123", 10);
+  const users = [
+    { email: "director@portflow.com", roleId: "DIR-01", name: "Sarah Chen", department: "Executive Operations", clearance: "LEVEL 5 (OMEGA)", password: hashedPassword },
+    { email: "yardmaster@portflow.com", roleId: "OPS-04", name: "David Miller", department: "Yard Logistics", clearance: "LEVEL 4 (DELTA)", password: hashedPassword },
+    { email: "security@portflow.com", roleId: "SEC-09", name: "Michael Chang", department: "Access Control", clearance: "LEVEL 2 (SIGMA)", password: hashedPassword },
+    { email: "crane.op@portflow.com", roleId: "EQP-12", name: "Elena Rodriguez", department: "Heavy Machinery", clearance: "LEVEL 2 (SIGMA)", password: hashedPassword },
+  ];
+
+  await prisma.user.createMany({ data: users });
+  console.log(`  🔐 4 users created (password: admin123)`);
+
+  // 📈 Summary ────────────────────────────────────────────────────────────
   const containerCount = await prisma.container.count();
   const occupiedSlots = await prisma.yardSlot.count({ where: { isOccupied: true } });
   const eventCount = await prisma.containerEvent.count();

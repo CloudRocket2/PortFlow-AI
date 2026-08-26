@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   Ship,
   Truck,
@@ -12,6 +12,7 @@ import {
   Container,
   LineChart,
   Radio,
+  Lock,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -26,58 +27,75 @@ const navItems = [
 
 export default function Sidebar() {
   const pathname = usePathname();
+  const router = useRouter();
   const [collapsed, setCollapsed] = useState(false);
+
+  const handleLogout = async () => {
+    try {
+      await fetch("/api/auth/logout", { method: "POST" });
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("portflow_role");
+        localStorage.removeItem("portflow_clearance");
+      }
+      router.push("/login");
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
 
   return (
     <aside
-      className={`
-        flex flex-col bg-black border-r border-neutral-800
-        transition-all duration-300 ease-in-out h-full relative z-20 shrink-0
-        ${collapsed ? "w-[68px]" : "w-[240px]"}
-      `}
+      className={`bg-black border-r border-neutral-800 text-white flex flex-col h-full transition-all duration-300 ${
+        collapsed ? "w-16" : "w-64"
+      }`}
     >
-      {/* Logo / Brand */}
-      <div className="flex items-center gap-3 px-4 py-5 border-b border-neutral-800">
-        <div className="flex items-center justify-center w-9 h-9 border border-white shrink-0">
-          <Anchor className="w-5 h-5 text-white" />
+      {/* Brand */}
+      <div className="h-16 flex items-center justify-center border-b border-neutral-800 shrink-0">
+        <div className="flex items-center gap-3">
+          <Anchor className="w-6 h-6 text-white" />
+          {!collapsed && (
+            <span className="font-bold text-lg tracking-widest uppercase">
+              PortFlow OS
+            </span>
+          )}
         </div>
-        {!collapsed && (
-          <div className="overflow-hidden">
-            <h1 className="text-sm font-bold uppercase tracking-widest text-white leading-tight truncate">
-              PortFlow
-            </h1>
-            <p className="text-[10px] font-mono text-neutral-500 leading-tight">
-              TOS MODULE
-            </p>
-          </div>
-        )}
       </div>
 
-      {/* Navigation Links */}
-      <nav className="flex-1 py-4 px-2 space-y-1">
+      {/* Nav Links */}
+      <nav className="flex-1 py-6 flex flex-col gap-2 px-3 overflow-y-auto hide-scrollbar">
         {navItems.map(({ href, label, icon: Icon }) => {
           const isActive = pathname === href;
           return (
             <Link
               key={href}
               href={href}
-              className={`
-                flex items-center gap-3 px-3 py-2.5 text-xs font-mono tracking-widest uppercase
-                transition-all duration-200
+              title={collapsed ? label : undefined}
+              className={`flex items-center gap-3 px-3 py-3 font-mono text-xs tracking-widest uppercase transition-all
                 ${
                   isActive
                     ? "bg-white text-black"
-                    : "text-neutral-500 hover:text-white hover:bg-neutral-900"
+                    : "text-neutral-500 hover:text-white hover:bg-neutral-900 border border-transparent"
                 }
+                ${collapsed ? "justify-center" : ""}
               `}
-              title={collapsed ? label : undefined}
             >
-              <Icon className="w-4 h-4 shrink-0" />
+              <Icon className="w-5 h-5 shrink-0" />
               {!collapsed && <span className="truncate">{label}</span>}
             </Link>
           );
         })}
       </nav>
+
+      <div className="p-2 border-t border-neutral-800">
+        <button
+          onClick={handleLogout}
+          className="w-full flex items-center justify-center gap-3 px-3 py-2 text-xs font-mono tracking-widest uppercase text-neutral-500 hover:text-white hover:bg-neutral-900 transition-colors"
+          title={collapsed ? "Lock / Logout" : undefined}
+        >
+          <Lock className="w-4 h-4 shrink-0" />
+          {!collapsed && <span className="truncate">Lock / Logout</span>}
+        </button>
+      </div>
 
       {/* Collapse Toggle */}
       <button

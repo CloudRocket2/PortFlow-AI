@@ -84,3 +84,16 @@ model ContainerEvent {
 
   @@index([containerId, timestamp]) // Fast lookups for container history
 }
+
+// 🔐 User (Authentication & Roles)
+model User {
+  id         String   @id @default(cuid())
+  email      String   @unique
+  password   String   // Hashed via bcrypt
+  roleId     String
+  name       String
+  department String
+  clearance  String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
