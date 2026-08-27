@@ -9,7 +9,7 @@ import {
   Anchor,
   ChevronLeft,
   ChevronRight,
-  Container,
+  Globe,
   LineChart,
   Radio,
   Lock,
@@ -17,7 +17,7 @@ import {
 import { useState } from "react";
 
 const navItems = [
-  { href: "/", label: "Terminal Operations", icon: Container },
+  { href: "/", label: "Global Bulk Radar", icon: Globe },
   { href: "/chartering", label: "Fleet Chartering", icon: Ship },
   { href: "/forecast", label: "Market Forecast", icon: LineChart },
   { href: "/ai-logs", label: "AI Assistant", icon: BrainCircuit },
