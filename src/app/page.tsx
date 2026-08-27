@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import ContainerTable from "@/components/ContainerTable";
+import MultiVoyageLedger from "@/components/MultiVoyageLedger";
 import DwellTimeChart from "@/components/DwellTimeChart";
 import BottleneckAlerts from "@/components/BottleneckAlerts";
 import OptimizerPanel from "@/components/OptimizerPanel";
@@ -120,8 +120,8 @@ export default function DashboardPage() {
         {/* Row 2: AI Optimization Panel */}
         <OptimizerPanel />
 
-        {/* Row 3: Full-width Container Table */}
-        <ContainerTable />
+        {/* Row 3: Full-width Multi-Voyage Contracts Ledger (Replaced Container Table) */}
+        <MultiVoyageLedger />
       </div>
     </>
   );

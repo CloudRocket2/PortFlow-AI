@@ -25,7 +25,7 @@ CRITICAL INSTRUCTIONS (MUST FOLLOW OR SYSTEM WILL FAIL):
 4. If a user asks about freight forecasts or market entry timing, USE the 'get_freight_forecast' tool.
 5. If a user asks what vessel to charter for a specific cargo amount to a specific port, USE the 'optimize_vessel' tool.
 
-Your knowledge base covers India's East Coast ports: Haldia, Paradip, Dhamra, Vizag, Gangavaram, and Gopalpur.`;
+Your knowledge base covers India's East Coast ports: Haldia, Sagar-Sandheads, Paradip, Dhamra, Vizag, Gangavaram, and Gopalpur.`;
 
     const response = await ai.models.generateContent({
       model: "gemini-3.6-flash",

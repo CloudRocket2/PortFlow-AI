@@ -62,17 +62,34 @@ export default function GlobeWrapper() {
   const handleMouseLeave = () => setIsDragging(false);
 
   const markers = [
+    // Origin Ports
+    { id: "newcastle", coordinates: [151.7817, -32.9283], name: "Newcastle, Australia", type: "origin" },
+    { id: "norfolk", coordinates: [-76.2859, 36.8508], name: "Norfolk, USA", type: "origin" },
+    { id: "maputo", coordinates: [32.5892, -25.9692], name: "Maputo, Mozambique", type: "origin" },
+    { id: "vladivostok", coordinates: [131.8869, 43.1198], name: "Vladivostok, Russia", type: "origin" },
+    { id: "kalimantan", coordinates: [116.0385, -0.2787], name: "Kalimantan, Indonesia", type: "origin" },
+    
+    // East Coast Destination Ports
+    { id: "haldia", coordinates: [88.0561, 22.0257], name: "Haldia (IN HAL)", type: "dest" },
+    { id: "sagar", coordinates: [88.0333, 21.6500], name: "Sagar-Sandheads", type: "dest" },
+    { id: "paradip", coordinates: [86.6833, 20.2667], name: "Paradip (IN PRT)", type: "dest" },
+    { id: "dhamra", coordinates: [86.9667, 20.8167], name: "Dhamra (IN DHM)", type: "dest" },
+    { id: "vizag", coordinates: [83.2185, 17.6868], name: "Vizag (IN VTZ)", type: "dest" },
+    { id: "gangavaram", coordinates: [83.2333, 17.6167], name: "Gangavaram", type: "dest" },
+    { id: "gopalpur", coordinates: [84.9000, 19.3000], name: "Gopalpur", type: "dest" },
+    
+    // Active Vessels (In Transit)
     { 
       id: "mv-pacific",
-      coordinates: [83.2185, 17.6868], 
+      coordinates: [85.5, 15.0], // En route to Vizag
       name: "MV PACIFIC HORIZON", 
       type: "ship",
       info: {
-        loc: "Vizag Port (IN VTZ)",
-        status: "Discharging Cargo",
-        cargo: "Coal (120k MT)",
-        eta: "Arrived",
-        draft: "14.2m (Deep Water)"
+        loc: "En route to Vizag",
+        status: "Approaching Destination",
+        cargo: "Iron Ore (180k MT)",
+        eta: "T-Minus 12 Hours",
+        draft: "17.8m (Deep Water)"
       }
     },
     { 
@@ -81,16 +98,13 @@ export default function GlobeWrapper() {
       name: "MAERSK SENTINEL", 
       type: "ship",
       info: {
-        loc: "Approaching Haldia (IN HAL)",
-        status: "En Route / Slow Steaming",
-        cargo: "Iron Ore (80k MT)",
-        eta: "T-Minus 4 Hours",
-        draft: "7.8m (Shallow Constraint)"
+        loc: "Sagar-Sandheads Anchorage",
+        status: "Lightering Cargo",
+        cargo: "Thermal Coal (75k MT)",
+        eta: "Arrived",
+        draft: "14.2m -> 8.5m"
       }
-    },
-    { coordinates: [113.2644, 23.1291], name: "GUANGZHOU (AI ROUTE)", type: "dest" },
-    { coordinates: [151.7817, -32.9283], name: "NEWCASTLE", type: "dest" },
-    { coordinates: [103.8519, 1.2903], name: "SINGAPORE (AI ROUTE)", type: "dest" }
+    }
   ];
 
   // Memoize the map geographies so React doesn't recreate the JSX nodes on every single frame
@@ -203,20 +217,40 @@ export default function GlobeWrapper() {
           {/* Render Memoized Landmasses */}
           {MapGeographies}
 
-          {/* Vizag to China Trajectory */}
+          {/* Newcastle to Sagar-Sandheads Trajectory */}
           <Line
-            from={[83.2185, 17.6868]}
-            to={[113.2644, 23.1291]}
+            from={[151.7817, -32.9283]}
+            to={[88.0333, 21.6500]}
             stroke="#00ff00"
             strokeWidth={1.5}
             strokeLinecap="round"
             style={{ strokeDasharray: "4 4" }}
           />
 
-          {/* Haldia to Singapore Trajectory */}
+          {/* Maputo to Paradip Trajectory */}
           <Line
-            from={[88.0561, 22.0257]}
-            to={[103.8519, 1.2903]}
+            from={[32.5892, -25.9692]}
+            to={[86.6833, 20.2667]}
+            stroke="#00ff00"
+            strokeWidth={1.5}
+            strokeLinecap="round"
+            style={{ strokeDasharray: "4 4" }}
+          />
+
+          {/* Vladivostok to Vizag Trajectory */}
+          <Line
+            from={[131.8869, 43.1198]}
+            to={[83.2185, 17.6868]}
+            stroke="#00ff00"
+            strokeWidth={1.5}
+            strokeLinecap="round"
+            style={{ strokeDasharray: "4 4" }}
+          />
+
+          {/* Norfolk to Dhamra Trajectory */}
+          <Line
+            from={[-76.2859, 36.8508]}
+            to={[86.9667, 20.8167]}
             stroke="#00ff00"
             strokeWidth={1.5}
             strokeLinecap="round"

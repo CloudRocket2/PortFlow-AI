@@ -27,11 +27,21 @@ export const LIGHTERING_PENALTY_USD_PER_TON = 4.5; // Cost penalty if ship must 
 
 export const INDIAN_EAST_COAST_PORTS: Record<string, PortConstraint> = {
   Haldia: { name: "Haldia", region: "West Bengal", maxDraftMeters: 8.5, maxLoaMeters: 230, cargoHandlingRateTpd: 15000, cycloneWarning: false },
+  SagarSandheads: { name: "Sagar-Sandheads", region: "West Bengal", maxDraftMeters: 20.0, maxLoaMeters: 400, cargoHandlingRateTpd: 25000, cycloneWarning: false }, // Deep-water anchorage for lightering
   Paradip: { name: "Paradip", region: "Odisha", maxDraftMeters: 14.5, maxLoaMeters: 260, cargoHandlingRateTpd: 40000, cycloneWarning: true }, // SIMULATED CYCLONE WARNING
   Dhamra: { name: "Dhamra", region: "Odisha", maxDraftMeters: 18.0, maxLoaMeters: 320, cargoHandlingRateTpd: 50000, cycloneWarning: true }, // SIMULATED CYCLONE WARNING
   Vizag: { name: "Vizag", region: "Andhra Pradesh", maxDraftMeters: 14.5, maxLoaMeters: 260, cargoHandlingRateTpd: 35000, cycloneWarning: false },
   Gangavaram: { name: "Gangavaram", region: "Andhra Pradesh", maxDraftMeters: 18.5, maxLoaMeters: 300, cargoHandlingRateTpd: 50000, cycloneWarning: false },
   Gopalpur: { name: "Gopalpur", region: "Odisha", maxDraftMeters: 12.5, maxLoaMeters: 225, cargoHandlingRateTpd: 20000, cycloneWarning: false },
+};
+
+// Global Origin Ports (SIH Specified)
+export const ORIGIN_PORTS = {
+  Australia: { name: "Australia (Newcastle)", coordinates: [151.7817, -32.9283] },
+  US: { name: "United States (Norfolk)", coordinates: [-76.2859, 36.8508] },
+  Mozambique: { name: "Mozambique (Maputo)", coordinates: [32.5892, -25.9692] },
+  Russia: { name: "Russia (Vladivostok)", coordinates: [131.8869, 43.1198] },
+  Indonesia: { name: "Indonesia (Kalimantan)", coordinates: [116.0385, -0.2787] },
 };
 
 // Mock Time-Series Data for Freight Forecast (USD per Tonne)
