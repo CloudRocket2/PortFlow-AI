@@ -1,6 +1,7 @@
 "use client";
 
 import { Activity, AlertTriangle, Globe, MapPin, Route, ShieldAlert, ArrowRight, Ship } from "lucide-react";
+import FreightForecastChart from "@/components/FreightForecastChart";
 
 export default function ForecastPage() {
   return (
@@ -9,10 +10,10 @@ export default function ForecastPage() {
         <div>
           <h1 className="text-xl font-bold uppercase tracking-widest text-white flex items-center gap-3">
             <Globe className="w-5 h-5" />
-            Global Risk & Idle Management
+            Global Risk & AI Market Forecasting
           </h1>
           <p className="text-xs font-mono text-neutral-500 mt-1 uppercase tracking-widest">
-            Early Warnings & Deadheading Prevention Radar
+            Early Warnings, Deadheading Prevention, and Spot Rate Predictions
           </p>
         </div>
         <div className="text-[10px] font-mono border border-neutral-800 px-3 py-1 text-neutral-400 uppercase tracking-widest bg-neutral-900/50">
@@ -20,10 +21,14 @@ export default function ForecastPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 flex-1 overflow-y-auto hide-scrollbar">
-        
-        {/* Left Column: Risk Mitigation */}
-        <div className="flex flex-col gap-6">
+      <div className="flex-1 overflow-y-auto hide-scrollbar flex flex-col gap-6 pb-6">
+        {/* Top Full-Width Section: AI Market Forecast */}
+        <FreightForecastChart />
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          
+          {/* Left Column: Risk Mitigation */}
+          <div className="flex flex-col gap-6">
           <div className="minimal-panel p-5 flex flex-col gap-4 bg-neutral-900/10">
             <h2 className="text-sm font-mono font-bold text-white uppercase tracking-wider flex items-center gap-2 border-b border-neutral-800 pb-3">
               <ShieldAlert className="w-4 h-4 text-white" />
@@ -163,6 +168,8 @@ export default function ForecastPage() {
             </div>
 
           </div>
+        </div>
+        
         </div>
       </div>
     </div>
