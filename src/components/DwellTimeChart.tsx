@@ -29,6 +29,7 @@ export default function DwellTimeChart() {
           setDwellTimeTrend(data.data);
         }
       })
+      .catch(() => {})
       .finally(() => setLoading(false));
   }, []);
 
@@ -57,11 +58,11 @@ export default function DwellTimeChart() {
       <div className="px-5 py-4 border-b border-white/5 flex items-center justify-between">
         <div>
           <h3 className="text-sm font-semibold text-white">
-            Average Dwell Time — Last 7 Days
+            Avg Lightering Delays — Last 7 Days
           </h3>
           <p className="text-xs text-slate-400 mt-0.5">
-            Target: &lt; 36 hours • Current avg:{" "}
-            <span className={avgDwell > 36 ? "text-amber-400" : "text-green-400"}>
+            Target: &lt; 24 hours • Current avg:{" "}
+            <span className={avgDwell > 24 ? "text-amber-400" : "text-green-400"}>
               {avgDwell.toFixed(1)}h
             </span>
           </p>
@@ -110,7 +111,7 @@ export default function DwellTimeChart() {
               fontSize: "12px",
             }}
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            formatter={(value: any) => [`${value} hours`, "Avg Dwell Time"]}
+            formatter={(value: any) => [`${value} hours`, "Avg Delay"]}
             labelStyle={{ color: "#94a3b8" }}
           />
           {/* Target threshold line */}

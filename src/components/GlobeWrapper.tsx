@@ -4,6 +4,8 @@ import React, { useState, useEffect, useRef } from "react";
 import Globe from "react-globe.gl";
 import * as topojson from "topojson-client";
 import * as THREE from "three";
+// Import the topojson directly to prevent any fetch/network 404s on deployment
+import topoData from "../../public/world-110m.json";
 
 export default function GlobeWrapper() {
   const [mounted, setMounted] = useState(false);
@@ -29,13 +31,13 @@ export default function GlobeWrapper() {
 
     resizeObserver.observe(containerRef.current);
     
-    // Fetch and parse the TopoJSON for minimalist vector landmasses
-    fetch('/world-110m.json')
-      .then(res => res.json())
-      .then(topoData => {
-        const geoJson = topojson.feature(topoData, topoData.objects.countries as any);
-        setCountries((geoJson as any).features);
-      });
+    // Parse the directly imported TopoJSON for minimalist vector landmasses
+    try {
+      const geoJson = topojson.feature(topoData as any, (topoData as any).objects.countries);
+      setCountries((geoJson as any).features);
+    } catch (e) {
+      console.error("Failed to parse map topology", e);
+    }
     
     return () => resizeObserver.disconnect();
   }, []);
