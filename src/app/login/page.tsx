@@ -84,7 +84,7 @@ export default function LoginPage() {
   // When a role is clicked on the left, prefill the email
   useEffect(() => {
     setEmail(selectedRole.email);
-    setPassword("admin123"); // Pre-filling for hackathon demo convenience
+    setPassword(""); // Cleared for the live demo so the user can type it manually
     setError("");
   }, [selectedRole]);
 
