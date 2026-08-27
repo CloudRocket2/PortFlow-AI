@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import Globe from "react-globe.gl";
 import * as topojson from "topojson-client";
+import * as THREE from "three";
 
 export default function GlobeWrapper() {
   const [mounted, setMounted] = useState(false);
@@ -49,11 +50,6 @@ export default function GlobeWrapper() {
 
       // Point camera roughly at the Indian Ocean / Asia region
       globeRef.current.pointOfView({ lat: 15, lng: 90, altitude: 2.5 }, 4000);
-      
-      // Set pure black ocean
-      const globeMaterial = globeRef.current.globeMaterial();
-      globeMaterial.color.set('#000000');
-      globeMaterial.shininess = 0;
     }
   }, [mounted]);
 
@@ -126,6 +122,7 @@ export default function GlobeWrapper() {
         height={dimensions.height}
         backgroundColor="rgba(0,0,0,0)"
         showAtmosphere={false}
+        globeMaterial={new THREE.MeshBasicMaterial({ color: 0x000000 })}
         
         // Vector Map (Restoring the original hacker aesthetic)
         polygonsData={countries}
