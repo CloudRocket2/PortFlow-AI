@@ -10,28 +10,26 @@ import { NextResponse } from "next/server";
 export async function GET() {
   try {
     return NextResponse.json({
-      yardCapacity: {
-        total: 1000000,
-        occupied: 720000, // Representing Metric Tonnes of coal/iron ore stockpiles
-        utilizationPercent: 72,
+      contracts: {
+        multiVoyage: 14,
+        spot: 3,
+        totalTonnage: 2450000, // 2.45M MT
       },
-      vessels: {
-        active: 5,
-        docked: 2,
-        list: [],
+      fleet: {
+        inTransit: 28,
+        anchored: 4,
+      },
+      market: {
+        forecastAccuracy: 94.2, // %
+        trend: "BULLISH",
       },
       alerts: {
-        highDwellCount: 2, // Representing high dwell stockpiles
-        threshold: 72,
+        anchorageDelays: 2,
+        threshold: 24,
       },
       carbon: {
-        totalSavedKg: 18200, // Matching the 18.2 Kilotons in Optimizer Panel
-      },
-      containers: {
-        total: 0,
-        byStatus: {},
-        byType: {},
-      },
+        totalSavedKg: 18200, 
+      }
     });
   } catch (error) {
     console.error("Dashboard metrics error:", error);

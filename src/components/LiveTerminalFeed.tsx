@@ -1,27 +1,27 @@
 "use client";
 
 import { useTelemetry } from "@/hooks/useTelemetry";
-import { Terminal, Activity, Radio, Truck, Ship, AlertCircle } from "lucide-react";
+import { Terminal, Radio, Ship, AlertCircle, Anchor } from "lucide-react";
 
 export default function LiveTerminalFeed() {
   const { events, isConnected } = useTelemetry();
 
   const getIcon = (type: string) => {
     switch (type) {
-      case "TRUCK_ARRIVED_GATE": return <Truck className="w-3.5 h-3.5 text-blue-400" />;
-      case "CRANE_LIFT_STARTED": return <Activity className="w-3.5 h-3.5 text-amber-400" />;
-      case "CONTAINER_PLACED_YARD": return <Ship className="w-3.5 h-3.5 text-green-400" />;
-      case "REEFER_TEMP_WARNING": return <AlertCircle className="w-3.5 h-3.5 text-red-400" />;
+      case "AIS_POSITION_UPDATE": return <Radio className="w-3.5 h-3.5 text-blue-400" />;
+      case "DRAFT_MEASUREMENT": return <Anchor className="w-3.5 h-3.5 text-amber-400" />;
+      case "BERTH_APPROACH": return <Ship className="w-3.5 h-3.5 text-green-400" />;
+      case "CARGO_DISCHARGE": return <Terminal className="w-3.5 h-3.5 text-purple-400" />;
       default: return <Radio className="w-3.5 h-3.5 text-slate-400" />;
     }
   };
 
   const getColor = (type: string) => {
     switch (type) {
-      case "TRUCK_ARRIVED_GATE": return "text-blue-400";
-      case "CRANE_LIFT_STARTED": return "text-amber-400";
-      case "CONTAINER_PLACED_YARD": return "text-green-400";
-      case "REEFER_TEMP_WARNING": return "text-red-400";
+      case "AIS_POSITION_UPDATE": return "text-blue-400";
+      case "DRAFT_MEASUREMENT": return "text-amber-400";
+      case "BERTH_APPROACH": return "text-green-400";
+      case "CARGO_DISCHARGE": return "text-purple-400";
       default: return "text-slate-400";
     }
   };
@@ -36,7 +36,7 @@ export default function LiveTerminalFeed() {
       <div className="px-4 py-3 border-b border-neutral-800 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Terminal className="w-4 h-4 text-white" />
-          <h3 className="text-[10px] font-mono tracking-widest uppercase text-white">Live IoT Feed</h3>
+          <h3 className="text-[10px] font-mono tracking-widest uppercase text-white">Global AIS & AI Dispatch Log</h3>
         </div>
         <div className="flex items-center gap-1.5">
           <span className="relative flex h-2 w-2">
@@ -60,14 +60,17 @@ export default function LiveTerminalFeed() {
         ) : (
           events.map((evt) => (
             <div key={evt.id} className="flex gap-3 text-xs animate-slide-in pb-3 border-b border-neutral-900 last:border-0">
-              <div className="w-16 shrink-0 text-[10px] font-mono text-neutral-600 pt-0.5">
+              <div className="w-16 shrink-0 text-[10px] font-mono text-neutral-600 pt-0.5 flex flex-col items-start gap-1">
                 {formatTime(evt.timestamp)}
+                <div className={`px-1 py-0.5 rounded-sm bg-neutral-900 border border-neutral-800 ${getColor(evt.type)}`}>
+                  {getIcon(evt.type)}
+                </div>
               </div>
-              <div>
-                <span className={`font-mono font-bold mr-2 uppercase ${evt.type === 'AI_AUTO_OPTIMIZATION' ? 'text-white' : 'text-neutral-400'}`}>
+              <div className="flex-1">
+                <span className={`font-mono font-bold mr-2 uppercase text-white`}>
                   {evt.vesselId}
                 </span>
-                <span className="text-[10px] uppercase font-mono tracking-widest text-neutral-500">{evt.details}</span>
+                <span className="text-[10px] uppercase font-mono tracking-widest text-neutral-500 block mt-1">{evt.details}</span>
               </div>
             </div>
           ))

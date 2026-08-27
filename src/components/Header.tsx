@@ -1,15 +1,14 @@
 "use client";
 
-import { Activity, Container, Ship, AlertTriangle, Leaf, LucideIcon } from "lucide-react";
+import { Activity, Globe, Ship, AlertTriangle, Leaf, LucideIcon, LineChart, FileText } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useTelemetry } from "@/hooks/useTelemetry";
 
 interface DashboardMetrics {
-  yardCapacity: { total: number; occupied: number; utilizationPercent: number };
-  vessels: { active: number; docked: number };
-  alerts: { highDwellCount: number };
+  contracts: { multiVoyage: number; spot: number; totalTonnage: number };
+  fleet: { inTransit: number; anchored: number };
+  market: { forecastAccuracy: number; trend: string };
+  alerts: { anchorageDelays: number };
   carbon: { totalSavedKg: number };
-  containers: { total: number };
 }
 
 interface MetricCardProps {
@@ -39,7 +38,6 @@ function MetricCard({ label, value, icon: Icon, color, subtitle }: MetricCardPro
 
 export default function Header() {
   const [metrics, setMetrics] = useState<DashboardMetrics | null>(null);
-  const { activeCranes } = useTelemetry();
 
   useEffect(() => {
     fetch("/api/dashboard/metrics")
@@ -52,61 +50,59 @@ export default function Header() {
     return (
       <header className="flex items-center justify-between bg-black border-b border-neutral-800 px-6 h-16 shrink-0 z-10">
         <div>
-          <h2 className="text-xs uppercase tracking-widest font-mono text-white">Operations Dashboard</h2>
-          <p className="text-[10px] text-neutral-500">Loading metrics...</p>
+          <h2 className="text-xs uppercase tracking-widest font-mono text-white">Global Fleet Command</h2>
+          <p className="text-[10px] text-neutral-500">Syncing telemetry...</p>
         </div>
       </header>
     );
   }
 
-  const densityPercent = metrics.yardCapacity.utilizationPercent;
-  const densityColor =
-    densityPercent > 80 ? "border-red-500 text-red-500" : densityPercent > 60 ? "border-amber-500 text-amber-500" : "border-neutral-500 text-neutral-300";
-
   return (
     <header className="flex items-center justify-between bg-black border-b border-neutral-800 px-6 h-20 shrink-0 z-10">
-      {/* Left ?" Title */}
+      {/* Left Title */}
       <div>
-        <h2 className="text-xs uppercase font-mono tracking-widest text-white">Operations Dashboard</h2>
+        <h2 className="text-xs uppercase font-mono tracking-widest text-white">Global Fleet Command</h2>
         <p className="text-[10px] text-neutral-500 font-mono">
-          REAL-TIME PORT TELEMETRY
+          REGIONAL FREIGHT FORECASTING
         </p>
       </div>
 
-      {/* Right ?" Global Metrics from API */}
+      {/* Right Global Metrics */}
       <div className="flex items-center divide-x divide-neutral-800">
         <MetricCard
-          label="Yard Density"
-          value={`${densityPercent}%`}
-          icon={Container}
-          color={densityColor}
-          subtitle={`${metrics.yardCapacity.occupied} / ${metrics.yardCapacity.total} slots`}
+          label="Active Contracts"
+          value={metrics.contracts.multiVoyage}
+          icon={FileText}
+          color="border-amber-500 text-amber-500"
+          subtitle={`${metrics.contracts.spot} Spot Routes Remaining`}
         />
         <MetricCard
-          label="Active Cranes"
-          value={activeCranes}
-          icon={Activity}
-          color="border-white text-white"
-          subtitle="Live Sensors"
+          label="Forecast Accuracy"
+          value={`${metrics.market.forecastAccuracy}%`}
+          icon={LineChart}
+          color="border-[#00ff00] text-[#00ff00]"
+          subtitle="90-Day Moving Avg"
         />
         <MetricCard
-          label="Ships Docked"
-          value={metrics.vessels.docked}
-          icon={Ship}
-          color="border-neutral-500 text-neutral-300"
+          label="Vessels in Transit"
+          value={metrics.fleet.inTransit}
+          icon={Globe}
+          color="border-blue-500 text-blue-400"
+          subtitle={`${(metrics.contracts.totalTonnage / 1000000).toFixed(2)}M MT Cargo`}
         />
         <MetricCard
-          label="High Dwell"
-          value={metrics.alerts.highDwellCount}
+          label="Anchorage Delays"
+          value={metrics.alerts.anchorageDelays}
           icon={AlertTriangle}
           color="border-red-500 text-red-500"
-          subtitle=">72hr containers"
+          subtitle=">24hr Wait Time"
         />
         <MetricCard
-          label="CO2 Saved"
-          value={`${metrics.carbon.totalSavedKg.toFixed(0)} kg`}
+          label="Emissions Avoided"
+          value={`${(metrics.carbon.totalSavedKg / 1000).toFixed(1)}k Tons`}
           icon={Leaf}
           color="border-green-500 text-green-500"
+          subtitle="Via route optimization"
         />
       </div>
     </header>
