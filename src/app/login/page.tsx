@@ -78,7 +78,7 @@ export default function LoginPage() {
   const [progress, setProgress] = useState("");
 
   const [email, setEmail] = useState(ROLES[0].email);
-  const [password, setPassword] = useState("admin123");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
   // When a role is clicked on the left, prefill the email

@@ -9,6 +9,7 @@ import dynamic from "next/dynamic";
 
 // R3F Canvas requires client-side only rendering to avoid hydration mismatch
 const Yard3D = dynamic(() => import("@/components/Yard3D"), { ssr: false });
+const GlobeWrapper = dynamic(() => import("@/components/GlobeWrapper"), { ssr: false });
 
 export default function DashboardPage() {
   return (
@@ -27,12 +28,17 @@ export default function DashboardPage() {
         </p>
       </div>
 
-      {/* Row 1: 3D Yard Digital Twin + Sidebar Panels */}
+      {/* Row 1: 3D Visualizations + Sidebar Panels */}
       <div className="flex flex-col xl:flex-row gap-6">
         
-        {/* Left: 3D Digital Twin - takes 2/3 of the row */}
-        <div className="w-full xl:w-2/3 h-[500px] xl:h-[700px] shrink-0 minimal-panel relative overflow-hidden">
-          <Yard3D />
+        {/* Left: 3D Digital Twin & Global Tracking - takes 2/3 of the row */}
+        <div className="w-full xl:w-2/3 flex flex-col gap-6 min-h-[800px] xl:h-[900px] shrink-0">
+          <div className="flex-1 minimal-panel relative overflow-hidden">
+            <Yard3D />
+          </div>
+          <div className="flex-1 min-h-[400px] minimal-panel relative overflow-hidden bg-black">
+            <GlobeWrapper />
+          </div>
         </div>
 
         {/* Right column - Data Panels */}
