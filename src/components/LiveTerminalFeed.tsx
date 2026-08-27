@@ -65,7 +65,7 @@ export default function LiveTerminalFeed() {
               </div>
               <div>
                 <span className={`font-mono font-bold mr-2 uppercase ${evt.type === 'AI_AUTO_OPTIMIZATION' ? 'text-white' : 'text-neutral-400'}`}>
-                  {evt.containerId}
+                  {evt.vesselId}
                 </span>
                 <span className="text-[10px] uppercase font-mono tracking-widest text-neutral-500">{evt.details}</span>
               </div>
