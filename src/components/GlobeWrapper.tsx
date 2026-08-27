@@ -2,12 +2,14 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import Globe from "react-globe.gl";
+import * as topojson from "topojson-client";
 
 export default function GlobeWrapper() {
   const [mounted, setMounted] = useState(false);
   const globeRef = useRef<any>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [dimensions, setDimensions] = useState({ width: 800, height: 800 });
+  const [countries, setCountries] = useState<any[]>([]);
 
   useEffect(() => {
     setMounted(true);
@@ -26,6 +28,14 @@ export default function GlobeWrapper() {
 
     resizeObserver.observe(containerRef.current);
     
+    // Fetch and parse the TopoJSON for minimalist vector landmasses
+    fetch('/world-110m.json')
+      .then(res => res.json())
+      .then(topoData => {
+        const geoJson = topojson.feature(topoData, topoData.objects.countries as any);
+        setCountries((geoJson as any).features);
+      });
+    
     return () => resizeObserver.disconnect();
   }, []);
 
@@ -39,6 +49,11 @@ export default function GlobeWrapper() {
 
       // Point camera roughly at the Indian Ocean / Asia region
       globeRef.current.pointOfView({ lat: 15, lng: 90, altitude: 2.5 }, 4000);
+      
+      // Set pure black ocean
+      const globeMaterial = globeRef.current.globeMaterial();
+      globeMaterial.color.set('#000000');
+      globeMaterial.shininess = 0;
     }
   }, [mounted]);
 
@@ -109,9 +124,16 @@ export default function GlobeWrapper() {
         ref={globeRef}
         width={dimensions.width}
         height={dimensions.height}
-        globeImageUrl="//unpkg.com/three-globe/example/img/earth-night.jpg"
         backgroundColor="rgba(0,0,0,0)"
+        showAtmosphere={false}
         
+        // Vector Map (Restoring the original hacker aesthetic)
+        polygonsData={countries}
+        polygonCapColor={() => '#0f0f0f'}
+        polygonSideColor={() => '#0f0f0f'}
+        polygonStrokeColor={() => '#222222'}
+        polygonAltitude={0.005}
+
         // Native WebGL labels (looks much cleaner, fades perfectly over horizon)
         labelsData={markers}
         labelLat={(d: any) => d.lat}
@@ -121,7 +143,7 @@ export default function GlobeWrapper() {
         labelDotRadius={(d: any) => d.type === 'dest' ? 0.8 : 0.5}
         labelColor={(d: any) => d.type === 'dest' ? '#ffffff' : '#aaaaaa'}
         labelResolution={2}
-        labelAltitude={0.01}
+        labelAltitude={0.015}
         
         // Glowing Arcs
         arcsData={arcs}
