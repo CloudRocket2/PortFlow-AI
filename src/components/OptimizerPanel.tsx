@@ -6,9 +6,14 @@ import { useTelemetry } from "@/hooks/useTelemetry";
 export default function OptimizerPanel() {
   const { events } = useTelemetry();
 
-  // Filter out only the AI optimization events
-  const aiEvents = events.filter(e => e.type === 'AI_AUTO_OPTIMIZATION').slice(0, 4);
-  const totalOptimizations = events.filter(e => e.type === 'AI_AUTO_OPTIMIZATION').length;
+  // Mocking AI optimization events for bulk freight
+  const aiEvents = [
+    { message: "Rerouted Panamax to Dhamra to avoid 48hr port congestion" },
+    { message: "Secured Sagar-Sandheads anchorage for Capesize lightering" },
+    { message: "Consolidated 3 Spot shipments into Multi-Voyage Contract" },
+    { message: "Adjusted ETA to align with predicted spot rate dip ($14.90)" },
+  ];
+  const totalOptimizations = 142;
 
   return (
     <div className="minimal-panel mb-6">
@@ -16,10 +21,10 @@ export default function OptimizerPanel() {
         <div>
           <h3 className="text-xs font-mono uppercase tracking-widest text-white flex items-center gap-2">
             <BrainCircuit className="w-4 h-4 text-white" />
-            Autonomous AI Engine
+            AI Fleet & Anchorage Optimizer
           </h3>
           <p className="text-[10px] font-mono text-neutral-500 mt-1 uppercase">
-            Evaluating stack physics & dwell times
+            Evaluating draft limits & lightering penalties
           </p>
         </div>
         <div className="flex items-center gap-2 px-3 py-1.5 border border-neutral-800 text-white text-[10px] font-mono uppercase tracking-widest">
@@ -28,38 +33,48 @@ export default function OptimizerPanel() {
         </div>
       </div>
 
-      <div className="p-5">
-        <div className="flex items-center justify-between mb-4">
-          <h4 className="text-[10px] font-mono uppercase tracking-widest text-neutral-400">Recent Output Log</h4>
-          <div className="text-[10px] font-mono uppercase tracking-widest text-white border border-neutral-800 px-2.5 py-1">
-            Total Saved: {(totalOptimizations * 12.5).toFixed(1)}kg CO2
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 p-5 bg-neutral-900/10">
+        
+        {/* Metric 1 */}
+        <div className="flex flex-col gap-2">
+          <div className="text-[10px] font-mono text-neutral-500 uppercase tracking-widest flex items-center gap-1.5">
+            <Activity className="w-3 h-3 text-[#00ff00]" />
+            AI Actions Taken (24h)
+          </div>
+          <div className="text-2xl font-mono text-white">
+            {totalOptimizations} <span className="text-[10px] text-neutral-500 ml-1">ROUTING DECISIONS</span>
           </div>
         </div>
 
-        {aiEvents.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-8 text-neutral-600">
-            <p className="text-[10px] font-mono uppercase tracking-widest">Yield optimal.</p>
+        {/* Metric 2 */}
+        <div className="flex flex-col gap-2 border-l border-neutral-800 pl-6">
+          <div className="text-[10px] font-mono text-neutral-500 uppercase tracking-widest flex items-center gap-1.5">
+            <Leaf className="w-3 h-3 text-[#00ff00]" />
+            CO2 Equivalents Saved
           </div>
-        ) : (
-          <div className="space-y-2">
-            {aiEvents.map((evt, i) => (
-              <div key={i} className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border border-neutral-800 p-3">
-                <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="font-mono text-[10px] font-bold text-white uppercase">{evt.containerId}</span>
-                    <span className="text-[10px] font-mono uppercase text-neutral-400 border border-neutral-800 px-1.5">
-                      Resolved
-                    </span>
-                    <span className="text-[10px] text-neutral-600 font-mono ml-auto">
-                      {new Date(evt.timestamp).toLocaleTimeString()}
-                    </span>
-                  </div>
-                  <p className="text-xs font-mono text-neutral-500">{evt.details}</p>
-                </div>
+          <div className="text-2xl font-mono text-white">
+            18.2 <span className="text-[10px] text-[#00ff00] ml-1">KILOTONS</span>
+          </div>
+          <p className="text-[9px] font-mono text-neutral-500 uppercase">
+            Via multi-voyage empty transit reduction
+          </p>
+        </div>
+
+        {/* AI Action Log */}
+        <div className="flex flex-col gap-2 border-l border-neutral-800 pl-6">
+          <div className="text-[10px] font-mono text-neutral-500 uppercase tracking-widest mb-1">
+            Recent Engine Operations
+          </div>
+          <div className="flex flex-col gap-1.5">
+            {aiEvents.map((e, idx) => (
+              <div key={idx} className="text-[9px] font-mono text-neutral-400 flex items-start gap-1.5">
+                <span className="text-[#00ff00] mt-0.5">&gt;</span>
+                {e.message}
               </div>
             ))}
           </div>
-        )}
+        </div>
+
       </div>
     </div>
   );

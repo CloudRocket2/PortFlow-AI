@@ -8,8 +8,6 @@ import OptimizerPanel from "@/components/OptimizerPanel";
 import LiveTerminalFeed from "@/components/LiveTerminalFeed";
 import dynamic from "next/dynamic";
 
-// R3F Canvas requires client-side only rendering to avoid hydration mismatch
-const Yard3D = dynamic(() => import("@/components/Yard3D"), { ssr: false });
 const GlobeWrapper = dynamic(() => import("@/components/GlobeWrapper"), { ssr: false });
 
 export default function DashboardPage() {
@@ -24,8 +22,8 @@ export default function DashboardPage() {
       "Establishing Secure Connection...",
       "Syncing Terminal AIS Telemetry...",
       "Calibrating Neural Forecasting Models...",
-      "Loading 3D Digital Yard Twin...",
       "Connecting Global Radar Arrays...",
+      "Mapping Deep-Water Anchorages...",
       "Interface Ready."
     ];
     let step = 0;
@@ -86,25 +84,20 @@ export default function DashboardPage() {
           <div className="flex items-center gap-3">
             <div className="w-2 h-2 rounded-full bg-[#00ff00] animate-pulse shadow-[0_0_5px_rgba(0,255,0,0.5)]" />
             <p className="text-xs font-mono uppercase tracking-widest text-[#00ff00]">
-              Live Telemetry feed
+              Global Bulk Radar Active
             </p>
           </div>
           <p className="text-[10px] font-mono uppercase tracking-widest text-neutral-500">
-            TOS & AIS Architecture Ready
+            AIS Fleet Architecture Ready
           </p>
         </div>
 
-        {/* Row 1: 3D Visualizations + Sidebar Panels */}
+        {/* Row 1: Global Tracking + Sidebar Panels */}
         <div className="flex flex-col xl:flex-row gap-6">
           
-          {/* Left: 3D Digital Twin & Global Tracking - takes 2/3 of the row */}
-          <div className="w-full xl:w-2/3 flex flex-col gap-6 min-h-[800px] xl:h-[900px] shrink-0">
-            <div className="flex-1 minimal-panel relative overflow-hidden">
-              <Yard3D />
-            </div>
-            <div className="flex-1 min-h-[400px] minimal-panel relative overflow-hidden bg-black">
-              <GlobeWrapper />
-            </div>
+          {/* Left: Global Tracking Globe - takes 2/3 of the row */}
+          <div className="w-full xl:w-2/3 flex flex-col min-h-[800px] xl:h-[900px] shrink-0 minimal-panel relative overflow-hidden bg-black">
+            <GlobeWrapper />
           </div>
 
           {/* Right column - Data Panels */}
