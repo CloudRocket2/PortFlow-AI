@@ -6,9 +6,27 @@ import Globe from "react-globe.gl";
 export default function GlobeWrapper() {
   const [mounted, setMounted] = useState(false);
   const globeRef = useRef<any>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [dimensions, setDimensions] = useState({ width: 800, height: 800 });
 
   useEffect(() => {
     setMounted(true);
+
+    if (!containerRef.current) return;
+    
+    // Create a ResizeObserver to perfectly fit the WebGL canvas to the container
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (let entry of entries) {
+        setDimensions({
+          width: entry.contentRect.width,
+          height: entry.contentRect.height
+        });
+      }
+    });
+
+    resizeObserver.observe(containerRef.current);
+    
+    return () => resizeObserver.disconnect();
   }, []);
 
   useEffect(() => {
@@ -63,7 +81,7 @@ export default function GlobeWrapper() {
   }));
 
   return (
-    <div className="absolute inset-0 w-full h-full cursor-grab active:cursor-grabbing" style={{ background: 'radial-gradient(circle at center, #0a0a0a 0%, #000000 100%)' }}>
+    <div ref={containerRef} className="absolute inset-0 w-full h-full cursor-grab active:cursor-grabbing flex items-center justify-center overflow-hidden" style={{ background: 'radial-gradient(circle at center, #0a0a0a 0%, #000000 100%)' }}>
       
       {/* Cinematic Tech Overlay */}
       <div className="absolute inset-0 pointer-events-none border border-white/5 z-10" />
@@ -89,24 +107,21 @@ export default function GlobeWrapper() {
 
       <Globe
         ref={globeRef}
-        globeImageUrl="//unpkg.com/three-globe/example/img/earth-dark.jpg"
-        bumpImageUrl="//unpkg.com/three-globe/example/img/earth-topology.png"
+        width={dimensions.width}
+        height={dimensions.height}
+        globeImageUrl="//unpkg.com/three-globe/example/img/earth-night.jpg"
         backgroundColor="rgba(0,0,0,0)"
         
-        // Custom 3D Objects for Markers
-        htmlElementsData={markers}
-        htmlElement={(d: any) => {
-          const el = document.createElement('div');
-          el.innerHTML = `
-            <div class="flex flex-col items-center translate-y-[-50%] translate-x-[-50%] pointer-events-auto cursor-pointer group hover:scale-110 transition-transform">
-              <div class="w-3 h-3 rounded-full border ${d.type === 'origin' ? 'border-neutral-500 bg-black' : 'border-white bg-white'} shadow-[0_0_10px_rgba(255,255,255,0.3)]"></div>
-              <div class="mt-1 text-[8px] font-mono whitespace-nowrap px-1.5 py-0.5 bg-black/80 backdrop-blur border border-neutral-800 text-${d.type === 'origin' ? 'neutral-400' : 'white'} opacity-0 group-hover:opacity-100 transition-opacity">
-                ${d.name}
-              </div>
-            </div>
-          `;
-          return el;
-        }}
+        // Native WebGL labels (looks much cleaner, fades perfectly over horizon)
+        labelsData={markers}
+        labelLat={(d: any) => d.lat}
+        labelLng={(d: any) => d.lng}
+        labelText={(d: any) => d.name}
+        labelSize={(d: any) => d.type === 'dest' ? 1.5 : 1}
+        labelDotRadius={(d: any) => d.type === 'dest' ? 0.8 : 0.5}
+        labelColor={(d: any) => d.type === 'dest' ? '#ffffff' : '#aaaaaa'}
+        labelResolution={2}
+        labelAltitude={0.01}
         
         // Glowing Arcs
         arcsData={arcs}
