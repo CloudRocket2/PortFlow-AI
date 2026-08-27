@@ -5,7 +5,7 @@ import Globe from "react-globe.gl";
 
 export default function GlobeWrapper() {
   const [mounted, setMounted] = useState(false);
-  const globeRef = useRef<any>();
+  const globeRef = useRef<any>(null);
 
   useEffect(() => {
     setMounted(true);
