@@ -2,10 +2,9 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import Globe from "react-globe.gl";
-import * as topojson from "topojson-client";
 import * as THREE from "three";
-// Import the topojson directly to prevent any fetch/network 404s on deployment
-import topoData from "../../public/world-110m.json";
+// Import pure GeoJSON directly from src to guarantee Next.js parses it as an object
+import geoJsonData from "../data/countries.json";
 
 export default function GlobeWrapper() {
   const [mounted, setMounted] = useState(false);
@@ -31,12 +30,13 @@ export default function GlobeWrapper() {
 
     resizeObserver.observe(containerRef.current);
     
-    // Parse the directly imported TopoJSON for minimalist vector landmasses
+    // Load the raw GeoJSON features directly
     try {
-      const geoJson = topojson.feature(topoData as any, (topoData as any).objects.countries);
-      setCountries((geoJson as any).features);
+      if (geoJsonData && geoJsonData.features) {
+        setCountries(geoJsonData.features);
+      }
     } catch (e) {
-      console.error("Failed to parse map topology", e);
+      console.error("Failed to load map data", e);
     }
     
     return () => resizeObserver.disconnect();
@@ -126,11 +126,11 @@ export default function GlobeWrapper() {
         showAtmosphere={false}
         globeMaterial={new THREE.MeshBasicMaterial({ color: 0x000000 })}
         
-        // Vector Map (Restoring the original hacker aesthetic)
+        // Vector Map (Restoring the original hacker aesthetic, brightened for WebGL lighting)
         polygonsData={countries}
-        polygonCapColor={() => '#0f0f0f'}
-        polygonSideColor={() => '#0f0f0f'}
-        polygonStrokeColor={() => '#222222'}
+        polygonCapColor={() => '#111111'}
+        polygonSideColor={() => '#111111'}
+        polygonStrokeColor={() => '#333333'}
         polygonAltitude={0.005}
 
         // Native WebGL labels (looks much cleaner, fades perfectly over horizon)
