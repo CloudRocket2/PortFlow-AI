@@ -48,17 +48,17 @@ export const ORIGIN_PORTS: Record<string, PortConstraint> = {
 
 // Mock Time-Series Data for Freight Forecast (USD per Tonne)
 export const MOCK_FREIGHT_FORECAST = [
-  { date: "Oct 01", actual: 14.2, predicted: null },
-  { date: "Oct 08", actual: 14.8, predicted: null },
-  { date: "Oct 15", actual: 15.5, predicted: null },
-  { date: "Oct 22", actual: 16.1, predicted: null },
-  { date: "Oct 29", actual: 15.8, predicted: null },
-  { date: "Nov 05", actual: 15.9, predicted: 15.9 }, // Present Day
-  { date: "Nov 12", actual: null, predicted: 16.5 },
-  { date: "Nov 19", actual: null, predicted: 17.2 },
-  { date: "Nov 26", actual: null, predicted: 16.8 },
-  { date: "Dec 03", actual: null, predicted: 15.5 },
-  { date: "Dec 10", actual: null, predicted: 14.9 },
+  { date: "Oct 01", actual: 14.2, predicted: null, predictedBacktest: 14.0, lowerBound: 13.5, upperBound: 14.5 },
+  { date: "Oct 08", actual: 14.8, predicted: null, predictedBacktest: 14.9, lowerBound: 14.4, upperBound: 15.4 },
+  { date: "Oct 15", actual: 15.5, predicted: null, predictedBacktest: 15.3, lowerBound: 14.8, upperBound: 15.8 },
+  { date: "Oct 22", actual: 16.1, predicted: null, predictedBacktest: 15.9, lowerBound: 15.4, upperBound: 16.4 },
+  { date: "Oct 29", actual: 15.8, predicted: null, predictedBacktest: 16.0, lowerBound: 15.5, upperBound: 16.5 },
+  { date: "Nov 05", actual: 15.9, predicted: 15.9, predictedBacktest: 15.9, lowerBound: 15.6, upperBound: 16.2 }, // Present Day
+  { date: "Nov 12", actual: null, predicted: 16.5, predictedBacktest: null, lowerBound: 15.8, upperBound: 17.2 },
+  { date: "Nov 19", actual: null, predicted: 17.2, predictedBacktest: null, lowerBound: 16.2, upperBound: 18.2 },
+  { date: "Nov 26", actual: null, predicted: 16.8, predictedBacktest: null, lowerBound: 15.6, upperBound: 18.0 },
+  { date: "Dec 03", actual: null, predicted: 15.5, predictedBacktest: null, lowerBound: 14.1, upperBound: 16.9 },
+  { date: "Dec 10", actual: null, predicted: 14.9, predictedBacktest: null, lowerBound: 13.2, upperBound: 16.6 },
 ];
 
 export const MULTI_YEAR_SEASONALITY_DATA = [
