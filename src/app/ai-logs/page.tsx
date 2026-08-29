@@ -121,7 +121,24 @@ export default function AILogsPage() {
         </div>
 
         {/* Input Area */}
-        <div className="p-4 bg-[#0f172a] border-t border-[#334155]">
+        <div className="p-4 bg-black border-t border-neutral-800 flex flex-col gap-3">
+          {/* Quick Questions */}
+          <div className="flex flex-wrap gap-2">
+            {[
+              "What are the max LOA & draft limits for Haldia?",
+              "Simulate lightering delays at Sagar-Sandheads for Capesize.",
+              "What are the handling rates for Coal vs Iron Ore?"
+            ].map((q, idx) => (
+              <button 
+                key={idx}
+                onClick={() => setInput(q)}
+                className="text-[10px] uppercase font-mono tracking-wider border border-[#00ff00]/30 text-[#00ff00]/80 bg-[#00ff00]/5 px-3 py-1.5 rounded-full hover:bg-[#00ff00]/10 hover:text-[#00ff00] transition-colors whitespace-nowrap"
+              >
+                {q}
+              </button>
+            ))}
+          </div>
+
           <form 
             onSubmit={(e) => { e.preventDefault(); handleSend(); }}
             className="flex gap-3"
@@ -130,13 +147,13 @@ export default function AILogsPage() {
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Ask about yard statistics, specific container IDs, or general logistics..."
-              className="flex-1 bg-[#1e293b] border border-[#334155] text-white px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+              placeholder="ASK ABOUT LIGHTERING DELAYS, DRAFT LIMITS, OR GENERAL BULK LOGISTICS..."
+              className="flex-1 bg-neutral-900 border border-neutral-700 text-white font-mono text-xs px-4 py-3 focus:outline-none focus:border-[#00ff00] transition-colors"
             />
             <button
               type="submit"
               disabled={!input.trim() || loading}
-              className="bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white px-5 rounded-lg flex items-center justify-center transition-colors"
+              className="bg-[#00ff00]/10 border border-[#00ff00]/30 hover:bg-[#00ff00]/20 disabled:opacity-30 text-[#00ff00] px-5 flex items-center justify-center transition-colors"
             >
               <Send className="w-4 h-4" />
             </button>

@@ -58,3 +58,18 @@ export const MOCK_FREIGHT_FORECAST = [
   { date: "Dec 03", actual: null, predicted: 15.5 },
   { date: "Dec 10", actual: null, predicted: 14.9 },
 ];
+
+export const MULTI_YEAR_SEASONALITY_DATA = [
+  { month: "Jan", "2024": 12.5, "2025": 13.1, "2026_Predicted": 13.8 },
+  { month: "Feb", "2024": 11.2, "2025": 11.9, "2026_Predicted": 12.5 },
+  { month: "Mar", "2024": 14.5, "2025": 15.2, "2026_Predicted": 16.0 },
+  { month: "Apr", "2024": 15.8, "2025": 16.5, "2026_Predicted": 17.1 },
+  { month: "May", "2024": 16.2, "2025": 16.9, "2026_Predicted": 17.5 },
+  { month: "Jun", "2024": 17.5, "2025": 18.1, "2026_Predicted": 18.9 }, // Pre-monsoon rush
+  { month: "Jul", "2024": 19.8, "2025": 20.5, "2026_Predicted": 21.2 }, // Peak monsoon delays
+  { month: "Aug", "2024": 18.5, "2025": 19.2, "2026_Predicted": 20.0 }, // Monsoon
+  { month: "Sep", "2024": 15.2, "2025": 15.9, "2026_Predicted": 16.5 },
+  { month: "Oct", "2024": 14.1, "2025": 14.8, "2026_Predicted": 15.2 },
+  { month: "Nov", "2024": 13.5, "2025": 14.1, "2026_Predicted": 14.8 },
+  { month: "Dec", "2024": 12.8, "2025": 13.5, "2026_Predicted": 14.1 },
+];

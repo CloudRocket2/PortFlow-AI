@@ -67,13 +67,14 @@ export default function GlobeWrapper() {
     { id: "vladivostok", lat: 43.1198, lng: 131.8869, name: "Vladivostok", type: "origin" },
     { id: "kalimantan", lat: -0.2787, lng: 116.0385, name: "Kalimantan", type: "origin" },
     
-    { id: "haldia", lat: 22.0257, lng: 88.0561, name: "Haldia", type: "dest" },
-    { id: "sagar", lat: 21.6500, lng: 88.0333, name: "Sagar-Sandheads", type: "dest" },
-    { id: "paradip", lat: 20.2667, lng: 86.6833, name: "Paradip", type: "dest" },
-    { id: "dhamra", lat: 20.8167, lng: 86.9667, name: "Dhamra", type: "dest" },
-    { id: "vizag", lat: 17.6868, lng: 83.2185, name: "Vizag", type: "dest" },
-    { id: "gangavaram", lat: 17.6167, lng: 83.2333, name: "Gangavaram", type: "dest" },
-    { id: "gopalpur", lat: 19.3000, lng: 84.9000, name: "Gopalpur", type: "dest" },
+    // Visually spread out the clustered ports slightly to prevent text overlapping
+    { id: "haldia", lat: 22.8, lng: 88.5, name: "Haldia", type: "dest" },
+    { id: "sagar", lat: 21.65, lng: 88.03, name: "Sagar-Sandheads", type: "dest" },
+    { id: "dhamra", lat: 20.81, lng: 87.2, name: "Dhamra", type: "dest" },
+    { id: "paradip", lat: 20.26, lng: 86.68, name: "Paradip", type: "dest" },
+    { id: "vizag", lat: 17.68, lng: 83.21, name: "Vizag", type: "dest" },
+    { id: "gangavaram", lat: 17.0, lng: 82.5, name: "Gangavaram", type: "dest" },
+    { id: "gopalpur", lat: 19.3, lng: 84.9, name: "Gopalpur", type: "dest" },
   ];
 
   const arcs = [
@@ -92,6 +93,24 @@ export default function GlobeWrapper() {
     propagationSpeed: 2,
     repeatPeriod: 1000
   }));
+
+  const handleLabelClick = (label: any) => {
+    if (globeRef.current) {
+      // Rotate the camera to the clicked port, slightly zoomed in
+      globeRef.current.pointOfView({ lat: label.lat, lng: label.lng, altitude: 1.2 }, 1500);
+      
+      // Stop auto rotation temporarily
+      const controls = globeRef.current.controls();
+      controls.autoRotate = false;
+      
+      // Resume rotation after 5 seconds
+      setTimeout(() => {
+        if (globeRef.current) {
+          globeRef.current.controls().autoRotate = true;
+        }
+      }, 5000);
+    }
+  };
 
   return (
     <div ref={containerRef} className="absolute inset-0 w-full h-full cursor-grab active:cursor-grabbing flex items-center justify-center overflow-hidden" style={{ background: 'radial-gradient(circle at center, #0a0a0a 0%, #000000 100%)' }}>
@@ -143,6 +162,7 @@ export default function GlobeWrapper() {
         labelColor={(d: any) => d.type === 'dest' ? '#ffffff' : '#aaaaaa'}
         labelResolution={2}
         labelAltitude={0.015}
+        onLabelClick={handleLabelClick}
         
         // Glowing Arcs
         arcsData={arcs}

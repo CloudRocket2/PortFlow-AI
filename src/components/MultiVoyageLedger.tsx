@@ -1,6 +1,8 @@
 "use client";
 
-import { Ship, Anchor, MapPin, Search, ArrowRight, ShieldCheck, Route, Zap } from "lucide-react";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
+import { Ship, Anchor, MapPin, Search, ArrowRight, ShieldCheck, Route, Zap, Download } from "lucide-react";
 
 export default function MultiVoyageLedger() {
   const voyages = [
@@ -61,6 +63,38 @@ export default function MultiVoyageLedger() {
     }
   ];
 
+  const exportPDF = () => {
+    const doc = new jsPDF();
+    doc.text("Multi-Voyage AI Recommendations", 14, 15);
+    
+    autoTable(doc, {
+      startY: 20,
+      head: [["ID", "Vessel", "Cargo", "Origin", "Destination", "Type", "Savings", "Status"]],
+      body: voyages.map(v => [
+        v.id, v.vessel, `${v.volume} ${v.cargo}`, v.origin, v.destination, v.type, v.savings, v.status
+      ]),
+      styles: { fontSize: 8 },
+      headStyles: { fillColor: [0, 0, 0] }
+    });
+    
+    doc.save("PortFlow-Recommendations.pdf");
+  };
+
+  const exportCSV = () => {
+    const headers = ["ID", "Vessel", "Cargo", "Volume", "Origin", "Destination", "Type", "Savings", "Status"];
+    const rows = voyages.map(v => [v.id, v.vessel, v.cargo, v.volume, v.origin, v.destination, v.type, v.savings, v.status]);
+    
+    let csvContent = "data:text/csv;charset=utf-8," + headers.join(",") + "\n" + rows.map(e => e.map(item => `"${item}"`).join(",")).join("\n");
+    
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "PortFlow-Recommendations.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <div className="minimal-panel p-4 flex flex-col h-full bg-black">
       {/* Header */}
@@ -76,7 +110,13 @@ export default function MultiVoyageLedger() {
         </div>
         
         <div className="flex items-center gap-3">
-          <div className="relative">
+          <button onClick={exportCSV} className="text-xs font-mono text-neutral-400 hover:text-white transition-colors flex items-center gap-1 border border-neutral-700 px-2 py-1 rounded">
+            <Download className="w-3 h-3" /> CSV
+          </button>
+          <button onClick={exportPDF} className="text-xs font-mono text-neutral-400 hover:text-white transition-colors flex items-center gap-1 border border-neutral-700 px-2 py-1 rounded">
+            <Download className="w-3 h-3" /> PDF
+          </button>
+          <div className="relative ml-2">
             <Search className="w-3 h-3 absolute left-2 top-1/2 -translate-y-1/2 text-neutral-500" />
             <input 
               type="text" 

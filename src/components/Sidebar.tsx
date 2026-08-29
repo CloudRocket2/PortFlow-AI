@@ -13,16 +13,22 @@ import {
   LineChart,
   Radio,
   Lock,
+  Globe2,
+  BarChart3,
+  Scale,
+  Droplet,
+  Sparkles,
 } from "lucide-react";
 import { useState } from "react";
 
 const navItems = [
-  { href: "/", label: "Global Bulk Radar", icon: Globe },
-  { href: "/chartering", label: "Fleet Chartering", icon: Ship },
-  { href: "/forecast", label: "Market Forecast", icon: LineChart },
-  { href: "/ai-logs", label: "AI Assistant", icon: BrainCircuit },
-  { href: "/truck-queue", label: "Truck Gates", icon: Truck },
-  { href: "/radio-logs", label: "VHF Radio Logs", icon: Radio },
+  { label: "Fleet Command", icon: Globe2, href: "/" },
+  { label: "Chartering", icon: Ship, href: "/chartering" },
+  { label: "Freight Forecast", icon: BarChart3, href: "/forecast" },
+  { label: "Scenarios", icon: Scale, href: "/scenarios" },
+  { label: "Draft Logistics", icon: Droplet, href: "/truck-queue" },
+  { label: "Radio Logs", icon: Radio, href: "/radio-logs" },
+  { label: "AI Insights", icon: Sparkles, href: "/ai-logs" },
 ];
 
 export default function Sidebar() {
