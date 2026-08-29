@@ -32,7 +32,7 @@ const INITIAL_SCENARIOS = [
     volume: "1.2M MT",
     timing: "Delay until Nov 26",
     rate: "$14.80 / MT",
-    rateIcon: <TrendingDown className="w-4 h-4" />,
+    hasTrendingIcon: true,
     cost: "$17.76M",
     costColor: "amber",
     tradeoffs: [
@@ -46,6 +46,7 @@ const INITIAL_SCENARIOS = [
 export default function ScenariosPage() {
   const [scenarios, setScenarios] = useState(INITIAL_SCENARIOS);
   const [showModal, setShowModal] = useState(false);
+  const [mounted, setMounted] = useState(false);
   
   // Form State
   const [formData, setFormData] = useState({
@@ -54,6 +55,26 @@ export default function ScenariosPage() {
     volume: "1.2M MT",
     timing: "Phased over 4 weeks"
   });
+
+  // Load from localStorage on mount
+  React.useEffect(() => {
+    setMounted(true);
+    const saved = localStorage.getItem("portflow_scenarios");
+    if (saved) {
+      try {
+        setScenarios(JSON.parse(saved));
+      } catch (e) {
+        console.error("Failed to parse scenarios", e);
+      }
+    }
+  }, []);
+
+  // Save to localStorage when scenarios change
+  React.useEffect(() => {
+    if (mounted) {
+      localStorage.setItem("portflow_scenarios", JSON.stringify(scenarios));
+    }
+  }, [scenarios, mounted]);
 
   const handleDelete = (id: string) => {
     setScenarios(prev => prev.filter(s => s.id !== id));
@@ -240,7 +261,7 @@ export default function ScenariosPage() {
                 <div className="p-3 bg-neutral-900/50 border border-neutral-800">
                   <div className="text-[10px] text-neutral-500 uppercase font-mono mb-1">Avg Freight Rate</div>
                   <div className={`text-lg font-bold flex items-center gap-2 ${scenario.id === 'b' ? 'text-[#00ff00]' : 'text-white'}`}>
-                    {scenario.rateIcon} {scenario.rate}
+                    {(scenario as any).hasTrendingIcon && <TrendingDown className="w-4 h-4" />} {scenario.rate}
                   </div>
                 </div>
                 
