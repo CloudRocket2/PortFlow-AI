@@ -29,10 +29,8 @@
     "puppeteer": "^25.9.0",
     "react": "19.2.8",
     "react-dom": "19.2.8",
-    "react-globe.gl": "^2.38.0",
     "react-simple-maps": "^3.0.0",
     "recharts": "^3.10.1",
-    "three": "^0.185.1",
     "zod": "^4.4.3"
   },
   "devDependencies": {
