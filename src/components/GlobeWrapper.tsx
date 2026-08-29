@@ -3,52 +3,106 @@
 import React, { useState, useEffect } from "react";
 import { ComposableMap, Geographies, Geography, Marker, Line, ZoomableGroup } from "react-simple-maps";
 import geoJsonData from "../data/countries.json";
-import { ZoomIn, ZoomOut, RotateCcw } from "lucide-react";
+import { ZoomIn, ZoomOut, RotateCcw, X, Anchor, ShieldAlert, Ship } from "lucide-react";
+import { ORIGIN_PORTS, INDIAN_EAST_COAST_PORTS } from "../lib/maritime-data";
 
-const markers = [
-  // Origins
-  { id: "newcastle", coordinates: [151.7817, -32.9283], name: "Newcastle", type: "origin", dx: 15, dy: 10, textAnchor: "start" },
-  { id: "norfolk", coordinates: [-76.2859, 36.8508], name: "Norfolk", type: "origin", dx: 10, dy: 10, textAnchor: "start" },
-  { id: "maputo", coordinates: [32.5892, -25.9692], name: "Maputo", type: "origin", dx: -15, dy: 10, textAnchor: "end" },
-  { id: "vladivostok", coordinates: [131.8869, 43.1198], name: "Vladivostok", type: "origin", dx: 15, dy: -10, textAnchor: "start" },
-  { id: "kalimantan", coordinates: [116.0385, -0.2787], name: "Kalimantan", type: "origin", dx: 15, dy: 10, textAnchor: "start" },
-  
-  // Destinations (East Coast India) - REAL COORDINATES
-  // Paradip 20.317°N 86.611°E
-  { id: "paradip", coordinates: [86.611, 20.317], name: "Paradip", type: "dest", dx: 25, dy: 15, textAnchor: "start" },
-  // Vizag 17.686°N 83.218°E
-  { id: "vizag", coordinates: [83.218, 17.686], name: "Vizag", type: "dest", dx: -25, dy: -10, textAnchor: "end" },
-  // Gangavaram 17.616°N 83.238°E
-  { id: "gangavaram", coordinates: [83.238, 17.616], name: "Gangavaram", type: "dest", dx: 25, dy: 15, textAnchor: "start" },
-  // Gopalpur 19.281°N 84.906°E
-  { id: "gopalpur", coordinates: [84.906, 19.281], name: "Gopalpur", type: "dest", dx: -25, dy: 0, textAnchor: "end" },
-  // Dhamra 20.787°N 86.977°E
-  { id: "dhamra", coordinates: [86.977, 20.787], name: "Dhamra", type: "dest", dx: -25, dy: -15, textAnchor: "end" },
-  // Sagar-Sandheads 21.646°N 88.084°E
-  { id: "sagar", coordinates: [88.084, 21.646], name: "Sagar", type: "dest", dx: 30, dy: 0, textAnchor: "start" },
-  // Haldia 22.033°N 88.093°E
-  { id: "haldia", coordinates: [88.093, 22.033], name: "Haldia", type: "dest", dx: 25, dy: -25, textAnchor: "start" },
+// Extract origin markers
+const originMarkers = Object.entries(ORIGIN_PORTS).map(([id, data]) => ({
+  id,
+  coordinates: data.coordinates,
+  name: data.name,
+  type: "origin",
+  data
+}));
+
+// Extract destination markers
+const destMarkers = Object.entries(INDIAN_EAST_COAST_PORTS).map(([id, data]) => ({
+  id,
+  coordinates: data.coordinates,
+  name: data.name,
+  type: "dest",
+  data
+}));
+
+const allMarkers = [...originMarkers, ...destMarkers];
+
+// Realistic paths (waypoints to avoid landmasses where simple lines cross)
+// Coordinates format: [longitude, latitude]
+const routes = [
+  {
+    id: "russia-vizag", origin: "Russia", destination: "Vizag", color: "#ff3333",
+    waypoints: [
+      ORIGIN_PORTS["Russia"].coordinates,
+      [129.0, 34.0], // Sea of Japan
+      [120.0, 20.0], // South China Sea
+      [104.0, 1.5],  // Malacca
+      INDIAN_EAST_COAST_PORTS["Vizag"].coordinates
+    ]
+  },
+  {
+    id: "aus-sagar", origin: "Australia", destination: "Sagar", color: "#00ff00",
+    waypoints: [
+      ORIGIN_PORTS["Australia"].coordinates,
+      [153.0, -20.0], // Coral Sea
+      [142.0, -10.0], // Torres Strait
+      [115.0, -8.0], // South of Java
+      INDIAN_EAST_COAST_PORTS["Sagar-Sandheads"].coordinates
+    ]
+  },
+  {
+    id: "indo-paradip", origin: "Indonesia", destination: "Paradip", color: "#00ff00",
+    waypoints: [
+      ORIGIN_PORTS["Indonesia"].coordinates,
+      [104.0, 1.5], // Malacca
+      INDIAN_EAST_COAST_PORTS["Paradip"].coordinates
+    ]
+  },
+  {
+    id: "moz-gangavaram", origin: "Mozambique", destination: "Gangavaram", color: "#00ff00",
+    waypoints: [
+      ORIGIN_PORTS["Mozambique"].coordinates,
+      [50.0, -15.0], // Madagascar North
+      [75.0, 0.0], // Maldives
+      INDIAN_EAST_COAST_PORTS["Gangavaram"].coordinates
+    ]
+  },
+  {
+    id: "us-haldia", origin: "US", destination: "Haldia", color: "#00ff00",
+    waypoints: [
+      ORIGIN_PORTS["US"].coordinates,
+      [-30.0, 35.0], // Atlantic
+      [-5.0, 36.0], // Gibraltar
+      [15.0, 35.0], // Med
+      [32.0, 31.0], // Suez
+      [43.0, 12.0], // Bab el Mandeb
+      [60.0, 15.0], // Arabian Sea
+      INDIAN_EAST_COAST_PORTS["Haldia"].coordinates
+    ]
+  }
 ];
 
-const arcs = [
-  { start: [151.7817, -32.9283], end: [88.084, 21.646], name: "Australia to Sagar" }, // Updated to exact dest coords
-  { start: [32.5892, -25.9692], end: [86.611, 20.317], name: "Maputo to Paradip" },
-  { start: [131.8869, 43.1198], end: [83.218, 17.686], name: "Russia to Vizag" },
+const ships = [
+  { id: "ship1", name: "MV Oceanic", vesselType: "Capesize", coords: [104.0, 1.5], route: "Vladivostok → Vizag", heading: 270, cargo: "Coal", eta: "Nov 12", type: "ship" },
+  { id: "ship2", name: "MV Iron Maiden", vesselType: "Panamax", coords: [50.0, -15.0], route: "Maputo → Gangavaram", heading: 45, cargo: "Iron Ore", eta: "Nov 15", type: "ship" },
+  { id: "ship3", name: "MV Pacific", vesselType: "Supramax", coords: [-5.0, 36.0], route: "Norfolk → Haldia", heading: 90, cargo: "Thermal Coal", eta: "Nov 22", type: "ship" },
+  { id: "ship4", name: "MV Asian", vesselType: "Panamax", coords: [115.0, -8.0], route: "Newcastle → Sagar", heading: 300, cargo: "Coking Coal", eta: "Nov 10", type: "ship" },
+  { id: "ship5", name: "MV Nusantara", vesselType: "Supramax", coords: [95.0, 10.0], route: "Kalimantan → Paradip", heading: 320, cargo: "Thermal Coal", eta: "Nov 08", type: "ship" }
 ];
 
 export default function GlobeWrapper() {
   const [mounted, setMounted] = useState(false);
-  const [hoveredMarker, setHoveredMarker] = useState<string | null>(null);
+  const [hoveredNode, setHoveredNode] = useState<string | null>(null);
+  const [selectedNode, setSelectedNode] = useState<any | null>(null);
   
-  // Controlled zoom state
-  const [position, setPosition] = useState({ coordinates: [90, 15] as [number, number], zoom: 1 });
+  // Controlled zoom state - initialize wider to see origins
+  const [position, setPosition] = useState({ coordinates: [80, 20] as [number, number], zoom: 2 });
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
   const handleZoomIn = () => {
-    if (position.zoom >= 8) return;
+    if (position.zoom >= 12) return;
     setPosition((pos) => ({ ...pos, zoom: pos.zoom * 1.5 }));
   };
 
@@ -58,11 +112,11 @@ export default function GlobeWrapper() {
   };
 
   const handleReset = () => {
-    setPosition({ coordinates: [90, 15], zoom: 1 });
+    setPosition({ coordinates: [80, 20], zoom: 2 });
   };
 
-  const handleMoveEnd = (position: { coordinates: [number, number], zoom: number }) => {
-    setPosition(position);
+  const handleMoveEnd = (pos: { coordinates: [number, number], zoom: number }) => {
+    setPosition(pos);
   };
 
   if (!mounted) {
@@ -79,110 +133,141 @@ export default function GlobeWrapper() {
       <div className="absolute top-4 right-4 z-10 flex flex-col gap-2">
         <button 
           onClick={handleZoomIn}
-          className="bg-neutral-900/80 border border-neutral-700 text-neutral-300 p-2 hover:bg-neutral-800 hover:text-white transition-colors"
+          className="p-2 bg-neutral-900/80 border border-neutral-700 text-neutral-400 hover:text-white hover:border-[#00ff00] transition-colors rounded shadow-lg"
           title="Zoom In"
         >
           <ZoomIn className="w-4 h-4" />
         </button>
         <button 
-          onClick={handleZoomOut}
-          className="bg-neutral-900/80 border border-neutral-700 text-neutral-300 p-2 hover:bg-neutral-800 hover:text-white transition-colors"
-          title="Zoom Out"
-        >
-          <ZoomOut className="w-4 h-4" />
-        </button>
-        <button 
           onClick={handleReset}
-          className="bg-neutral-900/80 border border-neutral-700 text-neutral-300 p-2 hover:bg-neutral-800 hover:text-white transition-colors"
+          className="p-2 bg-neutral-900/80 border border-neutral-700 text-neutral-400 hover:text-white hover:border-[#00ff00] transition-colors rounded shadow-lg"
           title="Reset View"
         >
           <RotateCcw className="w-4 h-4" />
         </button>
+        <button 
+          onClick={handleZoomOut}
+          className="p-2 bg-neutral-900/80 border border-neutral-700 text-neutral-400 hover:text-white hover:border-[#00ff00] transition-colors rounded shadow-lg"
+          title="Zoom Out"
+        >
+          <ZoomOut className="w-4 h-4" />
+        </button>
       </div>
 
-      {/* Radar grid overlay */}
-      <div 
-        className="absolute inset-0 opacity-10 pointer-events-none"
-        style={{
-          backgroundImage: `
-            linear-gradient(to right, #00ff00 1px, transparent 1px),
-            linear-gradient(to bottom, #00ff00 1px, transparent 1px)
-          `,
-          backgroundSize: '40px 40px'
-        }}
-      />
-      
-      {/* Radar scanning sweep */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-20">
-        <div className="w-[200%] h-[200%] absolute top-[-50%] left-[-50%] border-r-[2px] border-[#00ff00]/40 rotate-180 animate-spin-slow origin-center" 
-             style={{ 
-               animationDuration: '10s', 
-               background: 'conic-gradient(from 0deg, transparent 0deg, transparent 270deg, rgba(0,255,0,0.2) 360deg)' 
-             }} 
-        />
-      </div>
+      {/* Selected Node Details Popup */}
+      {selectedNode && (
+        <div className="absolute top-4 left-4 z-20 w-72 bg-black/90 border border-[#00ff00]/40 p-4 shadow-2xl backdrop-blur-md">
+          <div className="flex justify-between items-start mb-3 border-b border-neutral-800 pb-2">
+            <div>
+              <h3 className="text-white font-mono font-bold uppercase tracking-wider">{selectedNode.name}</h3>
+              <p className="text-[#00ff00] text-[10px] font-mono uppercase tracking-widest mt-1">
+                {selectedNode.type === "ship" ? "Vessel in Transit" : selectedNode.data?.region}
+              </p>
+            </div>
+            <button onClick={() => setSelectedNode(null)} className="text-neutral-500 hover:text-white">
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+          
+          <div className="space-y-2 text-xs font-mono text-neutral-300">
+            {selectedNode.type === "dest" && selectedNode.data && (
+              <>
+                <div className="flex justify-between border-b border-neutral-900 pb-1"><span>Max Draft:</span> <span className="text-white">{selectedNode.data.maxDraftMeters}m</span></div>
+                <div className="flex justify-between border-b border-neutral-900 pb-1"><span>Max LOA:</span> <span className="text-white">{selectedNode.data.maxLoaMeters}m</span></div>
+                <div className="flex justify-between border-b border-neutral-900 pb-1"><span>Beam:</span> <span className="text-white">{selectedNode.data.maxBeamMeters}m</span></div>
+                <div className="flex justify-between border-b border-neutral-900 pb-1"><span>Handling Rate:</span> <span className="text-white">{selectedNode.data.cargoHandlingRateTpd} TPD</span></div>
+                {selectedNode.data.cycloneWarning && (
+                  <div className="flex items-center gap-1 text-red-500 mt-2 bg-red-500/10 p-1 border border-red-500/30">
+                    <ShieldAlert className="w-3 h-3" /> ACTIVE WEATHER THREAT
+                  </div>
+                )}
+              </>
+            )}
+            {selectedNode.type === "origin" && selectedNode.data && (
+              <>
+                <div className="flex justify-between border-b border-neutral-900 pb-1"><span>Handling Rate:</span> <span className="text-white">{selectedNode.data.cargoHandlingRateTpd} TPD</span></div>
+                <div className="flex justify-between border-b border-neutral-900 pb-1"><span>Status:</span> <span className="text-[#00ff00]">Loading Active</span></div>
+              </>
+            )}
+            {selectedNode.type === "ship" && (
+              <>
+                <div className="flex justify-between border-b border-neutral-900 pb-1"><span>Type:</span> <span className="text-white">{selectedNode.vesselType}</span></div>
+                <div className="flex justify-between border-b border-neutral-900 pb-1"><span>Route:</span> <span className="text-[#00ff00]">{selectedNode.route}</span></div>
+                <div className="flex justify-between border-b border-neutral-900 pb-1"><span>Cargo:</span> <span className="text-white">{selectedNode.cargo}</span></div>
+                <div className="flex justify-between border-b border-neutral-900 pb-1"><span>ETA:</span> <span className="text-white">{selectedNode.eta}</span></div>
+              </>
+            )}
+          </div>
+        </div>
+      )}
 
-      <ComposableMap
-        projection="geoMercator"
-        projectionConfig={{
-          scale: 350,
-        }}
+      {/* Map Content */}
+      <ComposableMap 
+        projection="geoMercator" 
+        projectionConfig={{ scale: 150 }}
         style={{ width: "100%", height: "100%" }}
       >
         <ZoomableGroup 
-          zoom={position.zoom}
-          center={position.coordinates}
+          zoom={position.zoom} 
+          center={position.coordinates} 
           onMoveEnd={handleMoveEnd}
           maxZoom={12}
         >
           <Geographies geography={geoJsonData}>
             {({ geographies }) =>
               geographies.map((geo) => (
-                <Geography
-                  key={geo.rsmKey}
-                  geography={geo}
-                  fill="#111111"
-                  stroke="#333333"
-                  strokeWidth={0.5 / position.zoom} // keep stroke consistent on zoom
+                <Geography 
+                  key={geo.rsmKey} 
+                  geography={geo} 
+                  fill="#111111" 
+                  stroke="#222222" 
+                  strokeWidth={0.5 / position.zoom}
                   style={{
                     default: { outline: "none" },
                     hover: { fill: "#1a1a1a", outline: "none" },
-                    pressed: { outline: "none" },
+                    pressed: { outline: "none" }
                   }}
                 />
               ))
             }
           </Geographies>
 
-          {/* Draw shipping lanes */}
-          {arcs.map((arc, i) => (
-            <Line
-              key={`line-${i}`}
-              from={arc.start as [number, number]}
-              to={arc.end as [number, number]}
-              stroke="#00ff00"
-              strokeWidth={1 / position.zoom}
-              strokeOpacity={0.4}
-              strokeDasharray={`${4 / position.zoom} ${4 / position.zoom}`}
-              className="animate-pulse"
-            />
-          ))}
+          {/* Waypoint Routes */}
+          {routes.map((route, i) => {
+            // Draw lines between each waypoint sequentially
+            const lines = [];
+            for (let w = 0; w < route.waypoints.length - 1; w++) {
+              lines.push(
+                <Line
+                  key={`${route.id}-${w}`}
+                  from={route.waypoints[w] as [number, number]}
+                  to={route.waypoints[w+1] as [number, number]}
+                  stroke={route.color}
+                  strokeWidth={1 / position.zoom}
+                  strokeDasharray={`${3 / position.zoom} ${2 / position.zoom}`}
+                  style={{ opacity: 0.6 }}
+                />
+              );
+            }
+            return <React.Fragment key={route.id}>{lines}</React.Fragment>;
+          })}
 
-          {/* Draw markers and labels */}
-          {markers.map((marker) => {
-            const isHovered = hoveredMarker === marker.id;
-            // Only show the label if we are zoomed in enough, OR if the user is hovering over the marker
-            const shouldShowLabel = isZoomedIn || isHovered;
+          {/* Port Markers */}
+          {allMarkers.map((marker) => {
+            const isHovered = hoveredNode === marker.id;
+            const isSelected = selectedNode?.id === marker.id;
+            const shouldShowLabel = isZoomedIn || isHovered || isSelected;
 
             return (
               <Marker 
                 key={marker.id} 
                 coordinates={marker.coordinates as [number, number]}
-                onMouseEnter={() => setHoveredMarker(marker.id)}
-                onMouseLeave={() => setHoveredMarker(null)}
+                onMouseEnter={() => setHoveredNode(marker.id)}
+                onMouseLeave={() => setHoveredNode(null)}
+                onClick={() => setSelectedNode(marker)}
               >
                 <circle 
-                  r={isHovered ? (6 / position.zoom) : (4 / position.zoom)} 
+                  r={(isHovered || isSelected ? 6 : 4) / position.zoom} 
                   fill={marker.type === "dest" ? "#00ff00" : "#aaaaaa"} 
                   className="transition-all duration-300 cursor-pointer"
                 />
@@ -199,29 +284,19 @@ export default function GlobeWrapper() {
                   />
                 )}
                 
-                {/* Label with leader line */}
+                {/* Label */}
                 <g 
                   className="pointer-events-none transition-opacity duration-300"
                   style={{ opacity: shouldShowLabel ? 1 : 0 }}
                 >
-                  <line 
-                    x1={0} 
-                    y1={0} 
-                    x2={marker.dx / position.zoom * 0.9} 
-                    y2={marker.dy / position.zoom * 0.9} 
-                    stroke={marker.type === "dest" ? "#00ff00" : "#555555"} 
-                    strokeWidth={1 / position.zoom} 
-                    opacity={0.6} 
-                  />
                   <text
-                    textAnchor={marker.textAnchor as "start" | "middle" | "end"}
-                    x={marker.dx / position.zoom}
-                    y={marker.dy / position.zoom}
+                    textAnchor="middle"
+                    y={-10 / position.zoom}
                     style={{
                       fontFamily: "monospace",
                       fill: marker.type === "dest" ? "#ffffff" : "#aaaaaa",
-                      fontSize: `${(isHovered ? 13 : 11) / Math.max(1, position.zoom * 0.5)}px`,
-                      fontWeight: isHovered ? "bold" : "normal",
+                      fontSize: `${(isHovered || isSelected ? 13 : 11) / Math.max(1, position.zoom * 0.5)}px`,
+                      fontWeight: isHovered || isSelected ? "bold" : "normal",
                       textShadow: "1px 1px 2px black, -1px -1px 2px black, 0px 0px 4px black",
                       transition: "all 0.2s ease-in-out",
                     }}
@@ -232,22 +307,68 @@ export default function GlobeWrapper() {
               </Marker>
             );
           })}
+
+          {/* Ships in Transit */}
+          {ships.map((ship) => {
+            const isHovered = hoveredNode === ship.id;
+            const isSelected = selectedNode?.id === ship.id;
+            const shouldShowLabel = isZoomedIn || isHovered || isSelected;
+            
+            return (
+              <Marker 
+                key={ship.id} 
+                coordinates={ship.coords as [number, number]}
+                onMouseEnter={() => setHoveredNode(ship.id)}
+                onMouseLeave={() => setHoveredNode(null)}
+                onClick={() => setSelectedNode(ship)}
+              >
+                {/* Rotate the icon based on heading */}
+                <g transform={`rotate(${ship.heading})`} className="cursor-pointer">
+                  <path 
+                    d="M-4,-2 L0,-6 L4,-2 L3,5 L-3,5 Z" 
+                    fill="#00ffff" 
+                    stroke="#000"
+                    strokeWidth={0.5 / position.zoom}
+                    transform={`scale(${1.5 / position.zoom})`}
+                  />
+                </g>
+
+                <g 
+                  className="pointer-events-none transition-opacity duration-300"
+                  style={{ opacity: shouldShowLabel ? 1 : 0 }}
+                >
+                  <text
+                    textAnchor="middle"
+                    y={15 / position.zoom}
+                    style={{
+                      fontFamily: "monospace",
+                      fill: "#00ffff",
+                      fontSize: `${9 / Math.max(1, position.zoom * 0.5)}px`,
+                      textShadow: "1px 1px 2px black, -1px -1px 2px black, 0px 0px 4px black",
+                    }}
+                  >
+                    {ship.name}
+                  </text>
+                </g>
+              </Marker>
+            );
+          })}
         </ZoomableGroup>
       </ComposableMap>
       
       {/* Decorative corners */}
-      <div className="absolute top-4 left-4 w-4 h-4 border-t-2 border-l-2 border-[#00ff00]/50" />
-      <div className="absolute bottom-4 left-4 w-4 h-4 border-b-2 border-l-2 border-[#00ff00]/50" />
-      <div className="absolute bottom-4 right-4 w-4 h-4 border-b-2 border-r-2 border-[#00ff00]/50" />
+      <div className="absolute top-4 left-4 w-4 h-4 border-t-2 border-l-2 border-[#00ff00]/50 pointer-events-none" />
+      <div className="absolute bottom-4 left-4 w-4 h-4 border-b-2 border-l-2 border-[#00ff00]/50 pointer-events-none" />
+      <div className="absolute bottom-4 right-4 w-4 h-4 border-b-2 border-r-2 border-[#00ff00]/50 pointer-events-none" />
       
-      <div className="absolute bottom-4 left-8 text-[#00ff00]/70 font-mono text-[10px] uppercase tracking-widest flex items-center gap-2">
+      <div className="absolute bottom-4 left-8 text-[#00ff00]/70 font-mono text-[10px] uppercase tracking-widest flex items-center gap-2 pointer-events-none">
         <div className="w-1.5 h-1.5 rounded-full bg-[#00ff00] animate-pulse" />
-        Live Tracking: {markers.length} Terminals
+        Live Tracking: {allMarkers.length + ships.length} Entities
       </div>
       
-      {!isZoomedIn && (
-        <div className="absolute bottom-8 left-8 text-neutral-500 font-mono text-[9px] uppercase tracking-widest">
-          (Zoom in or hover to view terminal identities)
+      {!isZoomedIn && !selectedNode && (
+        <div className="absolute bottom-8 left-8 text-neutral-500 font-mono text-[9px] uppercase tracking-widest pointer-events-none">
+          (Scroll to zoom. Click terminals or vessels for details)
         </div>
       )}
     </div>
