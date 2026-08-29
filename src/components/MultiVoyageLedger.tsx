@@ -1,65 +1,134 @@
 "use client";
 
-import { Ship, Anchor, MapPin, Search, ArrowRight, ShieldCheck, Route, Zap, Download } from "lucide-react";
+import React, { useState, useMemo } from "react";
+import { Ship, Anchor, MapPin, Search, ArrowRight, ShieldCheck, Route, Zap, Download, Loader2 } from "lucide-react";
+
+const INITIAL_VOYAGES = [
+  {
+    id: "MV-CT-901",
+    vessel: "MV Pacific Horizon (Capesize)",
+    cargo: "Iron Ore",
+    volume: "180,000 MT",
+    origin: "Newcastle, Australia",
+    destination: "Sagar-Sandheads, India",
+    type: "Spot → 3-Voyage Contract",
+    status: "AI Executed",
+    savings: "$1.4M",
+    rawSavings: 1400000,
+  },
+  {
+    id: "MV-CT-902",
+    vessel: "Maersk Sentinel (Panamax)",
+    cargo: "Thermal Coal",
+    volume: "75,000 MT",
+    origin: "Maputo, Mozambique",
+    destination: "Paradip, India",
+    type: "Spot → 2-Voyage Contract",
+    status: "Draft Approved",
+    savings: "$420K",
+    rawSavings: 420000,
+  },
+  {
+    id: "MV-CT-903",
+    vessel: "Oceanic Pioneer (Supramax)",
+    cargo: "Coking Coal",
+    volume: "55,000 MT",
+    origin: "Vladivostok, Russia",
+    destination: "Vizag, India",
+    type: "Spot → 4-Voyage Contract",
+    status: "Pending Signature",
+    savings: "$890K",
+    rawSavings: 890000,
+  },
+  {
+    id: "MV-CT-904",
+    vessel: "Global Spirit (Capesize)",
+    cargo: "Thermal Coal",
+    volume: "150,000 MT",
+    origin: "Kalimantan, Indonesia",
+    destination: "Haldia, India",
+    type: "Single Spot Route",
+    status: "Lightering Req.",
+    savings: "N/A",
+    rawSavings: 0,
+  },
+  {
+    id: "MV-CT-905",
+    vessel: "Apex Voyager (Capesize)",
+    cargo: "Iron Ore",
+    volume: "210,000 MT",
+    origin: "Norfolk, United States",
+    destination: "Dhamra, India",
+    type: "Spot → 3-Voyage Contract",
+    status: "AI Executed",
+    savings: "$1.8M",
+    rawSavings: 1800000,
+  }
+];
 
 export default function MultiVoyageLedger() {
-  const voyages = [
-    {
-      id: "MV-CT-901",
-      vessel: "MV Pacific Horizon (Capesize)",
-      cargo: "Iron Ore",
-      volume: "180,000 MT",
-      origin: "Newcastle, Australia",
-      destination: "Sagar-Sandheads, India",
-      type: "Spot \u2192 3-Voyage Contract",
-      status: "AI Executed",
-      savings: "$1.4M",
-    },
-    {
-      id: "MV-CT-902",
-      vessel: "Maersk Sentinel (Panamax)",
-      cargo: "Thermal Coal",
-      volume: "75,000 MT",
-      origin: "Maputo, Mozambique",
-      destination: "Paradip, India",
-      type: "Spot \u2192 2-Voyage Contract",
-      status: "Draft Approved",
-      savings: "$420K",
-    },
-    {
-      id: "MV-CT-903",
-      vessel: "Oceanic Pioneer (Supramax)",
-      cargo: "Coking Coal",
-      volume: "55,000 MT",
-      origin: "Vladivostok, Russia",
-      destination: "Vizag, India",
-      type: "Spot \u2192 4-Voyage Contract",
-      status: "Pending Signature",
-      savings: "$890K",
-    },
-    {
-      id: "MV-CT-904",
-      vessel: "Global Trader (Panamax)",
-      cargo: "Thermal Coal",
-      volume: "68,000 MT",
-      origin: "Kalimantan, Indonesia",
-      destination: "Haldia, India",
-      type: "Single Spot Route",
-      status: "Lightering Req.",
-      savings: "N/A",
-    },
-    {
-      id: "MV-CT-905",
-      vessel: "Apex Voyager (Capesize)",
-      cargo: "Iron Ore",
-      volume: "210,000 MT",
-      origin: "Norfolk, United States",
-      destination: "Dhamra, India",
-      type: "Spot \u2192 3-Voyage Contract",
-      status: "AI Executed",
-      savings: "$1.8M",
-    }
-  ];
+  const [voyages, setVoyages] = useState(INITIAL_VOYAGES);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [isOptimizing, setIsOptimizing] = useState(false);
+  const [optResult, setOptResult] = useState<string | null>(null);
+
+  const filteredVoyages = useMemo(() => {
+    if (!searchTerm) return voyages;
+    const lower = searchTerm.toLowerCase();
+    return voyages.filter(v => v.id.toLowerCase().includes(lower) || v.vessel.toLowerCase().includes(lower));
+  }, [voyages, searchTerm]);
+
+  const handleOptimize = () => {
+    setIsOptimizing(true);
+    setOptResult(null);
+
+    setTimeout(() => {
+      let updatedCount = 0;
+      let extraSavings = 0;
+
+      const newVoyages = voyages.map((v) => {
+        // If there's a search term, only optimize filtered rows
+        if (searchTerm && !v.id.toLowerCase().includes(searchTerm.toLowerCase()) && !v.vessel.toLowerCase().includes(searchTerm.toLowerCase())) {
+          return v;
+        }
+
+        // Optimize rows that aren't already AI Executed
+        if (v.status === "Draft Approved" || v.status === "Pending Signature") {
+          updatedCount++;
+          const boost = Math.floor(v.rawSavings * 0.15); // Add ~15% savings
+          extraSavings += boost;
+          
+          const newRaw = v.rawSavings + boost;
+          let newSavingsStr = v.savings;
+          if (newRaw >= 1000000) {
+            newSavingsStr = `$${(newRaw / 1000000).toFixed(1)}M`;
+          } else {
+            newSavingsStr = `$${Math.round(newRaw / 1000)}K`;
+          }
+
+          return {
+            ...v,
+            status: "AI Executed",
+            rawSavings: newRaw,
+            savings: newSavingsStr
+          };
+        }
+        return v;
+      });
+
+      setVoyages(newVoyages);
+      setIsOptimizing(false);
+      
+      if (updatedCount > 0) {
+        setOptResult(`Optimization complete — ${updatedCount} contract(s) updated, $${Math.round(extraSavings/1000)}K additional savings identified.`);
+      } else {
+        setOptResult(`Optimization complete — no pending contracts found to optimize.`);
+      }
+      
+      // Auto-hide banner after 5s
+      setTimeout(() => setOptResult(null), 5000);
+    }, 1500);
+  };
 
   const handleExportPDF = async () => {
     try {
@@ -108,7 +177,15 @@ export default function MultiVoyageLedger() {
   };
 
   return (
-    <div className="minimal-panel p-4 flex flex-col h-full bg-black">
+    <div className="minimal-panel p-4 flex flex-col h-full bg-black relative">
+      {/* Toast Notification */}
+      {optResult && (
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#00ff00]/20 border border-[#00ff00] text-[#00ff00] px-4 py-2 rounded text-xs font-mono z-50 flex items-center gap-2 shadow-[0_0_15px_rgba(0,255,0,0.3)] backdrop-blur-sm animate-in fade-in slide-in-from-top-5">
+          <ShieldCheck className="w-4 h-4" />
+          {optResult}
+        </div>
+      )}
+
       {/* Header */}
       <div className="flex items-center justify-between border-b border-neutral-800 pb-4 mb-4">
         <div>
@@ -133,12 +210,27 @@ export default function MultiVoyageLedger() {
             <input 
               type="text" 
               placeholder="SEARCH VOYAGE ID..." 
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
               className="bg-neutral-900 border border-neutral-700 text-xs font-mono px-7 py-1.5 focus:outline-none focus:border-[#00ff00] text-white w-48"
             />
           </div>
-          <button className="bg-[#00ff00]/10 text-[#00ff00] border border-[#00ff00]/30 px-3 py-1.5 text-xs font-mono font-bold uppercase tracking-wider hover:bg-[#00ff00]/20 transition-colors flex items-center gap-2">
-            <Zap className="w-3 h-3" />
-            Run Fleet Optimization
+          <button 
+            onClick={handleOptimize}
+            disabled={isOptimizing}
+            className="bg-[#00ff00]/10 text-[#00ff00] border border-[#00ff00]/30 px-3 py-1.5 text-xs font-mono font-bold uppercase tracking-wider hover:bg-[#00ff00]/20 transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed w-56 justify-center"
+          >
+            {isOptimizing ? (
+              <>
+                <Loader2 className="w-3 h-3 animate-spin" />
+                Optimizing...
+              </>
+            ) : (
+              <>
+                <Zap className="w-3 h-3" />
+                Run Fleet Optimization
+              </>
+            )}
           </button>
         </div>
       </div>
@@ -158,7 +250,7 @@ export default function MultiVoyageLedger() {
             </tr>
           </thead>
           <tbody className="text-xs font-mono text-neutral-300">
-            {voyages.map((voyage, idx) => (
+            {filteredVoyages.map((voyage, idx) => (
               <tr 
                 key={voyage.id} 
                 className={`border-b border-neutral-800 hover:bg-neutral-900/50 transition-colors ${idx % 2 === 0 ? 'bg-black' : 'bg-neutral-900/20'}`}
@@ -198,11 +290,11 @@ export default function MultiVoyageLedger() {
                     )}
                   </div>
                 </td>
-                <td className="py-3 px-4 text-[#00ff00]">
+                <td className="py-3 px-4 text-[#00ff00] font-bold transition-all duration-500">
                   {voyage.savings}
                 </td>
                 <td className="py-3 px-4 text-right">
-                  <span className={`inline-flex items-center gap-1 px-2 py-1 text-[9px] uppercase tracking-widest border ${
+                  <span className={`inline-flex items-center gap-1 px-2 py-1 text-[9px] uppercase tracking-widest border transition-colors duration-500 ${
                     voyage.status === "AI Executed" ? "border-[#00ff00]/30 text-[#00ff00] bg-[#00ff00]/10" : 
                     voyage.status === "Draft Approved" ? "border-blue-500/30 text-blue-400 bg-blue-500/10" :
                     voyage.status === "Lightering Req." ? "border-amber-500/30 text-amber-400 bg-amber-500/10" :
@@ -216,6 +308,11 @@ export default function MultiVoyageLedger() {
             ))}
           </tbody>
         </table>
+        {filteredVoyages.length === 0 && (
+          <div className="py-8 text-center text-neutral-500 font-mono text-xs">
+            No voyages match the current search filter.
+          </div>
+        )}
       </div>
     </div>
   );
