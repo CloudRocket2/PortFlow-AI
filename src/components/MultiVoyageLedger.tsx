@@ -1,7 +1,5 @@
 "use client";
 
-import jsPDF from "jspdf";
-import autoTable from "jspdf-autotable";
 import { Ship, Anchor, MapPin, Search, ArrowRight, ShieldCheck, Route, Zap, Download } from "lucide-react";
 
 export default function MultiVoyageLedger() {
@@ -63,21 +61,35 @@ export default function MultiVoyageLedger() {
     }
   ];
 
-  const exportPDF = () => {
-    const doc = new jsPDF();
-    doc.text("Multi-Voyage AI Recommendations", 14, 15);
-    
-    autoTable(doc, {
-      startY: 20,
-      head: [["ID", "Vessel", "Cargo", "Origin", "Destination", "Type", "Savings", "Status"]],
-      body: voyages.map(v => [
-        v.id, v.vessel, `${v.volume} ${v.cargo}`, v.origin, v.destination, v.type, v.savings, v.status
-      ]),
-      styles: { fontSize: 8 },
-      headStyles: { fillColor: [0, 0, 0] }
-    });
-    
-    doc.save("PortFlow-Recommendations.pdf");
+  const handleExportPDF = async () => {
+    try {
+      const { jsPDF } = await import("jspdf");
+      const { default: autoTable } = await import("jspdf-autotable");
+      
+      const doc = new jsPDF();
+      doc.setFontSize(16);
+      doc.text("Multi-Voyage Execution Ledger", 14, 15);
+      
+      doc.setFontSize(10);
+      doc.text(`Generated: ${new Date().toLocaleDateString()}`, 14, 22);
+
+      const tableData = voyages.map(v => [
+        v.id, v.vessel, v.cargo, v.volume, v.origin, v.destination, v.status, v.savings
+      ]);
+
+      autoTable(doc, {
+        startY: 28,
+        head: [['ID', 'Vessel', 'Cargo', 'Volume', 'Origin', 'Destination', 'Status', 'Savings']],
+        body: tableData,
+        theme: 'grid',
+        styles: { fontSize: 8 },
+        headStyles: { fillColor: [0, 0, 0], textColor: [0, 255, 0] }
+      });
+
+      doc.save("portflow-ledger.pdf");
+    } catch (error) {
+      console.error("Failed to generate PDF", error);
+    }
   };
 
   const exportCSV = () => {
@@ -113,7 +125,7 @@ export default function MultiVoyageLedger() {
           <button onClick={exportCSV} className="text-xs font-mono text-neutral-400 hover:text-white transition-colors flex items-center gap-1 border border-neutral-700 px-2 py-1 rounded">
             <Download className="w-3 h-3" /> CSV
           </button>
-          <button onClick={exportPDF} className="text-xs font-mono text-neutral-400 hover:text-white transition-colors flex items-center gap-1 border border-neutral-700 px-2 py-1 rounded">
+          <button onClick={handleExportPDF} className="text-xs font-mono text-neutral-400 hover:text-white transition-colors flex items-center gap-1 border border-neutral-700 px-2 py-1 rounded">
             <Download className="w-3 h-3" /> PDF
           </button>
           <div className="relative ml-2">
