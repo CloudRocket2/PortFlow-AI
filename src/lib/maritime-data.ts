@@ -28,13 +28,13 @@ export const VESSEL_PROFILES: Record<string, VesselProfile> = {
 export const LIGHTERING_PENALTY_USD_PER_TON = 4.5; // Cost penalty if ship must be lightered (e.g. Capesize in 14m draft)
 
 export const INDIAN_EAST_COAST_PORTS: Record<string, PortConstraint> = {
-  Haldia: { name: "Haldia", region: "West Bengal", maxDraftMeters: 8.5, maxLoaMeters: 230, maxBeamMeters: 32.2, cargoHandlingRateTpd: 15000, cycloneWarning: false },
-  SagarSandheads: { name: "Sagar-Sandheads", region: "West Bengal", maxDraftMeters: 20.0, maxLoaMeters: 400, maxBeamMeters: 60.0, cargoHandlingRateTpd: 25000, cycloneWarning: false }, // Deep-water anchorage for lightering
-  Paradip: { name: "Paradip", region: "Odisha", maxDraftMeters: 14.5, maxLoaMeters: 260, maxBeamMeters: 43.0, cargoHandlingRateTpd: 40000, cycloneWarning: true }, // SIMULATED CYCLONE WARNING
-  Dhamra: { name: "Dhamra", region: "Odisha", maxDraftMeters: 18.0, maxLoaMeters: 320, maxBeamMeters: 50.0, cargoHandlingRateTpd: 50000, cycloneWarning: true }, // SIMULATED CYCLONE WARNING
-  Vizag: { name: "Vizag", region: "Andhra Pradesh", maxDraftMeters: 14.5, maxLoaMeters: 260, maxBeamMeters: 43.0, cargoHandlingRateTpd: 35000, cycloneWarning: false },
-  Gangavaram: { name: "Gangavaram", region: "Andhra Pradesh", maxDraftMeters: 18.5, maxLoaMeters: 300, maxBeamMeters: 50.0, cargoHandlingRateTpd: 50000, cycloneWarning: false },
-  Gopalpur: { name: "Gopalpur", region: "Odisha", maxDraftMeters: 12.5, maxLoaMeters: 225, maxBeamMeters: 32.2, cargoHandlingRateTpd: 20000, cycloneWarning: false },
+  Haldia: { name: "Haldia", region: "West Bengal", coordinates: [88.093, 22.033], maxDraftMeters: 8.5, maxLoaMeters: 230, maxBeamMeters: 32.2, cargoHandlingRateTpd: 15000, cycloneWarning: false },
+  SagarSandheads: { name: "Sagar-Sandheads", region: "West Bengal", coordinates: [88.084, 21.646], maxDraftMeters: 20.0, maxLoaMeters: 400, maxBeamMeters: 60.0, cargoHandlingRateTpd: 25000, cycloneWarning: false },
+  Paradip: { name: "Paradip", region: "Odisha", coordinates: [86.611, 20.317], maxDraftMeters: 14.5, maxLoaMeters: 260, maxBeamMeters: 43.0, cargoHandlingRateTpd: 40000, cycloneWarning: true },
+  Dhamra: { name: "Dhamra", region: "Odisha", coordinates: [86.977, 20.787], maxDraftMeters: 18.0, maxLoaMeters: 320, maxBeamMeters: 50.0, cargoHandlingRateTpd: 50000, cycloneWarning: true },
+  Vizag: { name: "Vizag", region: "Andhra Pradesh", coordinates: [83.218, 17.686], maxDraftMeters: 14.5, maxLoaMeters: 260, maxBeamMeters: 43.0, cargoHandlingRateTpd: 35000, cycloneWarning: false },
+  Gangavaram: { name: "Gangavaram", region: "Andhra Pradesh", coordinates: [83.238, 17.616], maxDraftMeters: 18.5, maxLoaMeters: 300, maxBeamMeters: 50.0, cargoHandlingRateTpd: 50000, cycloneWarning: false },
+  Gopalpur: { name: "Gopalpur", region: "Odisha", coordinates: [84.906, 19.281], maxDraftMeters: 12.5, maxLoaMeters: 225, maxBeamMeters: 32.2, cargoHandlingRateTpd: 20000, cycloneWarning: false },
 };
 
 // Global Origin Ports (SIH Specified)

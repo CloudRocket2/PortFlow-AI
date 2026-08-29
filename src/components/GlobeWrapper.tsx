@@ -46,7 +46,7 @@ const routes = [
       [153.0, -20.0], // Coral Sea
       [142.0, -10.0], // Torres Strait
       [115.0, -8.0], // South of Java
-      INDIAN_EAST_COAST_PORTS["Sagar-Sandheads"].coordinates
+      INDIAN_EAST_COAST_PORTS["SagarSandheads"].coordinates
     ]
   },
   {
