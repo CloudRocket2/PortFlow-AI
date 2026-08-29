@@ -43,7 +43,7 @@ export default function ScenariosPage() {
                 <div className="space-y-4">
                   <div className="flex justify-between items-center bg-black p-3 border border-neutral-800">
                     <div className="text-xs text-neutral-400 uppercase font-mono">Primary Strategy</div>
-                    <div className="text-sm text-white font-bold">100% Panamax (Coal)</div>
+                    <div className="text-sm text-white font-bold">Spot Contract Now (Immediate)</div>
                   </div>
                   
                   <div className="grid grid-cols-2 gap-4">
@@ -52,16 +52,16 @@ export default function ScenariosPage() {
                       <div className="text-lg text-white font-bold">1.2M MT</div>
                     </div>
                     <div className="p-3 bg-neutral-900/50 border border-neutral-800">
-                      <div className="text-[10px] text-neutral-500 uppercase font-mono mb-1">Voyage Count</div>
-                      <div className="text-lg text-white font-bold">16 Voyages</div>
+                      <div className="text-[10px] text-neutral-500 uppercase font-mono mb-1">Execution Timing</div>
+                      <div className="text-lg text-white font-bold">This Week</div>
                     </div>
                     <div className="p-3 bg-neutral-900/50 border border-neutral-800">
                       <div className="text-[10px] text-neutral-500 uppercase font-mono mb-1">Avg Freight Rate</div>
-                      <div className="text-lg text-white font-bold">$15.20 / MT</div>
+                      <div className="text-lg text-white font-bold">$16.10 / MT</div>
                     </div>
                     <div className="p-3 bg-red-900/10 border border-red-500/20">
-                      <div className="text-[10px] text-red-400 uppercase font-mono mb-1">Lightering Penalty</div>
-                      <div className="text-lg text-red-400 font-bold">$0.00 / MT</div>
+                      <div className="text-[10px] text-red-400 uppercase font-mono mb-1">Total Logistics Cost</div>
+                      <div className="text-lg text-red-400 font-bold">$19.32M</div>
                     </div>
                   </div>
 
@@ -70,11 +70,11 @@ export default function ScenariosPage() {
                     <ul className="space-y-2 text-sm text-neutral-300">
                       <li className="flex items-start gap-2">
                         <div className="w-1.5 h-1.5 rounded-full bg-blue-500 mt-1.5 shrink-0" />
-                        No draft penalties at Haldia/Paradip.
+                        Locks in vessel availability immediately.
                       </li>
                       <li className="flex items-start gap-2">
                         <div className="w-1.5 h-1.5 rounded-full bg-amber-500 mt-1.5 shrink-0" />
-                        Higher base freight rate compared to Capesize.
+                        Ignores AI forecast indicating an upcoming seasonal dip in rates.
                       </li>
                     </ul>
                   </div>
@@ -92,7 +92,7 @@ export default function ScenariosPage() {
                 <div className="space-y-4">
                   <div className="flex justify-between items-center bg-black p-3 border border-neutral-800">
                     <div className="text-xs text-[#00ff00]/70 uppercase font-mono">Primary Strategy</div>
-                    <div className="text-sm text-white font-bold">80% Capesize (Iron Ore), 20% Panamax</div>
+                    <div className="text-sm text-white font-bold">Wait 3 Weeks for Predicted Dip</div>
                   </div>
                   
                   <div className="grid grid-cols-2 gap-4">
@@ -101,20 +101,20 @@ export default function ScenariosPage() {
                       <div className="text-lg text-white font-bold">1.2M MT</div>
                     </div>
                     <div className="p-3 bg-neutral-900/50 border border-neutral-800">
-                      <div className="text-[10px] text-neutral-500 uppercase font-mono mb-1">Voyage Count</div>
+                      <div className="text-[10px] text-neutral-500 uppercase font-mono mb-1">Execution Timing</div>
                       <div className="text-lg text-[#00ff00] font-bold flex items-center gap-2">
-                        <TrendingDown className="w-4 h-4" /> 7 Voyages
+                        Delay until Nov 26
                       </div>
                     </div>
                     <div className="p-3 bg-neutral-900/50 border border-neutral-800">
                       <div className="text-[10px] text-neutral-500 uppercase font-mono mb-1">Avg Freight Rate</div>
                       <div className="text-lg text-[#00ff00] font-bold flex items-center gap-2">
-                        <TrendingDown className="w-4 h-4" /> $12.10 / MT
+                        <TrendingDown className="w-4 h-4" /> $14.80 / MT
                       </div>
                     </div>
                     <div className="p-3 bg-amber-900/10 border border-amber-500/20">
-                      <div className="text-[10px] text-amber-400 uppercase font-mono mb-1">Lightering Penalty</div>
-                      <div className="text-lg text-amber-400 font-bold">+$2.50 / MT</div>
+                      <div className="text-[10px] text-amber-400 uppercase font-mono mb-1">Total Logistics Cost</div>
+                      <div className="text-lg text-amber-400 font-bold">$17.76M</div>
                     </div>
                   </div>
 
@@ -123,11 +123,11 @@ export default function ScenariosPage() {
                     <ul className="space-y-2 text-sm text-neutral-300">
                       <li className="flex items-start gap-2">
                         <div className="w-1.5 h-1.5 rounded-full bg-[#00ff00] mt-1.5 shrink-0" />
-                        Massive reduction in voyage count saves $3.7M overall.
+                        Saves $1.56M overall by riding the forecasted rate drop.
                       </li>
                       <li className="flex items-start gap-2">
                         <div className="w-1.5 h-1.5 rounded-full bg-amber-500 mt-1.5 shrink-0" />
-                        Incurs $2.50/t penalty for lightering Capesize at Sagar-Sandheads before entering Haldia.
+                        Small risk of supply constraint if the predicted dip does not materialize.
                       </li>
                     </ul>
                   </div>

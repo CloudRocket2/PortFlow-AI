@@ -2,10 +2,15 @@
 
 import { useState } from "react";
 import { Ship, Anchor, Calculator, TrendingDown, Clock, ShieldAlert, Cpu, CheckCircle2, AlertTriangle, ArrowRight } from "lucide-react";
+import { ORIGIN_PORTS, INDIAN_EAST_COAST_PORTS } from "@/lib/maritime-data";
+import PortInfraTable from "@/components/PortInfraTable";
 
 export default function CharteringPage() {
-  const [origin, setOrigin] = useState("Australia (Newcastle)");
-  const [destination, setDestination] = useState("Haldia");
+  const originKeys = Object.keys(ORIGIN_PORTS);
+  const destKeys = Object.keys(INDIAN_EAST_COAST_PORTS);
+  
+  const [originKey, setOriginKey] = useState(originKeys[0]);
+  const [destinationKey, setDestinationKey] = useState(destKeys[0]);
   const [cargo, setCargo] = useState("Coal");
   const [volume, setVolume] = useState("75000");
   const [status, setStatus] = useState<"idle" | "calculating" | "complete">("idle");
@@ -17,15 +22,17 @@ export default function CharteringPage() {
     setStatus("calculating");
     setLogs(["Initializing Gemini AI Freight Model..."]);
 
-    setTimeout(() => setLogs(l => [...l, "Analyzing East Coast draft restrictions..."]), 600);
-    setTimeout(() => setLogs(l => [...l, `Checking LOA limits for ${destination}...`]), 1200);
+    const dest = INDIAN_EAST_COAST_PORTS[destinationKey];
+    const orig = ORIGIN_PORTS[originKey];
+
+    setTimeout(() => setLogs(l => [...l, `Analyzing East Coast draft restrictions for ${dest.name}...`]), 600);
+    setTimeout(() => setLogs(l => [...l, `Checking LOA limit (${dest.maxLoaMeters}m) at ${dest.name}...`]), 1200);
     setTimeout(() => setLogs(l => [...l, `Evaluating optimal vessel class for ${volume} MT...`]), 1800);
     setTimeout(() => setLogs(l => [...l, "Simulating Spot vs Multi-Voyage contract rates..."]), 2400);
     
     setTimeout(() => {
       const vol = parseInt(volume) || 50000;
-      const shallowPorts = ["Haldia", "Gopalpur", "Sagar-Sandheads"];
-      const isShallow = shallowPorts.includes(destination);
+      const isShallow = dest.maxDraftMeters < 14;
       
       let approvedVessel = "";
       let rejectedVessel = "";
@@ -36,31 +43,31 @@ export default function CharteringPage() {
         if (isShallow) {
            approvedVessel = "2x PANAMAX";
            rejectedVessel = "CAPESIZE";
-           rejectedReason = `Destination (${destination}) has a strict 8.0m draft limit. A Capesize vessel (16m draft) would ground or require costly lighterage.`;
-           approvedReason = `Splitting ${vol.toLocaleString()} MT into two Panamax vessels perfectly aligns with ${destination}'s infrastructure and cargo handling rates.`;
+           rejectedReason = `Destination (${dest.name}) has a strict ${dest.maxDraftMeters.toFixed(1)}m draft limit. A Capesize vessel (18m draft) would ground or require costly lighterage.`;
+           approvedReason = `Splitting ${vol.toLocaleString()} MT into two Panamax vessels aligns perfectly with ${dest.name}'s infrastructure and ${dest.cargoHandlingRateTpd.toLocaleString()} TPD handling rate.`;
         } else {
            approvedVessel = "CAPESIZE";
            rejectedVessel = "PANAMAX";
-           rejectedReason = `Using multiple Panamax vessels for ${vol.toLocaleString()} MT to ${destination} is highly inefficient and increases port dues.`;
-           approvedReason = `${destination} is a deep-water port capable of handling Capesize drafts. This maximizes economies of scale for ${cargo}.`;
+           rejectedReason = `Using multiple Panamax vessels for ${vol.toLocaleString()} MT to ${dest.name} is highly inefficient and increases port dues.`;
+           approvedReason = `${dest.name} is a deep-water port capable of handling Capesize drafts (${dest.maxDraftMeters.toFixed(1)}m limit). This maximizes economies of scale for ${cargo}.`;
         }
       } else if (vol > 55000) {
          if (isShallow && vol > 80000) {
            approvedVessel = "2x SUPRAMAX";
            rejectedVessel = "PANAMAX";
-           rejectedReason = `${destination} draft constraints make fully laden Panamax arrivals risky during current tidal conditions.`;
-           approvedReason = `Supramax vessels offer the ideal LOA and draft flexibility for ${destination} while handling ${vol.toLocaleString()} MT.`;
+           rejectedReason = `${dest.name} draft constraints (${dest.maxDraftMeters.toFixed(1)}m) make fully laden Panamax arrivals risky during current tidal conditions.`;
+           approvedReason = `Supramax vessels offer the ideal LOA and draft flexibility for ${dest.name} while handling ${vol.toLocaleString()} MT.`;
          } else {
            approvedVessel = "PANAMAX";
            rejectedVessel = "SUPRAMAX";
            rejectedReason = `A Supramax is too small for ${vol.toLocaleString()} MT, requiring multiple voyages and driving up logistics costs.`;
-           approvedReason = `A single Panamax perfectly matches the ${vol.toLocaleString()} MT volume requirement while clearing ${destination}'s draft limits.`;
+           approvedReason = `A single Panamax perfectly matches the ${vol.toLocaleString()} MT volume requirement while clearing ${dest.name}'s ${dest.maxDraftMeters.toFixed(1)}m draft limit and ${dest.maxLoaMeters}m LOA limit.`;
          }
       } else {
          approvedVessel = "HANDYSIZE / SUPRAMAX";
          rejectedVessel = "PANAMAX";
          rejectedReason = `Volume (${vol.toLocaleString()} MT) is too low to justify the chartering cost of a Panamax vessel.`;
-         approvedReason = `Handysize/Supramax provides the best cost-to-volume ratio for ${cargo} on this trade lane to ${destination}.`;
+         approvedReason = `Handysize/Supramax provides the best cost-to-volume ratio for ${cargo} on this trade lane to ${dest.name} (Max Draft: ${dest.maxDraftMeters.toFixed(1)}m).`;
       }
 
       const baseRate = (Math.random() * 5 + 20).toFixed(2); // 20 - 25
@@ -74,6 +81,7 @@ export default function CharteringPage() {
         approvedReason,
         spotRate: baseRate,
         multiRate,
+        originName: orig.name,
         savings: savings.toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 })
       });
       
@@ -104,25 +112,15 @@ export default function CharteringPage() {
         <div className="lg:col-span-4 minimal-panel p-6 flex flex-col gap-6">
           <div>
             <label className="text-[10px] font-mono text-neutral-500 uppercase tracking-widest block mb-2">Origin Port (Loading)</label>
-            <select className="w-full bg-black border border-neutral-700 text-white font-mono text-sm p-2 outline-none focus:border-white transition-colors" value={origin} onChange={e => setOrigin(e.target.value)}>
-              <option>Australia (Newcastle)</option>
-              <option>US (Gulf Coast)</option>
-              <option>Mozambique (Maputo)</option>
-              <option>Russia (Ust-Luga)</option>
-              <option>Indonesia (Kalimantan)</option>
+            <select className="w-full bg-black border border-neutral-700 text-white font-mono text-sm p-2 outline-none focus:border-white transition-colors" value={originKey} onChange={e => setOriginKey(e.target.value)}>
+              {originKeys.map(k => <option key={k} value={k}>{ORIGIN_PORTS[k].name}</option>)}
             </select>
           </div>
 
           <div>
             <label className="text-[10px] font-mono text-neutral-500 uppercase tracking-widest block mb-2">Destination Port (Discharge)</label>
-            <select className="w-full bg-black border border-neutral-700 text-white font-mono text-sm p-2 outline-none focus:border-white transition-colors" value={destination} onChange={e => setDestination(e.target.value)}>
-              <option>Paradip</option>
-              <option>Vizag</option>
-              <option>Gangavaram</option>
-              <option>Gopalpur</option>
-              <option>Dhamra</option>
-              <option>Sagar-Sandheads</option>
-              <option>Haldia</option>
+            <select className="w-full bg-black border border-neutral-700 text-white font-mono text-sm p-2 outline-none focus:border-white transition-colors" value={destinationKey} onChange={e => setDestinationKey(e.target.value)}>
+              {destKeys.map(k => <option key={k} value={k}>{INDIAN_EAST_COAST_PORTS[k].name}</option>)}
             </select>
           </div>
 
@@ -223,7 +221,7 @@ export default function CharteringPage() {
                   Optimal Market Entry Timing
                 </h2>
                 <p className="text-xs font-mono text-neutral-400 mb-4">
-                  AI Time-series analysis indicates high volatility on the {origin} route due to seasonal demand.
+                  AI Time-series analysis indicates high volatility on the {result?.originName} route due to seasonal demand.
                 </p>
                 <div className="flex items-center gap-4 border border-neutral-700 p-3">
                   <AlertTriangle className="w-5 h-5 text-white animate-pulse" />
@@ -263,6 +261,10 @@ export default function CharteringPage() {
             </div>
           )}
         </div>
+      </div>
+
+      <div className="mt-4">
+        <PortInfraTable />
       </div>
     </div>
   );

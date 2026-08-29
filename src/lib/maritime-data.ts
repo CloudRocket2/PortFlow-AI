@@ -12,8 +12,10 @@ export interface PortConstraint {
   region: string;
   maxDraftMeters: number;
   maxLoaMeters: number;
+  maxBeamMeters: number;
   cargoHandlingRateTpd: number; // Tonnes per day
   cycloneWarning: boolean; // Weather risk flag
+  coordinates?: [number, number]; // [lng, lat]
 }
 
 export const VESSEL_PROFILES: Record<string, VesselProfile> = {
@@ -26,22 +28,22 @@ export const VESSEL_PROFILES: Record<string, VesselProfile> = {
 export const LIGHTERING_PENALTY_USD_PER_TON = 4.5; // Cost penalty if ship must be lightered (e.g. Capesize in 14m draft)
 
 export const INDIAN_EAST_COAST_PORTS: Record<string, PortConstraint> = {
-  Haldia: { name: "Haldia", region: "West Bengal", maxDraftMeters: 8.5, maxLoaMeters: 230, cargoHandlingRateTpd: 15000, cycloneWarning: false },
-  SagarSandheads: { name: "Sagar-Sandheads", region: "West Bengal", maxDraftMeters: 20.0, maxLoaMeters: 400, cargoHandlingRateTpd: 25000, cycloneWarning: false }, // Deep-water anchorage for lightering
-  Paradip: { name: "Paradip", region: "Odisha", maxDraftMeters: 14.5, maxLoaMeters: 260, cargoHandlingRateTpd: 40000, cycloneWarning: true }, // SIMULATED CYCLONE WARNING
-  Dhamra: { name: "Dhamra", region: "Odisha", maxDraftMeters: 18.0, maxLoaMeters: 320, cargoHandlingRateTpd: 50000, cycloneWarning: true }, // SIMULATED CYCLONE WARNING
-  Vizag: { name: "Vizag", region: "Andhra Pradesh", maxDraftMeters: 14.5, maxLoaMeters: 260, cargoHandlingRateTpd: 35000, cycloneWarning: false },
-  Gangavaram: { name: "Gangavaram", region: "Andhra Pradesh", maxDraftMeters: 18.5, maxLoaMeters: 300, cargoHandlingRateTpd: 50000, cycloneWarning: false },
-  Gopalpur: { name: "Gopalpur", region: "Odisha", maxDraftMeters: 12.5, maxLoaMeters: 225, cargoHandlingRateTpd: 20000, cycloneWarning: false },
+  Haldia: { name: "Haldia", region: "West Bengal", maxDraftMeters: 8.5, maxLoaMeters: 230, maxBeamMeters: 32.2, cargoHandlingRateTpd: 15000, cycloneWarning: false },
+  SagarSandheads: { name: "Sagar-Sandheads", region: "West Bengal", maxDraftMeters: 20.0, maxLoaMeters: 400, maxBeamMeters: 60.0, cargoHandlingRateTpd: 25000, cycloneWarning: false }, // Deep-water anchorage for lightering
+  Paradip: { name: "Paradip", region: "Odisha", maxDraftMeters: 14.5, maxLoaMeters: 260, maxBeamMeters: 43.0, cargoHandlingRateTpd: 40000, cycloneWarning: true }, // SIMULATED CYCLONE WARNING
+  Dhamra: { name: "Dhamra", region: "Odisha", maxDraftMeters: 18.0, maxLoaMeters: 320, maxBeamMeters: 50.0, cargoHandlingRateTpd: 50000, cycloneWarning: true }, // SIMULATED CYCLONE WARNING
+  Vizag: { name: "Vizag", region: "Andhra Pradesh", maxDraftMeters: 14.5, maxLoaMeters: 260, maxBeamMeters: 43.0, cargoHandlingRateTpd: 35000, cycloneWarning: false },
+  Gangavaram: { name: "Gangavaram", region: "Andhra Pradesh", maxDraftMeters: 18.5, maxLoaMeters: 300, maxBeamMeters: 50.0, cargoHandlingRateTpd: 50000, cycloneWarning: false },
+  Gopalpur: { name: "Gopalpur", region: "Odisha", maxDraftMeters: 12.5, maxLoaMeters: 225, maxBeamMeters: 32.2, cargoHandlingRateTpd: 20000, cycloneWarning: false },
 };
 
 // Global Origin Ports (SIH Specified)
-export const ORIGIN_PORTS = {
-  Australia: { name: "Australia (Newcastle)", coordinates: [151.7817, -32.9283] },
-  US: { name: "United States (Norfolk)", coordinates: [-76.2859, 36.8508] },
-  Mozambique: { name: "Mozambique (Maputo)", coordinates: [32.5892, -25.9692] },
-  Russia: { name: "Russia (Vladivostok)", coordinates: [131.8869, 43.1198] },
-  Indonesia: { name: "Indonesia (Kalimantan)", coordinates: [116.0385, -0.2787] },
+export const ORIGIN_PORTS: Record<string, PortConstraint> = {
+  Australia: { name: "Australia (Newcastle)", region: "Oceania", coordinates: [151.7817, -32.9283], maxDraftMeters: 15.2, maxLoaMeters: 300, maxBeamMeters: 50.0, cargoHandlingRateTpd: 80000, cycloneWarning: false },
+  US: { name: "United States (Norfolk)", region: "North America", coordinates: [-76.2859, 36.8508], maxDraftMeters: 15.0, maxLoaMeters: 300, maxBeamMeters: 50.0, cargoHandlingRateTpd: 75000, cycloneWarning: false },
+  Mozambique: { name: "Mozambique (Maputo)", region: "Africa", coordinates: [32.5892, -25.9692], maxDraftMeters: 14.3, maxLoaMeters: 280, maxBeamMeters: 45.0, cargoHandlingRateTpd: 40000, cycloneWarning: false },
+  Russia: { name: "Russia (Vladivostok)", region: "Asia", coordinates: [131.8869, 43.1198], maxDraftMeters: 13.0, maxLoaMeters: 260, maxBeamMeters: 40.0, cargoHandlingRateTpd: 45000, cycloneWarning: false },
+  Indonesia: { name: "Indonesia (Kalimantan)", region: "Asia", coordinates: [116.0385, -0.2787], maxDraftMeters: 14.0, maxLoaMeters: 270, maxBeamMeters: 45.0, cargoHandlingRateTpd: 55000, cycloneWarning: false },
 };
 
 // Mock Time-Series Data for Freight Forecast (USD per Tonne)

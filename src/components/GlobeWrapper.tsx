@@ -59,22 +59,24 @@ export default function GlobeWrapper() {
     return <div className="w-full h-full bg-[#020202] flex items-center justify-center animate-pulse text-xs font-mono text-[#00ff00]">Initializing WebGL Engine...</div>;
   }
 
+  const [hoverD, setHoverD] = useState<any>(null);
+
   // --- Data Points ---
   const markers = [
-    { id: "newcastle", lat: -32.9283, lng: 151.7817, name: "Newcastle", type: "origin" },
-    { id: "norfolk", lat: 36.8508, lng: -76.2859, name: "Norfolk", type: "origin" },
-    { id: "maputo", lat: -25.9692, lng: 32.5892, name: "Maputo", type: "origin" },
-    { id: "vladivostok", lat: 43.1198, lng: 131.8869, name: "Vladivostok", type: "origin" },
-    { id: "kalimantan", lat: -0.2787, lng: 116.0385, name: "Kalimantan", type: "origin" },
+    { id: "newcastle", lat: -32.9283, lng: 151.7817, name: "Newcastle", type: "origin", alt: 0.015 },
+    { id: "norfolk", lat: 36.8508, lng: -76.2859, name: "Norfolk", type: "origin", alt: 0.015 },
+    { id: "maputo", lat: -25.9692, lng: 32.5892, name: "Maputo", type: "origin", alt: 0.015 },
+    { id: "vladivostok", lat: 43.1198, lng: 131.8869, name: "Vladivostok", type: "origin", alt: 0.015 },
+    { id: "kalimantan", lat: -0.2787, lng: 116.0385, name: "Kalimantan", type: "origin", alt: 0.015 },
     
-    // Visually spread out the clustered ports slightly to prevent text overlapping
-    { id: "haldia", lat: 22.8, lng: 88.5, name: "Haldia", type: "dest" },
-    { id: "sagar", lat: 21.65, lng: 88.03, name: "Sagar-Sandheads", type: "dest" },
-    { id: "dhamra", lat: 20.81, lng: 87.2, name: "Dhamra", type: "dest" },
-    { id: "paradip", lat: 20.26, lng: 86.68, name: "Paradip", type: "dest" },
-    { id: "vizag", lat: 17.68, lng: 83.21, name: "Vizag", type: "dest" },
-    { id: "gangavaram", lat: 17.0, lng: 82.5, name: "Gangavaram", type: "dest" },
-    { id: "gopalpur", lat: 19.3, lng: 84.9, name: "Gopalpur", type: "dest" },
+    // Visually spread out the clustered ports slightly to prevent text overlapping using altitude
+    { id: "haldia", lat: 22.8, lng: 88.5, name: "Haldia", type: "dest", alt: 0.07 },
+    { id: "sagar", lat: 21.65, lng: 88.03, name: "Sagar-Sandheads", type: "dest", alt: 0.015 },
+    { id: "dhamra", lat: 20.81, lng: 87.2, name: "Dhamra", type: "dest", alt: 0.07 },
+    { id: "paradip", lat: 20.26, lng: 86.68, name: "Paradip", type: "dest", alt: 0.015 },
+    { id: "vizag", lat: 17.68, lng: 83.21, name: "Vizag", type: "dest", alt: 0.06 },
+    { id: "gangavaram", lat: 17.0, lng: 82.5, name: "Gangavaram", type: "dest", alt: 0.015 },
+    { id: "gopalpur", lat: 19.3, lng: 84.9, name: "Gopalpur", type: "dest", alt: 0.015 },
   ];
 
   const arcs = [
@@ -157,12 +159,13 @@ export default function GlobeWrapper() {
         labelLat={(d: any) => d.lat}
         labelLng={(d: any) => d.lng}
         labelText={(d: any) => d.name}
-        labelSize={(d: any) => d.type === 'dest' ? 1.5 : 1}
+        labelSize={(d: any) => d === hoverD ? 2 : (d.type === 'dest' ? 1.5 : 1)}
         labelDotRadius={(d: any) => d.type === 'dest' ? 0.8 : 0.5}
-        labelColor={(d: any) => d.type === 'dest' ? '#ffffff' : '#aaaaaa'}
+        labelColor={(d: any) => d === hoverD ? '#00ff00' : (d.type === 'dest' ? '#ffffff' : '#aaaaaa')}
         labelResolution={2}
-        labelAltitude={0.015}
+        labelAltitude={(d: any) => d === hoverD ? d.alt + 0.02 : d.alt}
         onLabelClick={handleLabelClick}
+        onLabelHover={setHoverD}
         
         // Glowing Arcs
         arcsData={arcs}

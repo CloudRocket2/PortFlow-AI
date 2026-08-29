@@ -26,8 +26,6 @@ const navItems = [
   { label: "Chartering", icon: Ship, href: "/chartering" },
   { label: "Freight Forecast", icon: BarChart3, href: "/forecast" },
   { label: "Scenarios", icon: Scale, href: "/scenarios" },
-  { label: "Draft Logistics", icon: Droplet, href: "/truck-queue" },
-  { label: "Radio Logs", icon: Radio, href: "/radio-logs" },
   { label: "AI Insights", icon: Sparkles, href: "/ai-logs" },
 ];
 
