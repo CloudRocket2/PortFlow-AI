@@ -75,3 +75,18 @@ export const MULTI_YEAR_SEASONALITY_DATA = [
   { month: "Nov", "2024": 13.5, "2025": 14.1, "2026_Predicted": 14.8 },
   { month: "Dec", "2024": 12.8, "2025": 13.5, "2026_Predicted": 14.1 },
 ];
+
+// Mock Time-Series Data for Macro Volatility Index (0-100 scale)
+export const MOCK_VOLATILITY_INDEX = [
+  { date: "Aug 01", score: 42 },
+  { date: "Aug 15", score: 45 },
+  { date: "Sep 01", score: 48 },
+  { date: "Sep 15", score: 55 },
+  { date: "Oct 01", score: 62 },
+  { date: "Oct 15", score: 75 },
+  { date: "Nov 01", score: 85 },
+  { date: "Nov 05", score: 92 }, // Peak spike near today
+  { date: "Nov 15", score: 88 },
+  { date: "Dec 01", score: 70 },
+  { date: "Dec 15", score: 60 },
+];

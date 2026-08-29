@@ -2,6 +2,7 @@
 
 import { Activity, AlertTriangle, Globe, MapPin, Route, ShieldAlert, ArrowRight, Ship } from "lucide-react";
 import FreightForecastChart from "@/components/FreightForecastChart";
+import MacroVolatilityChart from "@/components/MacroVolatilityChart";
 
 export default function ForecastPage() {
   return (
@@ -67,16 +68,13 @@ export default function ForecastPage() {
             </div>
           </div>
 
-          <div className="minimal-panel p-5 flex flex-col gap-4 bg-neutral-900/10 flex-1">
-             <h2 className="text-sm font-mono font-bold text-white uppercase tracking-wider flex items-center gap-2 border-b border-neutral-800 pb-3">
+          <div className="minimal-panel p-5 flex flex-col gap-4 bg-neutral-900/10 flex-1 min-h-[350px]">
+             <h2 className="text-sm font-mono font-bold text-white uppercase tracking-wider flex items-center gap-2 border-b border-neutral-800 pb-3 shrink-0">
               <Activity className="w-4 h-4 text-white" />
               Macro Volatility Index
             </h2>
-            <div className="flex-1 flex flex-col justify-center items-center text-center p-6">
-              <div className="text-4xl font-mono text-white font-bold mb-2">HIGH</div>
-              <p className="text-xs font-mono text-neutral-500 uppercase tracking-widest max-w-xs">
-                Global freight volatility is peaking due to supply constraints. Recommend locking multi-voyage contracts immediately.
-              </p>
+            <div className="flex-1 flex flex-col min-h-0">
+              <MacroVolatilityChart />
             </div>
           </div>
         </div>
