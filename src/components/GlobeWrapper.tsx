@@ -55,11 +55,11 @@ export default function GlobeWrapper() {
     }
   }, [mounted]);
 
+  const [hoverD, setHoverD] = useState<any>(null);
+
   if (!mounted) {
     return <div className="w-full h-full bg-[#020202] flex items-center justify-center animate-pulse text-xs font-mono text-[#00ff00]">Initializing WebGL Engine...</div>;
   }
-
-  const [hoverD, setHoverD] = useState<any>(null);
 
   // --- Data Points ---
   const markers = [
