@@ -1,86 +1,52 @@
 import { NextResponse } from "next/server";
-import prisma from "@/lib/prisma";
 
 export async function GET() {
   try {
     const alerts = [];
 
-    // 1. Check for high density
-    const totalSlots = await prisma.yardSlot.count();
-    const occupiedSlots = await prisma.yardSlot.count({
-      where: { isOccupied: true },
-    });
-    
-    const utilization = (occupiedSlots / totalSlots) * 100;
-    if (utilization > 80) {
-      alerts.push({
-        id: "alert-density",
-        severity: "CRITICAL",
-        title: "Critical Yard Congestion",
-        message: `Terminal capacity is at ${utilization.toFixed(1)}%. Recommend diverting inbound freight.`,
-        time: "Just now"
-      });
-    } else if (utilization > 65) {
-      alerts.push({
-        id: "alert-density",
-        severity: "WARNING",
-        title: "Elevated Yard Density",
-        message: `Terminal capacity reaching ${utilization.toFixed(1)}%. Keep crane efficiency high.`,
-        time: "Just now"
-      });
-    }
-
-    // 2. Check for buried HIGH priority containers
-    const buriedHighPriority = await prisma.container.count({
-      where: {
-        priorityLevel: "HIGH",
-        currentSlot: {
-          tier: 1 // Stuck on the ground
-        }
-      }
+    // 1. Draft/berth conflict
+    alerts.push({
+      id: "alert-draft-conflict",
+      severity: "CRITICAL",
+      title: "Draft & Berth Conflict",
+      message: "MV Pacific Horizon (Capesize) arrives in 6h \u2014 Berth 3 draft is 0.4m short at current tide.",
+      time: "Just now"
     });
 
-    if (buriedHighPriority > 0) {
-      alerts.push({
-        id: "alert-buried",
-        severity: "WARNING",
-        title: "Buried Priority Cargo",
-        message: `${buriedHighPriority} High-Priority containers are currently at Tier 1, risking severe re-handle delays.`,
-        time: "10m ago"
-      });
-    }
-
-    // 3. Check for extremely long dwell times
-    const staleContainers = await prisma.container.count({
-      where: {
-        dwellTimeHours: { gte: 96 } // 4+ days
-      }
+    // 2. Cargo dwell / demurrage risk
+    alerts.push({
+      id: "alert-demurrage",
+      severity: "WARNING",
+      title: "Demurrage Risk Detected",
+      message: "42,000 MT of Coking Coal has been in the Vizag stockyard for 9 days \u2014 demurrage clock running, contact charterer.",
+      time: "10m ago"
     });
 
-    if (staleContainers > 0) {
-      alerts.push({
-        id: "alert-dwell",
-        severity: "INFO",
-        title: "Stale Freight Detected",
-        message: `${staleContainers} containers have been dwelling for over 96 hours. Contact consignees.`,
-        time: "1h ago"
-      });
-    }
-
-    // 4. Inbound vessel warning
-    const approachingVessels = await prisma.vessel.findMany({
-      where: { berthStatus: "APPROACHING" },
-      select: { name: true, eta: true }
+    // 3. Loading/discharge rate shortfall
+    alerts.push({
+      id: "alert-rate-shortfall",
+      severity: "WARNING",
+      title: "Discharge Rate Shortfall",
+      message: "Discharge rate at Haldia is running at 8,200 MT/day vs. the 12,000 MT/day assumed \u2014 laytime at risk of being exceeded.",
+      time: "45m ago"
     });
 
-    approachingVessels.forEach(v => {
-      alerts.push({
-        id: `alert-vessel-${v.name}`,
-        severity: "INFO",
-        title: "Vessel Approaching",
-        message: `MV ${v.name} is arriving shortly. Ensure RTG cranes are positioned at Berth.`,
-        time: "2h ago"
-      });
+    // 4. Vessel approaching
+    alerts.push({
+      id: "alert-vessel-approaching",
+      severity: "INFO",
+      title: "Vessel Approaching",
+      message: "MV Global Spirit is arriving in 2h \u2014 confirm grab/conveyor discharge equipment and berth are ready.",
+      time: "1h ago"
+    });
+
+    // 5. Weather/tide delay risk
+    alerts.push({
+      id: "alert-tide-delay",
+      severity: "INFO",
+      title: "Tidal Delay Risk",
+      message: "Sagar-Sandheads anchorage: MV Oceanic Pioneer needs high tide to cross the bar \u2014 next window in 14h.",
+      time: "2h ago"
     });
 
     return NextResponse.json({

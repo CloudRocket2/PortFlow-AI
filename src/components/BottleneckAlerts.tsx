@@ -61,7 +61,7 @@ export default function BottleneckAlerts() {
   if (loading) {
     return (
       <div className="minimal-panel p-5 flex items-center justify-center text-neutral-500 text-xs font-mono uppercase tracking-widest">
-        Scanning yard anomalies...
+        Scanning port anomalies...
       </div>
     );
   }
