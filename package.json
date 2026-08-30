@@ -59,5 +59,8 @@
     "prisma@5.22.0": true,
     "@prisma/client@5.22.0": true,
     "@prisma/engines@5.22.0": true
+  },
+  "overrides": {
+    "d3-color": "^3.1.0"
   }
 }
