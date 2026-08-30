@@ -1,20 +1,18 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
-import { BrainCircuit, Send, Bot, User, AlertCircle } from "lucide-react";
-
-interface ChatMessage {
-  role: "user" | "model";
-  text: string;
-}
+import { useRef, useEffect } from "react";
+import { BrainCircuit, Send, Bot, User, AlertCircle, Trash2 } from "lucide-react";
+import { useChat, ChatMessage } from "@/context/ChatContext";
 
 export default function AILogsPage() {
-  const [messages, setMessages] = useState<ChatMessage[]>([
-    { role: "model", text: "Hello Manager! I am PortFlow AI. How can I assist with terminal operations today?" }
-  ]);
-  const [input, setInput] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const { 
+    messages, setMessages, 
+    input, setInput, 
+    loading, setLoading, 
+    error, setError, 
+    clearConversation 
+  } = useChat();
+  
   const scrollRef = useRef<HTMLDivElement>(null);
 
   // Auto-scroll to bottom
@@ -74,6 +72,14 @@ export default function AILogsPage() {
             Real-time operations intelligence powered by Gemini 3.6 Flash.
           </p>
         </div>
+        <button 
+          onClick={clearConversation}
+          className="flex items-center gap-2 px-3 py-1.5 bg-neutral-800 hover:bg-neutral-700 text-neutral-400 hover:text-white rounded text-xs font-mono transition-colors"
+          title="Clear Conversation"
+        >
+          <Trash2 className="w-4 h-4" />
+          CLEAR
+        </button>
       </div>
 
       {error && (
