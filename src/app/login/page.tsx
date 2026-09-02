@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Shield, Fingerprint, Terminal, Key, Database, Anchor, Lock } from "lucide-react";
+import { Shield, Fingerprint, Key, Anchor, Lock, Briefcase, LineChart, Globe } from "lucide-react";
 
 type Role = {
   id: string;
@@ -16,58 +16,59 @@ type Role = {
 
 const ROLES: Role[] = [
   {
-    id: "DIR-01",
+    id: "MGR-01",
+    email: "chartering@portflow.com",
+    title: "Chartering Manager",
+    clearance: "LEVEL 3 (DELTA)",
+    department: "Commercial Chartering",
+    features: [
+      "Fleet Chartering",
+      "Multi-Voyage Contract Ledger",
+      "Portfolio Scenarios",
+    ],
+    icon: Briefcase,
+  },
+  {
+    id: "ANL-04",
+    email: "analyst@portflow.com",
+    title: "Freight Analyst",
+    clearance: "LEVEL 3 (DELTA)",
+    department: "Market Intelligence",
+    features: [
+      "Market Forecast",
+      "Risk Mitigation Alerts",
+      "AI Assistant",
+    ],
+    icon: LineChart,
+  },
+  {
+    id: "OPS-09",
+    email: "ops@portflow.com",
+    title: "Operations Coordinator",
+    clearance: "LEVEL 2 (SIGMA)",
+    department: "Terminal Logistics",
+    features: [
+      "Global Bulk Radar",
+      "AIS Dispatch Log",
+      "Anchorage Delays",
+    ],
+    icon: Globe,
+  },
+  {
+    id: "DIR-12",
     email: "director@portflow.com",
-    title: "Terminal Director",
+    title: "Fleet Director",
     clearance: "LEVEL 5 (OMEGA)",
     department: "Executive Operations",
     features: [
-      "Global Telemetry Dashboard",
-      "AI Yard Optimizer (Write Access)",
-      "Fleet Chartering & Forecasts",
-      "System Overrides",
-    ],
-    icon: Anchor,
-  },
-  {
-    id: "OPS-04",
-    email: "yardmaster@portflow.com",
-    title: "Yard Master",
-    clearance: "LEVEL 4 (DELTA)",
-    department: "Yard Logistics",
-    features: [
-      "3D Digital Twin Analytics",
-      "VHF Radio Transcripts",
-      "Container Relocation Queue",
-      "AI Optimization Approvals",
-    ],
-    icon: Database,
-  },
-  {
-    id: "SEC-09",
-    email: "security@portflow.com",
-    title: "Gate Security",
-    clearance: "LEVEL 2 (SIGMA)",
-    department: "Access Control",
-    features: [
-      "Truck Gate Queues",
-      "Live License Plate Recognition",
-      "Vessel Manifest Read-Only",
+      "Global Bulk Radar",
+      "Fleet Chartering",
+      "Market Forecast",
+      "Multi-Voyage Contract Ledger",
+      "Portfolio Scenarios",
+      "AI Assistant"
     ],
     icon: Shield,
-  },
-  {
-    id: "EQP-12",
-    email: "crane.op@portflow.com",
-    title: "Crane Operator",
-    clearance: "LEVEL 2 (SIGMA)",
-    department: "Heavy Machinery",
-    features: [
-      "Assigned Move Instructions",
-      "VHF Radio Comms",
-      "Equipment Diagnostics",
-    ],
-    icon: Terminal,
   },
 ];
 
@@ -162,7 +163,12 @@ export default function LoginPage() {
               {ROLES.map((role) => (
                 <button
                   key={role.id}
-                  onClick={() => !authenticating && setSelectedRole(role)}
+                  onClick={() => {
+                    if (!authenticating) {
+                      setSelectedRole(role);
+                      setEmail(role.email);
+                    }
+                  }}
                   disabled={authenticating}
                   className={`w-full text-left p-4 flex items-center gap-4 transition-colors border ${
                     selectedRole.id === role.id
