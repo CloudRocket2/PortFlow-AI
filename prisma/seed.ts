@@ -291,10 +291,10 @@ async function main() {
   console.log("  Creating users...");
   const hashedPassword = await bcrypt.hash("admin123", 10);
   const users = [
-    { email: "director@portflow.com", roleId: "DIR-01", name: "Sarah Chen", department: "Executive Operations", clearance: "LEVEL 5 (OMEGA)", password: hashedPassword },
-    { email: "yardmaster@portflow.com", roleId: "OPS-04", name: "David Miller", department: "Yard Logistics", clearance: "LEVEL 4 (DELTA)", password: hashedPassword },
-    { email: "security@portflow.com", roleId: "SEC-09", name: "Michael Chang", department: "Access Control", clearance: "LEVEL 2 (SIGMA)", password: hashedPassword },
-    { email: "crane.op@portflow.com", roleId: "EQP-12", name: "Elena Rodriguez", department: "Heavy Machinery", clearance: "LEVEL 2 (SIGMA)", password: hashedPassword },
+    { email: "chartering@portflow.com", roleId: "MGR-01", name: "Sarah Chen", department: "Commercial Chartering", clearance: "LEVEL 3 (DELTA)", password: hashedPassword },
+    { email: "analyst@portflow.com", roleId: "ANL-04", name: "David Miller", department: "Market Intelligence", clearance: "LEVEL 3 (DELTA)", password: hashedPassword },
+    { email: "ops@portflow.com", roleId: "OPS-09", name: "Michael Chang", department: "Terminal Logistics", clearance: "LEVEL 2 (SIGMA)", password: hashedPassword },
+    { email: "director@portflow.com", roleId: "DIR-12", name: "Elena Rodriguez", department: "Executive Operations", clearance: "LEVEL 5 (OMEGA)", password: hashedPassword },
   ];
 
   await prisma.user.createMany({ data: users });
