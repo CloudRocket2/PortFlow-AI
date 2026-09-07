@@ -2,7 +2,6 @@
 
 import React, { useState, useMemo } from "react";
 import { Ship, Search, ArrowRight, ShieldCheck, Route, Zap, Download, Loader2 } from "lucide-react";
-import ModelPerformancePanel from "./ModelPerformancePanel";
 import { usePortFlowData } from "@/context/PortFlowContext";
 
 export default function MultiVoyageLedger() {
@@ -283,8 +282,6 @@ export default function MultiVoyageLedger() {
           )}
         </div>
       </div>
-
-      <ModelPerformancePanel completedVoyages={completedVoyages} />
     </div>
   );
 }
