@@ -4,6 +4,7 @@ import "./globals.css";
 import AppShell from "@/components/AppShell";
 import { TelemetryProvider } from "@/hooks/useTelemetry";
 import { ChatProvider } from "@/context/ChatContext";
+import { PortFlowProvider } from "@/context/PortFlowContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,9 +29,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     >
       <body className="h-full flex overflow-hidden bg-black">
         <TelemetryProvider>
-          <ChatProvider>
-            <AppShell>{children}</AppShell>
-          </ChatProvider>
+          <PortFlowProvider>
+            <ChatProvider>
+              <AppShell>{children}</AppShell>
+            </ChatProvider>
+          </PortFlowProvider>
         </TelemetryProvider>
       </body>
     </html>

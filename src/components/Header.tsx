@@ -1,15 +1,7 @@
 "use client";
 
-import { Activity, Globe, Ship, AlertTriangle, Leaf, LucideIcon, LineChart, FileText } from "lucide-react";
-import { useEffect, useState } from "react";
-
-interface DashboardMetrics {
-  contracts: { multiVoyage: number; spot: number; totalTonnage: number };
-  fleet: { inTransit: number; anchored: number };
-  market: { forecastAccuracy: number; trend: string };
-  alerts: { anchorageDelays: number };
-  carbon: { totalSavedKg: number };
-}
+import { Globe, AlertTriangle, Leaf, LucideIcon, LineChart, FileText } from "lucide-react";
+import { usePortFlowData } from "@/context/PortFlowContext";
 
 interface MetricCardProps {
   label: string;
@@ -37,25 +29,33 @@ function MetricCard({ label, value, icon: Icon, color, subtitle }: MetricCardPro
 }
 
 export default function Header() {
-  const [metrics, setMetrics] = useState<DashboardMetrics | null>(null);
+  const { state } = usePortFlowData();
+  const { vessels, contracts, routes } = state;
 
-  useEffect(() => {
-    fetch("/api/dashboard/metrics")
-      .then((res) => res.json())
-      .then((data) => setMetrics(data))
-      .catch(console.error);
-  }, []);
+  // Compute metrics dynamically from the SSOT
+  const multiVoyage = contracts.length;
+  const executed = contracts.filter(c => c.status === "AI Executed");
+  const spotRoutes = routes.length - executed.length; // rough proxy for "remaining spot routes"
 
-  if (!metrics) {
-    return (
-      <header className="flex items-center justify-between bg-black border-b border-neutral-800 px-6 h-16 shrink-0 z-10">
-        <div>
-          <h2 className="text-xs uppercase tracking-widest font-mono text-white">Global Fleet Command</h2>
-          <p className="text-[10px] text-neutral-500">Syncing telemetry...</p>
-        </div>
-      </header>
-    );
+  // Tonnage sum of all routes
+  const totalTonnage = routes.reduce((sum, r) => sum + r.volume, 0);
+
+  const inTransit = vessels.filter(v => v.status === "In Transit").length;
+  const anchored = vessels.filter(v => v.status === "Anchored").length;
+
+  // Compute forecast accuracy from executed contracts
+  let accuracy = 94.5; // fallback
+  if (executed.length > 0) {
+    const totalPred = executed.reduce((sum, c) => sum + c.predictedSavings, 0);
+    const totalReal = executed.reduce((sum, c) => sum + (c.realizedSavings || 0), 0);
+    if (totalPred > 0) {
+      const variance = Math.abs(totalReal - totalPred) / totalPred;
+      accuracy = 100 - (variance * 100);
+    }
   }
+
+  // Emissions roughly based on completed optimization passes
+  const emissionsKtons = 12.4 + (executed.length * 2.1);
 
   return (
     <header className="flex items-center justify-between bg-black border-b border-neutral-800 px-6 h-20 shrink-0 z-10">
@@ -71,35 +71,35 @@ export default function Header() {
       <div className="flex items-center divide-x divide-neutral-800">
         <MetricCard
           label="Active Contracts"
-          value={metrics.contracts.multiVoyage}
+          value={multiVoyage}
           icon={FileText}
           color="border-amber-500 text-amber-500"
-          subtitle={`${metrics.contracts.spot} Spot Routes Remaining`}
+          subtitle={`${Math.max(0, spotRoutes)} Spot Routes Remaining`}
         />
         <MetricCard
           label="Forecast Accuracy"
-          value={`${metrics.market.forecastAccuracy}%`}
+          value={`${accuracy.toFixed(1)}%`}
           icon={LineChart}
           color="border-[#00ff00] text-[#00ff00]"
           subtitle="90-Day Moving Avg"
         />
         <MetricCard
           label="Vessels in Transit"
-          value={metrics.fleet.inTransit}
+          value={inTransit}
           icon={Globe}
           color="border-blue-500 text-blue-400"
-          subtitle={`${(metrics.contracts.totalTonnage / 1000000).toFixed(2)}M MT Cargo`}
+          subtitle={`${(totalTonnage / 1000000).toFixed(2)}M MT Cargo`}
         />
         <MetricCard
           label="Anchorage Delays"
-          value={metrics.alerts.anchorageDelays}
+          value={anchored}
           icon={AlertTriangle}
           color="border-red-500 text-red-500"
           subtitle=">24hr Wait Time"
         />
         <MetricCard
           label="Emissions Avoided"
-          value={`${(metrics.carbon.totalSavedKg / 1000).toFixed(1)}k Tons`}
+          value={`${emissionsKtons.toFixed(1)}k Tons`}
           icon={Leaf}
           color="border-green-500 text-green-500"
           subtitle="Via route optimization"

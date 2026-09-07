@@ -1,82 +1,41 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
-import { Ship, Anchor, MapPin, Search, ArrowRight, ShieldCheck, Route, Zap, Download, Loader2 } from "lucide-react";
+import { Ship, Search, ArrowRight, ShieldCheck, Route, Zap, Download, Loader2 } from "lucide-react";
 import ModelPerformancePanel from "./ModelPerformancePanel";
-
-const INITIAL_VOYAGES = [
-  {
-    id: "MV-CT-901",
-    vessel: "MV Pacific Horizon (Capesize)",
-    cargo: "Iron Ore",
-    volume: "180,000 MT",
-    origin: "Newcastle, Australia",
-    destination: "Sagar-Sandheads, India",
-    type: "Spot \u2192 3-Voyage Contract",
-    status: "AI Executed",
-    savings: "$1.4M",
-    rawSavings: 1400000,
-    realizedSavings: 1310000,
-  },
-  {
-    id: "MV-CT-899",
-    vessel: "Global Spirit (Capesize)",
-    cargo: "Thermal Coal",
-    volume: "160,000 MT",
-    origin: "Maputo, Mozambique",
-    destination: "Gangavaram, India",
-    type: "Spot \u2192 4-Voyage Contract",
-    status: "AI Executed",
-    savings: "$950K",
-    rawSavings: 950000,
-    realizedSavings: 965000,
-  },
-  {
-    id: "MV-CT-902",
-    vessel: "Maersk Sentinel (Panamax)",
-    cargo: "Thermal Coal",
-    volume: "75,000 MT",
-    origin: "Maputo, Mozambique",
-    destination: "Paradip, India",
-    type: "Spot \u2192 2-Voyage Contract",
-    status: "Draft Approved",
-    savings: "$420K",
-    rawSavings: 420000,
-    realizedSavings: null,
-  },
-  {
-    id: "MV-CT-903",
-    vessel: "Oceanic Pioneer (Supramax)",
-    cargo: "Coking Coal",
-    volume: "55,000 MT",
-    origin: "Vladivostok, Russia",
-    destination: "Vizag, India",
-    type: "Spot \u2192 4-Voyage Contract",
-    status: "Pending Signature",
-    savings: "$890K",
-    rawSavings: 890000,
-    realizedSavings: null,
-  },
-  {
-    id: "MV-CT-904",
-    vessel: "Global Spirit (Capesize)",
-    cargo: "Iron Ore",
-    volume: "160,000 MT",
-    origin: "Maputo, Mozambique",
-    destination: "Gangavaram, India",
-    type: "Spot \u2192 2-Voyage Contract",
-    status: "Lightering Req.",
-    savings: "$310K",
-    rawSavings: 310000,
-    realizedSavings: null,
-  }
-];
+import { usePortFlowData } from "@/context/PortFlowContext";
 
 export default function MultiVoyageLedger() {
-  const [voyages, setVoyages] = useState(INITIAL_VOYAGES);
+  const { state, runFleetOptimization } = usePortFlowData();
+  const { contracts, routes, vessels, ports } = state;
+
   const [searchTerm, setSearchTerm] = useState("");
   const [isOptimizing, setIsOptimizing] = useState(false);
   const [optResult, setOptResult] = useState<string | null>(null);
+
+  // Map SSOT data into the format the ledger table expects
+  const voyages = useMemo(() => {
+    return contracts.map(c => {
+      const route = routes.find(r => r.id === c.routeId)!;
+      const vessel = vessels.find(v => v.id === route.vesselId)!;
+      const origin = ports.find(p => p.id === route.originId)!;
+      const destination = ports.find(p => p.id === route.destinationId)!;
+
+      return {
+        id: c.id,
+        vessel: `${vessel.name} (${vessel.class})`,
+        cargo: route.cargo,
+        volume: `${(route.volume).toLocaleString()} MT`,
+        origin: origin.name,
+        destination: destination.name,
+        type: c.type,
+        status: c.status,
+        savings: `$${(c.predictedSavings / 1000000).toFixed(2)}M`,
+        rawSavings: c.predictedSavings,
+        realizedSavings: c.realizedSavings
+      };
+    });
+  }, [contracts, routes, vessels, ports]);
 
   const filteredVoyages = useMemo(() => {
     if (!searchTerm) return voyages;
@@ -98,43 +57,18 @@ export default function MultiVoyageLedger() {
     setOptResult(null);
 
     setTimeout(() => {
-      let updatedCount = 0;
-      let totalAdded = 0;
-
-      const updatedVoyages = voyages.map(v => {
-        if (!searchTerm || v.id.toLowerCase().includes(searchTerm.toLowerCase())) {
-          if (v.status === "Draft Approved" || v.status === "Pending Signature") {
-            updatedCount++;
-            const newRaw = v.rawSavings * 1.15;
-            totalAdded += (newRaw - v.rawSavings);
-            
-            // Mock realized savings +/- 10%
-            const variancePct = (Math.random() * 0.2) - 0.1;
-            const realized = newRaw * (1 + variancePct);
-
-            return { 
-              ...v, 
-              status: "AI Executed", 
-              rawSavings: newRaw,
-              realizedSavings: realized,
-              savings: `$${(newRaw / 1000000).toFixed(2)}M` 
-            };
-          }
-        }
-        return v;
-      });
-
-      setVoyages(updatedVoyages);
+      // Actually run the SSOT update
+      const { updatedCount, totalAdded } = runFleetOptimization();
+      
       setIsOptimizing(false);
       
       if (updatedCount > 0) {
         setOptResult(`Optimization complete: ${updatedCount} contracts updated, $${(totalAdded / 1000).toFixed(0)}K additional savings identified.`);
       } else {
-        setOptResult(`Optimization complete: 0 pending contracts found in current filter.`);
+        setOptResult(`Optimization complete: 0 pending contracts found.`);
       }
 
       setTimeout(() => setOptResult(null), 5000);
-
     }, 1500);
   };
 
@@ -193,7 +127,6 @@ export default function MultiVoyageLedger() {
   return (
     <div className="flex flex-col gap-6 h-full">
       <div className="minimal-panel p-4 flex flex-col bg-black relative">
-        {/* Toast Notification */}
         {optResult && (
           <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#00ff00]/20 border border-[#00ff00] text-[#00ff00] px-4 py-2 rounded text-xs font-mono z-50 flex items-center gap-2 shadow-[0_0_15px_rgba(0,255,0,0.3)] backdrop-blur-sm animate-in fade-in slide-in-from-top-5">
             <ShieldCheck className="w-4 h-4" />
@@ -201,7 +134,6 @@ export default function MultiVoyageLedger() {
           </div>
         )}
 
-        {/* Header */}
         <div className="flex items-center justify-between border-b border-neutral-800 pb-4 mb-4">
           <div>
             <h2 className="text-sm font-mono font-bold text-white uppercase tracking-wider flex items-center gap-2">
@@ -250,7 +182,6 @@ export default function MultiVoyageLedger() {
           </div>
         </div>
 
-        {/* Table */}
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
@@ -353,7 +284,6 @@ export default function MultiVoyageLedger() {
         </div>
       </div>
 
-      {/* Model Performance Panel below Ledger */}
       <ModelPerformancePanel completedVoyages={completedVoyages} />
     </div>
   );
