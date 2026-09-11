@@ -105,8 +105,8 @@ export default function Sidebar() {
     >
       {/* Brand */}
       <div className="h-16 flex items-center px-4 border-b border-neutral-800/60 shrink-0">
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-500/20 to-cyan-500/5 border border-cyan-500/20 flex items-center justify-center shrink-0">
+        <Link href="/" className="flex items-center gap-2 px-1 cursor-pointer hover:opacity-80 transition-opacity">
+          <div className="w-8 h-8 rounded-lg bg-neutral-900 border border-neutral-800 flex items-center justify-center shrink-0">
             <Anchor className="w-4 h-4 text-cyan-400" />
           </div>
           {!collapsed && (
@@ -114,7 +114,7 @@ export default function Sidebar() {
               PortFlow
             </span>
           )}
-        </div>
+        </Link>
       </div>
 
       {/* Nav Links */}

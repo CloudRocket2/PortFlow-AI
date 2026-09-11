@@ -21,6 +21,7 @@ export default function GlobeWrapper() {
   const [mounted, setMounted] = useState(false);
   const [hoveredNode, setHoveredNode] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedPortId, setSelectedPortId] = useState<string | null>(null);
   
   // Controlled zoom state - initialize wider to see origins
   const [position, setPosition] = useState({ coordinates: [80, 20] as [number, number], zoom: 2 });
@@ -125,6 +126,8 @@ export default function GlobeWrapper() {
   const selectedRouteInfo = mapRoutes.find(r => r.isSelected);
   const selectedShipInfo = ships.find(s => s.isSelected);
 
+  const selectedPortInfo = markers.find(m => m.id === selectedPortId);
+
   return (
     <div className="w-full h-full relative bg-[#000000] rounded-xl overflow-hidden shadow-[inset_0_0_50px_rgba(0,255,0,0.05)] border border-[#111111] group">
       
@@ -186,7 +189,46 @@ export default function GlobeWrapper() {
         </button>
       </div>
 
-
+      {/* Docked Detail Panel for Selected Port */}
+      {selectedPortInfo && (
+        <div className="absolute top-4 right-4 z-20 w-80 bg-neutral-900 border border-cyan-500/50 rounded-xl p-5 shadow-2xl animate-slide-in">
+          <div className="flex justify-between items-start mb-4">
+            <h3 className="text-lg font-bold text-white flex items-center gap-2">
+              <Anchor className="w-5 h-5 text-cyan-400" />
+              {selectedPortInfo.name}
+            </h3>
+            <button onClick={() => setSelectedPortId(null)} className="text-neutral-500 hover:text-white"><X className="w-4 h-4" /></button>
+          </div>
+          <div className="space-y-3">
+            <div className="flex justify-between border-b border-neutral-800 pb-2">
+              <span className="text-xs text-neutral-500 uppercase font-mono">Type</span>
+              <span className="text-sm text-neutral-300 capitalize">{selectedPortInfo.type}</span>
+            </div>
+            <div className="flex justify-between border-b border-neutral-800 pb-2">
+              <span className="text-xs text-neutral-500 uppercase font-mono">Status</span>
+              <span className={`text-sm font-mono ${selectedPortInfo.legalStatus !== 'Compliant' ? 'text-amber-400' : 'text-emerald-400'}`}>
+                {selectedPortInfo.legalStatus || 'Compliant'}
+              </span>
+            </div>
+            {selectedPortInfo.legalIssues && selectedPortInfo.legalIssues.length > 0 && (
+              <div className="flex flex-col border-b border-neutral-800 pb-2">
+                <span className="text-xs text-neutral-500 uppercase font-mono mb-1">Active Issues</span>
+                <ul className="text-xs text-neutral-300 list-disc list-inside">
+                  {selectedPortInfo.legalIssues.map((issue, i) => (
+                    <li key={i} className="truncate" title={issue}>{issue}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            <div className="flex justify-between border-b border-neutral-800 pb-2">
+              <span className="text-xs text-neutral-500 uppercase font-mono">Coordinates</span>
+              <span className="text-sm text-cyan-400 font-mono">
+                {selectedPortInfo.coordinates[1].toFixed(2)}&deg;N, {selectedPortInfo.coordinates[0].toFixed(2)}&deg;E
+              </span>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* The Map */}
       <ComposableMap
@@ -251,6 +293,8 @@ export default function GlobeWrapper() {
                 coordinates={marker.coordinates}
                 onMouseEnter={() => setHoveredNode(marker.id)}
                 onMouseLeave={() => setHoveredNode(null)}
+                onClick={() => setSelectedPortId(marker.id)}
+                className="cursor-pointer"
               >
                 <circle r={2.5 / position.zoom} fill={iconColor} className={hasIssue ? "animate-pulse" : ""} />
                 <circle r={8 / position.zoom} fill="transparent" stroke={iconColor} strokeWidth={0.5 / position.zoom} opacity={0.5} />
@@ -261,21 +305,26 @@ export default function GlobeWrapper() {
                   </g>
                 )}
 
-                {isHovered && (
-                  <text
-                    textAnchor="middle"
-                    y={-12 / position.zoom}
-                    style={{
-                      fontFamily: "monospace",
-                      fontSize: `${10 / position.zoom}px`,
-                      fill: "white",
-                      pointerEvents: "none",
-                      textShadow: "0 2px 4px rgba(0,0,0,0.8)"
-                    }}
-                  >
-                    {marker.name}
-                  </text>
-                )}
+                {(isHovered || isZoomedIn || selectedPortId === marker.id) && (() => {
+                  const isGangavaram = marker.name.includes("Gangavaram");
+                  const yOffset = isGangavaram ? (12 / position.zoom) : (-12 / position.zoom);
+                  
+                  return (
+                    <text
+                      textAnchor="middle"
+                      y={yOffset}
+                      style={{
+                        fontFamily: "monospace",
+                        fontSize: `${10 / position.zoom}px`,
+                        fill: "white",
+                        pointerEvents: "none",
+                        textShadow: "0 2px 4px rgba(0,0,0,0.8)"
+                      }}
+                    >
+                      {marker.name}
+                    </text>
+                  );
+                })()}
               </Marker>
             );
           })}
