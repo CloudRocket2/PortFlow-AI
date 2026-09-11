@@ -251,13 +251,14 @@ export default function DeckMap() {
       data: ships,
       pickable: true,
       getPosition: d => d.coordinates,
-      // We can use a simple generic icon or SVG mapping. Using an arrow/ship mapping.
-      iconAtlas: 'https://raw.githubusercontent.com/visgl/deck.gl-data/master/website/icon-atlas.png',
-      iconMapping: {
-        ship: { x: 128, y: 0, width: 128, height: 128, mask: true } // Assuming atlas has something or we just use marker. Wait, let's use a pure SVG string if possible. Actually, simpler: we'll just use a generic 'marker' but rotated.
-      },
-      getIcon: () => 'marker', 
-      getSize: d => d.isSelected ? 40 : 25,
+      getIcon: d => ({
+        url: "data:image/svg+xml;charset=utf-8,%3Csvg%20viewBox%3D%220%200%2024%2024%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M12%202L2%2022L12%2018L22%2022L12%202Z%22%20fill%3D%22white%22%2F%3E%3C%2Fsvg%3E",
+        width: 24,
+        height: 24,
+        mask: true
+      }),
+      sizeScale: 1,
+      getSize: d => d.isSelected ? 35 : 25,
       getColor: d => d.isSelected ? [0, 255, 0] : [0, 200, 255],
       getAngle: d => -d.bearing, // Rotate marker to face heading
       onClick: (info) => {
@@ -266,18 +267,6 @@ export default function DeckMap() {
       onHover: info => setHoverInfo(info.object ? { ...info, type: 'ship' } : null)
     }),
 
-    // Hover Ship Label (Only shows on hover)
-    new TextLayer({
-      id: 'ship-hover-label',
-      data: hoverInfo?.type === 'ship' ? [hoverInfo.object] : [],
-      getPosition: d => d.coordinates,
-      getText: d => d.name,
-      getSize: 16,
-      getColor: [0, 255, 255],
-      getPixelOffset: [0, -30],
-      getAlignmentBaseline: 'bottom',
-      getTextAnchor: 'middle',
-    })
   ];
 
   return (
@@ -360,6 +349,16 @@ export default function DeckMap() {
           {hoverInfo.object.properties.legalStatus !== 'Compliant' && (
             <div className="text-xs text-amber-400 mt-1">{hoverInfo.object.properties.legalStatus}</div>
           )}
+        </div>
+      )}
+
+      {/* Tooltip for Ship Hover */}
+      {hoverInfo?.type === 'ship' && hoverInfo.object && (
+        <div 
+          className="absolute z-10 bg-black/90 border border-cyan-700 text-cyan-400 px-3 py-1.5 rounded text-sm pointer-events-none transform -translate-x-1/2 -translate-y-[140%]"
+          style={{ left: hoverInfo.x, top: hoverInfo.y }}
+        >
+          <div className="font-bold">{hoverInfo.object.name}</div>
         </div>
       )}
 
