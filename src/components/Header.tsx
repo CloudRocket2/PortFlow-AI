@@ -26,32 +26,55 @@ export default function Header() {
   const [showProfile, setShowProfile] = useState(false);
   const [showSettingsModal, setShowSettingsModal] = useState(false);
   const [theme, setTheme] = useState("dark");
-  
+  const [density, setDensity] = useState("cozy");
+  const [notificationsEnabled, setNotificationsEnabled] = useState(true);
+
+  // Load settings on mount
   useEffect(() => {
+    const savedTheme = localStorage.getItem("pf_theme");
+    if (savedTheme) setTheme(savedTheme);
+    
+    const savedDensity = localStorage.getItem("pf_density");
+    if (savedDensity) setDensity(savedDensity);
+    
+    const savedNotifs = localStorage.getItem("pf_notifs");
+    if (savedNotifs) setNotificationsEnabled(savedNotifs === "true");
+  }, []);
+
+  // Theme logic
+  useEffect(() => {
+    localStorage.setItem("pf_theme", theme);
     const applyTheme = (t: string) => {
       if (t === 'light') {
-        document.body.classList.add('light-mode');
+        document.documentElement.classList.add('light-mode');
       } else if (t === 'dark') {
-        document.body.classList.remove('light-mode');
+        document.documentElement.classList.remove('light-mode');
       } else if (t === 'system') {
         if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
-          document.body.classList.add('light-mode');
+          document.documentElement.classList.add('light-mode');
         } else {
-          document.body.classList.remove('light-mode');
+          document.documentElement.classList.remove('light-mode');
         }
       }
     };
     applyTheme(theme);
     
     if (theme === 'system') {
-      const listener = (e: MediaQueryListEvent) => applyTheme('system');
+      const listener = () => applyTheme('system');
       const mediaQuery = window.matchMedia('(prefers-color-scheme: light)');
       mediaQuery.addEventListener('change', listener);
       return () => mediaQuery.removeEventListener('change', listener);
     }
   }, [theme]);
-  const [density, setDensity] = useState("cozy");
-  const [notificationsEnabled, setNotificationsEnabled] = useState(true);
+
+  // Save other settings
+  useEffect(() => {
+    localStorage.setItem("pf_density", density);
+  }, [density]);
+
+  useEffect(() => {
+    localStorage.setItem("pf_notifs", String(notificationsEnabled));
+  }, [notificationsEnabled]);
   const notifRef = useRef<HTMLDivElement>(null);
   const { state } = usePortFlowData();
   const { vessels, contracts, routes } = state;
