@@ -170,8 +170,8 @@ export default function LegalCompliancePage() {
         {/* Right: Results Panel */}
         <div className="minimal-panel p-6 relative overflow-hidden flex flex-col">
           {!resultsReady && !isScanning && (
-            <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6 bg-black/40 backdrop-blur-sm z-10">
-              <Scale className="w-12 h-12 text-neutral-800 mb-4" />
+            <div className="flex flex-col items-center justify-center text-center p-8 bg-neutral-900/10 border border-neutral-800 rounded-xl mb-6">
+              <Scale className="w-12 h-12 text-neutral-400 mb-4" />
               <p className="text-xs font-mono uppercase tracking-widest text-neutral-500">
                 Awaiting voyage particulars...
               </p>
@@ -293,8 +293,8 @@ export default function LegalCompliancePage() {
 
           <div className="minimal-panel p-6 relative overflow-hidden flex flex-col">
             {!charterResultsReady && !isAnalyzingCharter && (
-              <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6 bg-black/40 backdrop-blur-sm z-10">
-                <Scale className="w-12 h-12 text-neutral-800 mb-4" />
+              <div className="flex flex-col items-center justify-center text-center p-8 bg-neutral-900/10 border border-neutral-800 rounded-xl mb-6">
+                <Scale className="w-12 h-12 text-neutral-400 mb-4" />
                 <p className="text-sm font-mono uppercase tracking-widest text-neutral-500">
                   Awaiting clause input...
                 </p>
