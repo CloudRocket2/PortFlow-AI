@@ -29,7 +29,7 @@ export default function ModelPerformancePanel({ completedVoyages }: { completedV
   }
 
   return (
-    <div className="minimal-panel p-4 flex flex-col h-[300px] bg-black">
+    <div className="minimal-panel p-4 flex flex-col h-[300px]">
       <div className="flex items-center justify-between border-b border-neutral-800 pb-3 mb-4">
         <h2 className="text-sm font-mono font-bold text-white uppercase tracking-wider flex items-center gap-2">
           <Target className="w-4 h-4 text-white" />

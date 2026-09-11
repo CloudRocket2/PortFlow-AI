@@ -61,20 +61,20 @@ export default function AILogsPage() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto h-[calc(100vh-8rem)] flex flex-col">
+    <div className="max-w-[1600px] mx-auto h-[calc(100vh-8rem)] flex flex-col animate-page-enter">
       <div className="mb-6 flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-white flex items-center gap-2">
-            <BrainCircuit className="w-6 h-6 text-blue-500" />
+          <h1 className="text-lg font-semibold text-white flex items-center gap-2">
+            <BrainCircuit className="w-5 h-5 text-emerald-400" />
             PortFlow AI Logs
           </h1>
-          <p className="text-slate-400 text-sm mt-1">
+          <p className="text-xs text-neutral-500 mt-1">
             Real-time operations intelligence powered by Gemini 3.6 Flash.
           </p>
         </div>
         <button 
           onClick={clearConversation}
-          className="flex items-center gap-2 px-3 py-1.5 bg-neutral-800 hover:bg-neutral-700 text-neutral-400 hover:text-white rounded text-xs font-mono transition-colors"
+          className="flex items-center gap-2 px-3 py-1.5 bg-neutral-900 border border-neutral-800 hover:bg-neutral-800 text-neutral-400 hover:text-white rounded-lg text-xs font-mono transition-colors focus-ring"
           title="Clear Conversation"
         >
           <Trash2 className="w-4 h-4" />
@@ -83,21 +83,21 @@ export default function AILogsPage() {
       </div>
 
       {error && (
-        <div className="mb-4 bg-red-500/10 border border-red-500/30 text-red-400 px-4 py-3 rounded-lg flex items-center gap-3 text-sm">
+        <div className="mb-4 bg-rose-500/10 border border-rose-500/20 text-rose-400 px-4 py-3 rounded-lg flex items-center gap-3 text-sm">
           <AlertCircle className="w-5 h-5 flex-shrink-0" />
           <p>{error}</p>
         </div>
       )}
 
       {/* Chat Container */}
-      <div className="flex-1 bg-[#1e293b] rounded-t-xl border border-[#334155] border-b-0 overflow-hidden flex flex-col">
+      <div className="flex-1 bg-neutral-900/50 rounded-xl border border-neutral-800 overflow-hidden flex flex-col">
         {/* Messages */}
         <div ref={scrollRef} className="flex-1 overflow-y-auto p-6 space-y-6">
           {messages.map((msg, i) => (
             <div key={i} className={`flex gap-4 ${msg.role === "user" ? "flex-row-reverse" : "flex-row"}`}>
               {/* Avatar */}
               <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
-                msg.role === "user" ? "bg-emerald-500/20 text-emerald-400" : "bg-blue-500/20 text-blue-400"
+                msg.role === "user" ? "bg-cyan-500/20 text-cyan-400" : "bg-emerald-500/20 text-emerald-400"
               }`}>
                 {msg.role === "user" ? <User className="w-4 h-4" /> : <Bot className="w-4 h-4" />}
               </div>
@@ -105,29 +105,29 @@ export default function AILogsPage() {
               {/* Bubble */}
               <div className={`max-w-[80%] rounded-2xl px-5 py-3 ${
                 msg.role === "user" 
-                  ? "bg-blue-600 text-white rounded-tr-sm" 
-                  : "bg-[#0f172a] text-slate-300 border border-[#334155] rounded-tl-sm"
+                  ? "bg-cyan-600/90 text-white rounded-tr-sm" 
+                  : "bg-neutral-800/60 border border-neutral-700/50 text-neutral-300 rounded-tl-sm"
               }`}>
-                <p className="whitespace-pre-wrap text-sm leading-relaxed">{msg.text}</p>
+                <p className="whitespace-pre-wrap text-[13px] leading-relaxed">{msg.text}</p>
               </div>
             </div>
           ))}
           {loading && (
             <div className="flex gap-4 flex-row">
-              <div className="w-8 h-8 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center">
+              <div className="w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
                 <Bot className="w-4 h-4" />
               </div>
-              <div className="bg-[#0f172a] text-slate-300 border border-[#334155] rounded-2xl rounded-tl-sm px-5 py-4 flex items-center gap-2">
-                <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce" style={{ animationDelay: "0ms" }}></div>
-                <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce" style={{ animationDelay: "150ms" }}></div>
-                <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce" style={{ animationDelay: "300ms" }}></div>
+              <div className="bg-neutral-800/60 border border-neutral-700/50 text-neutral-300 rounded-2xl rounded-tl-sm px-5 py-4 flex items-center gap-2">
+                <div className="w-2 h-2 bg-cyan-400 rounded-full animate-bounce" style={{ animationDelay: "0ms" }}></div>
+                <div className="w-2 h-2 bg-cyan-400 rounded-full animate-bounce" style={{ animationDelay: "150ms" }}></div>
+                <div className="w-2 h-2 bg-cyan-400 rounded-full animate-bounce" style={{ animationDelay: "300ms" }}></div>
               </div>
             </div>
           )}
         </div>
 
         {/* Input Area */}
-        <div className="p-4 bg-black border-t border-neutral-800 flex flex-col gap-3">
+        <div className="p-4 bg-neutral-900/80 border-t border-neutral-800 flex flex-col gap-3">
           {/* Quick Questions */}
           <div className="flex flex-wrap gap-2">
             {[
@@ -138,7 +138,7 @@ export default function AILogsPage() {
               <button 
                 key={idx}
                 onClick={() => setInput(q)}
-                className="text-[10px] uppercase font-mono tracking-wider border border-[#00ff00]/30 text-[#00ff00]/80 bg-[#00ff00]/5 px-3 py-1.5 rounded-full hover:bg-[#00ff00]/10 hover:text-[#00ff00] transition-colors whitespace-nowrap"
+                className="text-[10px] uppercase font-mono tracking-widest border border-cyan-500/20 text-cyan-400 bg-cyan-500/5 px-3 py-1.5 rounded-full hover:bg-cyan-500/10 transition-colors whitespace-nowrap focus-ring"
               >
                 {q}
               </button>
@@ -154,12 +154,12 @@ export default function AILogsPage() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="ASK ABOUT LIGHTERING DELAYS, DRAFT LIMITS, OR GENERAL BULK LOGISTICS..."
-              className="flex-1 bg-neutral-900 border border-neutral-700 text-white font-mono text-xs px-4 py-3 focus:outline-none focus:border-[#00ff00] transition-colors"
+              className="flex-1 bg-neutral-950 border border-neutral-800 rounded-lg text-white font-mono text-xs px-4 py-3 focus:outline-none focus:border-cyan-500/50 transition-colors"
             />
             <button
               type="submit"
               disabled={!input.trim() || loading}
-              className="bg-[#00ff00]/10 border border-[#00ff00]/30 hover:bg-[#00ff00]/20 disabled:opacity-30 text-[#00ff00] px-5 flex items-center justify-center transition-colors"
+              className="bg-cyan-500/10 border border-cyan-500/20 rounded-lg hover:bg-cyan-500/20 disabled:opacity-30 text-cyan-400 px-5 flex items-center justify-center transition-colors focus-ring"
             >
               <Send className="w-4 h-4" />
             </button>

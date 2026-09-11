@@ -45,13 +45,13 @@ export default function ForecastPage() {
   }, [isSubscribed]);
 
   return (
-    <div className="flex flex-col gap-6 h-full p-2 relative">
+    <div className="flex flex-col gap-6 h-full relative animate-page-enter">
       
       {/* Active Toast Notification */}
       {activeToast && (
-        <div className="absolute top-4 left-1/2 -translate-x-1/2 z-50 bg-black border border-[#00ff00] p-4 shadow-[0_0_20px_rgba(0,255,0,0.2)] animate-in slide-in-from-top-4 flex flex-col gap-3 min-w-[400px]">
+        <div className="absolute top-4 left-1/2 -translate-x-1/2 z-50 bg-black border border-emerald-500/20 p-4 shadow-[0_0_20px_rgba(16,185,129,0.2)] animate-in slide-in-from-top-4 flex flex-col gap-3 min-w-[400px]">
           <div className="flex justify-between items-start">
-            <div className="flex items-center gap-2 text-[#00ff00] font-mono font-bold text-sm uppercase tracking-wider">
+            <div className="flex items-center gap-2 text-emerald-400 font-mono font-bold text-sm uppercase tracking-wider">
               <BellRing className="w-4 h-4 animate-pulse" />
               {activeToast.title}
             </div>
@@ -65,7 +65,7 @@ export default function ForecastPage() {
               setActiveToast(null);
               setShowEmailPreview(true);
             }}
-            className="mt-2 bg-[#00ff00]/10 border border-[#00ff00]/30 text-[#00ff00] text-[10px] font-mono font-bold uppercase tracking-widest py-1.5 px-3 hover:bg-[#00ff00]/20 flex items-center justify-center gap-2"
+            className="mt-2 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-mono font-bold uppercase tracking-widest py-1.5 px-3 hover:bg-emerald-500/20 flex items-center justify-center gap-2"
           >
             <Mail className="w-3 h-3" /> View Simulated Email
           </button>
@@ -77,7 +77,7 @@ export default function ForecastPage() {
         <div className="fixed inset-0 z-[60] bg-black/80 flex items-center justify-center backdrop-blur-sm p-4">
           <div className="bg-[#111] border border-neutral-700 w-full max-w-xl shadow-2xl">
             <div className="bg-neutral-900 border-b border-neutral-800 p-3 flex justify-between items-center">
-              <div className="text-xs font-mono text-neutral-400 uppercase tracking-widest flex items-center gap-2">
+              <div className="text-xs text-neutral-400 uppercase tracking-widest flex items-center gap-2">
                 <Mail className="w-4 h-4" /> Email Preview
               </div>
               <button onClick={() => setShowEmailPreview(false)} className="text-neutral-500 hover:text-white"><X className="w-4 h-4" /></button>
@@ -118,11 +118,11 @@ export default function ForecastPage() {
       {/* Header */}
       <div className="flex items-center justify-between border-b border-neutral-800 pb-4 relative">
         <div>
-          <h1 className="text-xl font-bold uppercase tracking-widest text-white flex items-center gap-3">
+          <h1 className="text-lg font-semibold text-white flex items-center gap-3">
             <Globe className="w-5 h-5" />
             Global Risk & AI Market Forecasting
           </h1>
-          <p className="text-xs font-mono text-neutral-500 mt-1 uppercase tracking-widest">
+          <p className="text-xs text-neutral-500 mt-1">
             Early Warnings, Deadheading Prevention, and Spot Rate Predictions
           </p>
         </div>
@@ -134,8 +134,8 @@ export default function ForecastPage() {
             onClick={() => setIsAlertsMenuOpen(!isAlertsMenuOpen)}
             className={`p-2 rounded border transition-colors relative ${isAlertsMenuOpen ? 'bg-neutral-800 border-neutral-600 text-white' : 'border-neutral-800 text-neutral-400 hover:text-white hover:bg-neutral-900'}`}
           >
-            {isSubscribed ? <BellRing className="w-5 h-5 text-[#00ff00]" /> : <Bell className="w-5 h-5" />}
-            {isSubscribed && <div className="absolute top-1.5 right-1.5 w-2 h-2 bg-[#00ff00] rounded-full animate-ping" />}
+            {isSubscribed ? <BellRing className="w-5 h-5 text-emerald-400" /> : <Bell className="w-5 h-5" />}
+            {isSubscribed && <div className="absolute top-1.5 right-1.5 w-2 h-2 bg-emerald-400 rounded-full animate-ping" />}
           </button>
         </div>
 
@@ -143,7 +143,7 @@ export default function ForecastPage() {
         {isAlertsMenuOpen && (
           <div className="absolute top-16 right-0 w-96 bg-[#0a0a0a] border border-neutral-800 shadow-2xl z-40 flex flex-col">
             <div className="p-4 border-b border-neutral-800 bg-black flex justify-between items-center">
-              <h3 className="text-sm font-mono font-bold text-white uppercase tracking-wider">Alert Preferences</h3>
+              <h3 className="text-sm font-medium uppercase tracking-wide font-mono text-white">Alert Preferences</h3>
               <button onClick={() => setIsAlertsMenuOpen(false)} className="text-neutral-500 hover:text-white"><X className="w-4 h-4"/></button>
             </div>
             
@@ -152,7 +152,7 @@ export default function ForecastPage() {
                 <div className="pt-1">
                   <div 
                     onClick={() => setIsSubscribed(!isSubscribed)}
-                    className={`w-10 h-5 rounded-full p-1 cursor-pointer transition-colors ${isSubscribed ? 'bg-[#00ff00]' : 'bg-neutral-700'}`}
+                    className={`w-10 h-5 rounded-full p-1 cursor-pointer transition-colors ${isSubscribed ? 'bg-emerald-400' : 'bg-neutral-700'}`}
                   >
                     <div className={`w-3 h-3 bg-white rounded-full transition-transform ${isSubscribed ? 'translate-x-5' : 'translate-x-0'}`} />
                   </div>
@@ -172,7 +172,7 @@ export default function ForecastPage() {
                 {alertHistory.map((alert) => (
                   <div key={alert.id} className="p-4 border-b border-neutral-800/50 hover:bg-neutral-900/30">
                     <div className="flex justify-between items-start mb-2">
-                      <div className={`text-[10px] font-mono font-bold uppercase tracking-widest ${alert.type === 'success' ? 'text-[#00ff00]' : 'text-amber-500'}`}>
+                      <div className={`text-[10px] font-mono font-bold uppercase tracking-widest ${alert.type === 'success' ? 'text-emerald-400' : 'text-amber-500'}`}>
                         {alert.title}
                       </div>
                       <div className="text-[9px] font-mono text-neutral-600">{alert.timestamp}</div>
@@ -186,7 +186,7 @@ export default function ForecastPage() {
                           setIsAlertsMenuOpen(false);
                           setShowEmailPreview(true);
                         }}
-                        className="mt-2 text-[10px] font-mono text-[#00ff00] hover:underline flex items-center gap-1"
+                        className="mt-2 text-[10px] font-mono text-emerald-400 hover:underline flex items-center gap-1"
                       >
                         <Mail className="w-3 h-3" /> View simulated email
                       </button>
@@ -207,8 +207,8 @@ export default function ForecastPage() {
           
           {/* Left Column: Risk Mitigation */}
           <div className="flex flex-col gap-6">
-          <div className="minimal-panel p-5 flex flex-col gap-4 bg-neutral-900/10">
-            <h2 className="text-sm font-mono font-bold text-white uppercase tracking-wider flex items-center gap-2 border-b border-neutral-800 pb-3">
+          <div className="minimal-panel p-5 flex flex-col gap-4">
+            <h2 className="text-sm font-medium uppercase tracking-wide font-mono text-white flex items-center gap-2 border-b border-neutral-800 pb-3">
               <ShieldAlert className="w-4 h-4 text-white" />
               Risk Mitigation Alerts
             </h2>
@@ -220,7 +220,7 @@ export default function ForecastPage() {
                   <div className="text-[10px] font-mono text-white uppercase tracking-widest font-bold">Severe Weather Warning</div>
                   <div className="text-[10px] font-mono text-neutral-500">2 HRS AGO</div>
                 </div>
-                <div className="text-xs font-mono text-neutral-400">
+                <div className="text-xs text-neutral-400">
                   Typhoon expected near Indonesia (Kalimantan) loading ports in 72 hours. 
                   Expect 3-4 days of berthing delays. 
                 </div>
@@ -235,7 +235,7 @@ export default function ForecastPage() {
                   <div className="text-[10px] font-mono text-neutral-300 uppercase tracking-widest font-bold">Port Congestion</div>
                   <div className="text-[10px] font-mono text-neutral-500">14 HRS AGO</div>
                 </div>
-                <div className="text-xs font-mono text-neutral-400">
+                <div className="text-xs text-neutral-400">
                   Australia (Newcastle) reporting massive queues for Panamax vessels due to crane maintenance.
                 </div>
                 <div className="mt-2 text-[10px] font-mono text-neutral-500 uppercase tracking-widest flex items-center gap-1">
@@ -245,8 +245,8 @@ export default function ForecastPage() {
             </div>
           </div>
 
-          <div className="minimal-panel p-5 flex flex-col gap-4 bg-neutral-900/10 flex-1 min-h-[350px]">
-             <h2 className="text-sm font-mono font-bold text-white uppercase tracking-wider flex items-center gap-2 border-b border-neutral-800 pb-3 shrink-0">
+          <div className="minimal-panel p-5 flex flex-col gap-4 flex-1 min-h-[350px]">
+             <h2 className="text-sm font-medium uppercase tracking-wide font-mono text-white flex items-center gap-2 border-b border-neutral-800 pb-3 shrink-0">
               <Activity className="w-4 h-4 text-white" />
               Macro Volatility Index
             </h2>
@@ -257,8 +257,8 @@ export default function ForecastPage() {
         </div>
 
         {/* Right Column: Idle Scenario Management (Deadheading) */}
-        <div className="minimal-panel p-5 flex flex-col gap-4 bg-neutral-900/10">
-          <h2 className="text-sm font-mono font-bold text-white uppercase tracking-wider flex items-center gap-2 border-b border-neutral-800 pb-3">
+        <div className="minimal-panel p-5 flex flex-col gap-4">
+          <h2 className="text-sm font-medium uppercase tracking-wide font-mono text-white flex items-center gap-2 border-b border-neutral-800 pb-3">
             <Route className="w-4 h-4 text-white" />
             Idle Scenario Management (Deadhead Prevention)
           </h2>
@@ -296,7 +296,7 @@ export default function ForecastPage() {
                   <AlertTriangle className="w-3 h-3" />
                   AI Alternative Employment Route
                 </div>
-                <p className="text-xs font-mono text-neutral-400">
+                <p className="text-xs text-neutral-400">
                   Instead of deadheading back to Australia empty, secure a short-term Iron Ore cargo from Vizag to China (Guangzhou). Market demand for Supramax on this route is currently elevated.
                 </p>
                 <div className="mt-3 text-[10px] font-mono text-white font-bold uppercase tracking-widest border border-white px-2 py-1 inline-block">
@@ -333,7 +333,7 @@ export default function ForecastPage() {
                   <AlertTriangle className="w-3 h-3" />
                   AI Alternative Employment Route
                 </div>
-                <p className="text-xs font-mono text-neutral-400">
+                <p className="text-xs text-neutral-400">
                   Sub-optimal positioning. Suggest routing vessel to Dhamra post-discharge for a backhaul fertilizer cargo to Southeast Asia, perfectly matching the Panamax LOA profile.
                 </p>
                 <div className="mt-3 text-[10px] font-mono text-white font-bold uppercase tracking-widest border border-white px-2 py-1 inline-block">

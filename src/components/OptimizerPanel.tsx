@@ -1,10 +1,15 @@
 "use client";
 
-import { BrainCircuit, Leaf, Activity } from "lucide-react";
+import { useState } from "react";
+import { BrainCircuit, Leaf, Activity, Loader2, Zap } from "lucide-react";
 import { useTelemetry } from "@/hooks/useTelemetry";
+import { usePortFlowData } from "@/context/PortFlowContext";
 
 export default function OptimizerPanel() {
   const { events } = useTelemetry();
+  const { runFleetOptimization } = usePortFlowData();
+  
+  const [isOptimizing, setIsOptimizing] = useState(false);
 
   // Mocking AI optimization events for bulk freight
   const aiEvents = [
@@ -14,6 +19,12 @@ export default function OptimizerPanel() {
     { message: "Adjusted ETA to align with predicted spot rate dip ($14.90)" },
   ];
   const totalOptimizations = 142;
+
+  const handleOptimize = async () => {
+    setIsOptimizing(true);
+    await runFleetOptimization();
+    setIsOptimizing(false);
+  };
 
   return (
     <div className="minimal-panel mb-6">
@@ -27,9 +38,28 @@ export default function OptimizerPanel() {
             Evaluating draft limits & lightering penalties
           </p>
         </div>
-        <div className="flex items-center gap-2 px-3 py-1.5 border border-neutral-800 text-white text-[10px] font-mono uppercase tracking-widest">
-          <div className="w-1.5 h-1.5 bg-white rounded-full animate-pulse" />
-          Active
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 px-3 py-1.5 border border-neutral-800 text-white text-[10px] font-mono uppercase tracking-widest rounded-lg">
+            <div className="w-1.5 h-1.5 bg-white rounded-full animate-pulse" />
+            Active
+          </div>
+          <button 
+            onClick={handleOptimize}
+            disabled={isOptimizing}
+            className="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-4 py-1.5 text-xs font-mono font-bold uppercase tracking-wider hover:bg-emerald-500/20 transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg focus-ring btn-sweep"
+          >
+            {isOptimizing ? (
+              <>
+                <Loader2 className="w-3 h-3 animate-spin" />
+                ANALYZING...
+              </>
+            ) : (
+              <>
+                <Zap className="w-3 h-3" />
+                RUN AI OPTIMIZATION
+              </>
+            )}
+          </button>
         </div>
       </div>
 
@@ -38,7 +68,7 @@ export default function OptimizerPanel() {
         {/* Metric 1 */}
         <div className="flex flex-col gap-2">
           <div className="text-[10px] font-mono text-neutral-500 uppercase tracking-widest flex items-center gap-1.5">
-            <Activity className="w-3 h-3 text-[#00ff00]" />
+            <Activity className="w-3 h-3 text-emerald-400" />
             AI Actions Taken (24h)
           </div>
           <div className="text-2xl font-mono text-white">
@@ -49,11 +79,11 @@ export default function OptimizerPanel() {
         {/* Metric 2 */}
         <div className="flex flex-col gap-2 border-l border-neutral-800 pl-6">
           <div className="text-[10px] font-mono text-neutral-500 uppercase tracking-widest flex items-center gap-1.5">
-            <Leaf className="w-3 h-3 text-[#00ff00]" />
+            <Leaf className="w-3 h-3 text-emerald-400" />
             CO2 Equivalents Saved
           </div>
           <div className="text-2xl font-mono text-white">
-            18.2 <span className="text-[10px] text-[#00ff00] ml-1">KILOTONS</span>
+            18.2 <span className="text-[10px] text-emerald-400 ml-1">KILOTONS</span>
           </div>
           <p className="text-[9px] font-mono text-neutral-500 uppercase">
             Via multi-voyage empty transit reduction
@@ -68,7 +98,7 @@ export default function OptimizerPanel() {
           <div className="flex flex-col gap-1.5">
             {aiEvents.map((e, idx) => (
               <div key={idx} className="text-[9px] font-mono text-neutral-400 flex items-start gap-1.5">
-                <span className="text-[#00ff00] mt-0.5">&gt;</span>
+                <span className="text-emerald-400 mt-0.5">&gt;</span>
                 {e.message}
               </div>
             ))}

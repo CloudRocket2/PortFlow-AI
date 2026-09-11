@@ -12,27 +12,49 @@ type Role = {
   department: string;
   features: string[];
   icon: any;
+  accent: string;
+  accentBg: string;
 };
 
 const ROLES: Role[] = [
   {
+    id: "DIR-12",
+    email: "director@portflow.com",
+    title: "Fleet Director",
+    clearance: "LEVEL 5 — OMEGA",
+    department: "Executive Operations",
+    features: [
+      "Global Bulk Radar",
+      "Fleet Chartering",
+      "Market Forecast",
+      "Multi-Voyage Ledger",
+      "Portfolio Scenarios",
+      "AI Assistant",
+    ],
+    icon: Shield,
+    accent: "text-cyan-400",
+    accentBg: "bg-cyan-500/10 border-cyan-500/20",
+  },
+  {
     id: "MGR-01",
     email: "chartering@portflow.com",
     title: "Chartering Manager",
-    clearance: "LEVEL 3 (DELTA)",
+    clearance: "LEVEL 3 — DELTA",
     department: "Commercial Chartering",
     features: [
       "Fleet Chartering",
-      "Multi-Voyage Contract Ledger",
+      "Multi-Voyage Ledger",
       "Portfolio Scenarios",
     ],
     icon: Briefcase,
+    accent: "text-emerald-400",
+    accentBg: "bg-emerald-500/10 border-emerald-500/20",
   },
   {
     id: "ANL-04",
     email: "analyst@portflow.com",
     title: "Freight Analyst",
-    clearance: "LEVEL 3 (DELTA)",
+    clearance: "LEVEL 3 — DELTA",
     department: "Market Intelligence",
     features: [
       "Market Forecast",
@@ -40,12 +62,14 @@ const ROLES: Role[] = [
       "AI Assistant",
     ],
     icon: LineChart,
+    accent: "text-amber-400",
+    accentBg: "bg-amber-500/10 border-amber-500/20",
   },
   {
     id: "OPS-09",
     email: "ops@portflow.com",
-    title: "Operations Coordinator",
-    clearance: "LEVEL 2 (SIGMA)",
+    title: "Ops Coordinator",
+    clearance: "LEVEL 2 — SIGMA",
     department: "Terminal Logistics",
     features: [
       "Global Bulk Radar",
@@ -53,22 +77,8 @@ const ROLES: Role[] = [
       "Anchorage Delays",
     ],
     icon: Globe,
-  },
-  {
-    id: "DIR-12",
-    email: "director@portflow.com",
-    title: "Fleet Director",
-    clearance: "LEVEL 5 (OMEGA)",
-    department: "Executive Operations",
-    features: [
-      "Global Bulk Radar",
-      "Fleet Chartering",
-      "Market Forecast",
-      "Multi-Voyage Contract Ledger",
-      "Portfolio Scenarios",
-      "AI Assistant"
-    ],
-    icon: Shield,
+    accent: "text-violet-400",
+    accentBg: "bg-violet-500/10 border-violet-500/20",
   },
 ];
 
@@ -82,10 +92,9 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  // When a role is clicked on the left, prefill the email
   useEffect(() => {
     setEmail(selectedRole.email);
-    setPassword(""); // Cleared for the live demo so the user can type it manually
+    setPassword("");
     setError("");
   }, [selectedRole]);
 
@@ -94,24 +103,20 @@ export default function LoginPage() {
     setAuthenticating(true);
     setProgress("Initiating secure handshake...");
     setError("");
-    
+
     setTimeout(() => setProgress("Verifying credentials..."), 600);
-    
+
     try {
       const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
-      
+
       const data = await res.json();
-      
+
       if (res.ok && data.success) {
         setProgress("Access Granted.");
-        if (typeof window !== "undefined") {
-          localStorage.setItem("portflow_role", data.user.name);
-          localStorage.setItem("portflow_clearance", data.user.clearance);
-        }
         setTimeout(() => {
           router.push("/");
         }, 800);
@@ -120,120 +125,128 @@ export default function LoginPage() {
         setError(data.message || "Authentication failed");
         setProgress("");
       }
-    } catch (err) {
+    } catch {
       setAuthenticating(false);
       setError("Network error");
     }
   };
 
   return (
-    <div className="min-h-screen bg-black flex items-center justify-center p-4 selection:bg-white selection:text-black">
-      
-      {/* Background Decor */}
-      <div className="fixed inset-0 z-0 pointer-events-none opacity-20 flex items-center justify-center">
-        <Anchor className="w-[800px] h-[800px] text-neutral-900" />
-      </div>
+    <div className="min-h-screen bg-black flex items-center justify-center p-4 selection:bg-cyan-500 selection:text-black relative">
 
-      <div className="w-full max-w-5xl z-10 flex flex-col gap-6">
-        
+      {/* Animated Grid Background */}
+      <div className="fixed inset-0 z-0 pointer-events-none animated-grid" />
+
+      {/* Scanline Overlay */}
+      <div className="fixed inset-0 z-[1] pointer-events-none scanlines" />
+
+      <div className="w-full max-w-5xl z-10 flex flex-col gap-6 animate-page-enter">
+
         {/* Header */}
-        <div className="flex flex-col items-center justify-center gap-2 mb-8">
-          <div className="w-12 h-12 border border-white flex items-center justify-center mb-4">
-            <Lock className="w-5 h-5 text-white" />
+        <div className="flex flex-col items-center justify-center gap-2 mb-6">
+          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500/20 to-cyan-500/5 border border-cyan-500/20 flex items-center justify-center mb-3">
+            <Anchor className="w-5 h-5 text-cyan-400" />
           </div>
-          <h1 className="text-2xl font-bold uppercase tracking-[0.3em] text-white">
+          <h1 className="text-2xl font-bold uppercase tracking-[0.25em] text-white">
             PortFlow OS
           </h1>
-          <p className="text-xs font-mono uppercase tracking-widest text-neutral-500">
-            Secure Terminal Authentication
+          <p className="text-xs text-neutral-500">
+            Secure terminal authentication
           </p>
         </div>
 
         {/* Main Interface */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-          
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+
           {/* Left Column: Role Selector */}
-          <div className="lg:col-span-5 minimal-panel flex flex-col h-[460px]">
-            <div className="p-4 border-b border-neutral-800 bg-neutral-900/30">
-              <h2 className="text-xs font-mono uppercase tracking-widest text-neutral-400">
+          <div className="lg:col-span-5 minimal-panel flex flex-col h-[480px]">
+            <div className="px-5 py-3.5 border-b border-neutral-800/60">
+              <h2 className="text-xs font-medium uppercase tracking-wide text-neutral-500">
                 Select Identity Profile
               </h2>
             </div>
-            <div className="flex-1 overflow-y-auto hide-scrollbar p-2 space-y-2">
-              {ROLES.map((role) => (
-                <button
-                  key={role.id}
-                  onClick={() => {
-                    if (!authenticating) {
-                      setSelectedRole(role);
-                      setEmail(role.email);
-                    }
-                  }}
-                  disabled={authenticating}
-                  className={`w-full text-left p-4 flex items-center gap-4 transition-colors border ${
-                    selectedRole.id === role.id
-                      ? "bg-white text-black border-white"
-                      : "border-transparent hover:border-neutral-800 text-white"
-                  }`}
-                >
-                  <role.icon className={`w-5 h-5 shrink-0 ${selectedRole.id === role.id ? "text-black" : "text-neutral-500"}`} />
-                  <div>
-                    <div className="font-mono text-sm font-bold uppercase tracking-wider">{role.title}</div>
-                    <div className={`text-[10px] font-mono mt-1 ${selectedRole.id === role.id ? "text-neutral-600" : "text-neutral-500"}`}>
-                      {role.email}
+            <div className="flex-1 overflow-y-auto hide-scrollbar p-2 space-y-1">
+              {ROLES.map((role) => {
+                const isSelected = selectedRole.id === role.id;
+                return (
+                  <button
+                    key={role.id}
+                    onClick={() => {
+                      if (!authenticating) {
+                        setSelectedRole(role);
+                        setEmail(role.email);
+                      }
+                    }}
+                    disabled={authenticating}
+                    className={`focus-ring w-full text-left p-4 flex items-center gap-4 transition-all duration-200 rounded-lg border ${
+                      isSelected
+                        ? `${role.accentBg} border`
+                        : "border-transparent hover:bg-white/[0.03] hover:border-neutral-800/60"
+                    }`}
+                  >
+                    <div className={`w-9 h-9 rounded-lg ${isSelected ? role.accentBg : "bg-neutral-900 border border-neutral-800"} flex items-center justify-center shrink-0`}>
+                      <role.icon className={`w-4 h-4 ${isSelected ? role.accent : "text-neutral-600"}`} />
                     </div>
-                  </div>
-                </button>
-              ))}
+                    <div className="min-w-0">
+                      <div className={`text-sm font-semibold ${isSelected ? "text-white" : "text-neutral-300"}`}>
+                        {role.title}
+                      </div>
+                      <div className="text-[11px] text-neutral-500 mt-0.5 truncate">
+                        {role.email}
+                      </div>
+                    </div>
+                  </button>
+                );
+              })}
             </div>
           </div>
 
           {/* Right Column: Details & Auth */}
-          <div className="lg:col-span-7 minimal-panel h-[460px] flex flex-col">
-            <div className="p-4 border-b border-neutral-800 bg-neutral-900/30 flex justify-between items-center">
-              <h2 className="text-xs font-mono uppercase tracking-widest text-neutral-400">
+          <div className="lg:col-span-7 minimal-panel h-[480px] flex flex-col">
+            <div className="px-5 py-3.5 border-b border-neutral-800/60 flex justify-between items-center">
+              <h2 className="text-xs font-medium uppercase tracking-wide text-neutral-500">
                 Clearance Matrix
               </h2>
-              <span className="text-[10px] font-mono uppercase tracking-widest text-white border border-neutral-800 px-2 py-1">
+              <span className={`text-[10px] font-mono uppercase tracking-widest px-2.5 py-1 rounded-md border ${selectedRole.accentBg} ${selectedRole.accent}`}>
                 {selectedRole.clearance}
               </span>
             </div>
-            
-            <form onSubmit={handleLogin} className="p-8 flex-1 flex flex-col">
-              
-              <div className="flex-1 flex flex-col gap-6">
-                <div className="flex gap-4">
-                  <div className="flex-1">
-                    <label className="text-[10px] font-mono text-neutral-500 uppercase tracking-widest mb-2 block">Operator Email</label>
-                    <input 
+
+            <form onSubmit={handleLogin} className="p-6 flex-1 flex flex-col">
+
+              <div className="flex-1 flex flex-col gap-5">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="text-xs text-neutral-500 mb-2 block">Operator Email</label>
+                    <input
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       required
-                      className="w-full bg-transparent border-b border-neutral-700 focus:border-white outline-none text-white font-mono text-sm py-2 transition-colors"
+                      className="focus-ring w-full bg-neutral-900/50 border border-neutral-800 rounded-lg px-3 py-2.5 text-sm font-mono text-white focus:outline-none focus:border-cyan-500/50 transition-colors"
                       placeholder="Enter email..."
                     />
                   </div>
-                  <div className="flex-1">
-                    <label className="text-[10px] font-mono text-neutral-500 uppercase tracking-widest mb-2 block">Security Passkey</label>
-                    <input 
+                  <div>
+                    <label className="text-xs text-neutral-500 mb-2 block">Security Passkey</label>
+                    <input
                       type="password"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
+                      placeholder="Enter password..."
+                      className="focus-ring w-full bg-neutral-900/50 border border-neutral-800 rounded-lg px-3 py-2.5 text-sm font-mono text-white focus:outline-none focus:border-cyan-500/50 transition-colors"
                       required
-                      className="w-full bg-transparent border-b border-neutral-700 focus:border-white outline-none text-white font-mono text-sm py-2 transition-colors"
-                      placeholder="••••••••"
                     />
                   </div>
                 </div>
 
-                <div className="mt-2">
-                  <div className="text-[10px] font-mono text-neutral-500 uppercase tracking-widest mb-3">Authorized Modules</div>
-                  <ul className="grid grid-cols-2 gap-3">
+                <div>
+                  <div className="text-xs text-neutral-500 mb-3">Authorized Modules</div>
+                  <ul className="grid grid-cols-2 gap-2.5">
                     {selectedRole.features.map((feature, i) => (
-                      <li key={i} className="flex items-center gap-3 animate-slide-in" style={{ animationDelay: `${i * 0.1}s` }}>
-                        <div className="w-1 h-1 bg-white shrink-0" />
-                        <span className="text-[10px] font-mono text-neutral-300 uppercase tracking-wider">{feature}</span>
+                      <li key={i} className="flex items-center gap-2.5 animate-slide-in" style={{ animationDelay: `${i * 0.06}s` }}>
+                        <div className={`w-1.5 h-1.5 rounded-full ${selectedRole.accent.replace("text-", "bg-")} shrink-0`} />
+                        <span className="text-xs text-neutral-400">{feature}</span>
                       </li>
                     ))}
                   </ul>
@@ -241,30 +254,30 @@ export default function LoginPage() {
               </div>
 
               {/* Login Button Area */}
-              <div className="pt-6 mt-auto border-t border-neutral-800">
+              <div className="pt-5 mt-auto border-t border-neutral-800/60">
                 {error && (
-                  <div className="text-red-500 text-xs font-mono uppercase tracking-widest mb-4 text-center border border-red-900/50 bg-red-900/20 py-2">
+                  <div className="text-rose-400 text-xs mb-4 text-center border border-rose-900/40 bg-rose-900/10 py-2.5 rounded-lg">
                     {error}
                   </div>
                 )}
-                
+
                 {authenticating ? (
                   <div className="flex flex-col gap-3">
-                    <div className="h-12 border border-neutral-800 bg-neutral-900/50 relative overflow-hidden flex items-center justify-center">
-                      <div className="absolute inset-0 bg-white/10 animate-pulse" />
-                      <span className="text-xs font-mono uppercase tracking-widest text-white relative z-10 flex items-center gap-2">
+                    <div className="h-12 border border-neutral-800 bg-neutral-900/50 relative overflow-hidden flex items-center justify-center rounded-lg">
+                      <div className="absolute inset-0 bg-white/5 animate-pulse" />
+                      <span className="text-xs font-mono text-white relative z-10 flex items-center gap-2">
                         <Fingerprint className="w-4 h-4 animate-bounce" />
                         Authenticating...
                       </span>
                     </div>
-                    <p className="text-[10px] font-mono text-neutral-500 text-center uppercase tracking-widest">
+                    <p className="text-[10px] font-mono text-neutral-500 text-center">
                       {progress}
                     </p>
                   </div>
                 ) : (
                   <button
                     type="submit"
-                    className="w-full h-12 bg-white text-black font-mono text-sm font-bold uppercase tracking-widest hover:bg-neutral-200 transition-colors flex items-center justify-center gap-3"
+                    className="focus-ring btn-sweep w-full h-12 bg-white text-black font-medium text-sm uppercase tracking-wider hover:bg-neutral-200 transition-colors flex items-center justify-center gap-2.5 rounded-lg"
                   >
                     <Key className="w-4 h-4" />
                     Initialize Session

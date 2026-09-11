@@ -2,15 +2,22 @@
 
 :root {
   --background: #000000;
-  --foreground: #ffffff;
-  --sidebar-bg: #000000;
-  --card-bg: #000000;
-  --card-border: #262626; /* neutral-800 */
-  --accent-blue: #ffffff;
-  --accent-green: #ffffff;
-  --accent-red: #ffffff;
-  --accent-amber: #ffffff;
-  --text-muted: #737373; /* neutral-500 */
+  --foreground: #f0f0f0;
+  --sidebar-bg: #050505;
+  --card-bg: #050505;
+  --card-border: #1f1f1f;
+
+  /* Accent Palette */
+  --accent-emerald: #34d399;
+  --accent-cyan: #22d3ee;
+  --accent-amber: #fbbf24;
+  --accent-rose: #fb7185;
+  --accent-violet: #a78bfa;
+
+  /* Legacy (boot sequence only) */
+  --matrix-green: #00ff00;
+
+  --text-muted: #737373;
 }
 
 @theme inline {
@@ -22,36 +29,67 @@
 
 body {
   background: var(--background);
+  background-image: radial-gradient(circle at 50% 0%, #0a0a0a 0%, #000000 70%);
+  background-attachment: fixed;
   color: var(--foreground);
   font-family: var(--font-sans, Arial, Helvetica, sans-serif);
 }
 
-/* Custom scrollbar for minimalist theme */
+/* ── Custom Scrollbar ─────────────────────────────────── */
 ::-webkit-scrollbar {
-  width: 4px;
-  height: 4px;
+  width: 5px;
+  height: 5px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #000000;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
   background: #262626;
+  border-radius: 99px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #525252;
+  background: #404040;
 }
 
-/* Minimalist Panel Utility */
+/* ── Modern Panel ─────────────────────────────────────── */
 .minimal-panel {
-  background: #000000;
-  border: 1px solid #262626;
-  border-radius: 4px; /* subtle rounding */
+  background: linear-gradient(180deg, rgba(14, 14, 14, 0.95) 0%, rgba(8, 8, 8, 0.9) 100%);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 14px;
+  box-shadow:
+    0 1px 0 0 rgba(255, 255, 255, 0.03) inset,
+    0 4px 24px -2px rgba(0, 0, 0, 0.5);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  overflow: hidden;
 }
 
-/* Minimal Scrollbar for lists */
+.minimal-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.015'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+}
+
+.minimal-panel > * {
+  position: relative;
+  z-index: 1;
+}
+
+.minimal-panel:hover {
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow:
+    0 1px 0 0 rgba(255, 255, 255, 0.05) inset,
+    0 8px 32px -2px rgba(0, 0, 0, 0.6);
+}
+
+/* ── Scrollbar Hiders ─────────────────────────────────── */
 .hide-scrollbar::-webkit-scrollbar {
   display: none;
 }
@@ -60,11 +98,107 @@ body {
   scrollbar-width: none;
 }
 
+/* ── Animations ───────────────────────────────────────── */
 @keyframes slide-in {
-  from { opacity: 0; transform: translateY(10px); }
+  from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
 .animate-slide-in {
-  animation: slide-in 0.3s ease-out forwards;
+  animation: slide-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes page-enter {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-page-enter {
+  animation: page-enter 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* ── Skeleton Shimmer ─────────────────────────────────── */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, #171717 25%, #262626 37%, #171717 63%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+  border-radius: 6px;
+}
+
+/* ── Button Sweep ─────────────────────────────────────── */
+@keyframes sweep {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+.btn-sweep {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-sweep::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+  pointer-events: none;
+}
+
+.btn-sweep:hover::after {
+  animation: sweep 0.6s ease-out;
+}
+
+/* ── Focus Ring ───────────────────────────────────────── */
+.focus-ring:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px #000, 0 0 0 4px rgba(34, 211, 238, 0.5);
+}
+
+/* ── Scanline Overlay (for Login) ─────────────────────── */
+.scanlines {
+  background-image: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(255, 255, 255, 0.008) 2px,
+    rgba(255, 255, 255, 0.008) 4px
+  );
+  pointer-events: none;
+}
+
+/* ── Animated Grid Background ─────────────────────────── */
+@keyframes grid-fade {
+  0%, 100% { opacity: 0.03; }
+  50% { opacity: 0.06; }
+}
+
+.animated-grid {
+  background-image:
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  animation: grid-fade 8s ease-in-out infinite;
+}
+
+/* ── Reduced Motion ───────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .animate-slide-in,
+  .animate-page-enter,
+  .skeleton,
+  .btn-sweep::after {
+    animation: none !important;
+  }
+
+  .minimal-panel,
+  .minimal-panel:hover {
+    transition: none !important;
+  }
 }

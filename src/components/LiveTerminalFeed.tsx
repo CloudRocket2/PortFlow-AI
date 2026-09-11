@@ -41,9 +41,9 @@ export default function LiveTerminalFeed() {
         <div className="flex items-center gap-1.5">
           <span className="relative flex h-2 w-2">
             {isConnected && (
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
             )}
-            <span className={`relative inline-flex rounded-full h-2 w-2 ${isConnected ? "bg-white" : "bg-neutral-600"}`}></span>
+            <span className={`relative inline-flex rounded-full h-2 w-2 ${isConnected ? "bg-emerald-400" : "bg-neutral-600"}`}></span>
           </span>
           <span className="text-[10px] font-mono text-neutral-500 uppercase tracking-widest">
             {isConnected ? "Connected" : "Disconnected"}

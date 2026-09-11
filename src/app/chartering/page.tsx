@@ -90,14 +90,14 @@ export default function CharteringPage() {
   };
 
   return (
-    <div className="flex flex-col gap-6 h-full p-2">
+    <div className="flex flex-col gap-6 h-full animate-page-enter">
       <div className="flex items-center justify-between border-b border-neutral-800 pb-4">
         <div>
-          <h1 className="text-xl font-bold uppercase tracking-widest text-white flex items-center gap-3">
+          <h1 className="text-lg font-semibold text-white flex items-center gap-3">
             <Calculator className="w-5 h-5" />
             AI Chartering & Vessel Optimizer
           </h1>
-          <p className="text-xs font-mono text-neutral-500 mt-1 uppercase tracking-widest">
+          <p className="text-xs text-neutral-500 mt-1">
             Predictive Freight & Infrastructure Alignment Model
           </p>
         </div>
@@ -111,38 +111,38 @@ export default function CharteringPage() {
         {/* Left Column: Input Form */}
         <div className="lg:col-span-4 minimal-panel p-6 flex flex-col gap-6">
           <div>
-            <label className="text-[10px] font-mono text-neutral-500 uppercase tracking-widest block mb-2">Origin Port (Loading)</label>
-            <select className="w-full bg-black border border-neutral-700 text-white font-mono text-sm p-2 outline-none focus:border-white transition-colors" value={originKey} onChange={e => setOriginKey(e.target.value)}>
+            <label className="text-xs text-neutral-500 block mb-2">Origin Port (Loading)</label>
+            <select className="w-full bg-neutral-900/50 border border-neutral-800 rounded-lg px-3 py-2.5 text-xs font-mono text-white focus:outline-none focus:border-cyan-500/50 transition-colors" value={originKey} onChange={e => setOriginKey(e.target.value)}>
               {originKeys.map(k => <option key={k} value={k}>{ORIGIN_PORTS[k].name}</option>)}
             </select>
           </div>
 
           <div>
-            <label className="text-[10px] font-mono text-neutral-500 uppercase tracking-widest block mb-2">Destination Port (Discharge)</label>
-            <select className="w-full bg-black border border-neutral-700 text-white font-mono text-sm p-2 outline-none focus:border-white transition-colors" value={destinationKey} onChange={e => setDestinationKey(e.target.value)}>
+            <label className="text-xs text-neutral-500 block mb-2">Destination Port (Discharge)</label>
+            <select className="w-full bg-neutral-900/50 border border-neutral-800 rounded-lg px-3 py-2.5 text-xs font-mono text-white focus:outline-none focus:border-cyan-500/50 transition-colors" value={destinationKey} onChange={e => setDestinationKey(e.target.value)}>
               {destKeys.map(k => <option key={k} value={k}>{INDIAN_EAST_COAST_PORTS[k].name}</option>)}
             </select>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="text-[10px] font-mono text-neutral-500 uppercase tracking-widest block mb-2">Cargo Type</label>
-              <select className="w-full bg-black border border-neutral-700 text-white font-mono text-sm p-2 outline-none focus:border-white transition-colors" value={cargo} onChange={e => setCargo(e.target.value)}>
+              <label className="text-xs text-neutral-500 block mb-2">Cargo Type</label>
+              <select className="w-full bg-neutral-900/50 border border-neutral-800 rounded-lg px-3 py-2.5 text-xs font-mono text-white focus:outline-none focus:border-cyan-500/50 transition-colors" value={cargo} onChange={e => setCargo(e.target.value)}>
                 <option>Coal</option>
                 <option>Iron Ore</option>
                 <option>Fertilizer</option>
               </select>
             </div>
             <div>
-              <label className="text-[10px] font-mono text-neutral-500 uppercase tracking-widest block mb-2">Volume (MT)</label>
-              <input type="number" className="w-full bg-black border border-neutral-700 text-white font-mono text-sm p-2 outline-none focus:border-white transition-colors" value={volume} onChange={e => setVolume(e.target.value)} />
+              <label className="text-xs text-neutral-500 block mb-2">Volume (MT)</label>
+              <input type="number" className="w-full bg-neutral-900/50 border border-neutral-800 rounded-lg px-3 py-2.5 text-xs font-mono text-white focus:outline-none focus:border-cyan-500/50 transition-colors" value={volume} onChange={e => setVolume(e.target.value)} />
             </div>
           </div>
 
           <button 
             onClick={handleOptimize}
             disabled={status === "calculating"}
-            className="mt-auto w-full border border-white bg-white text-black font-mono text-xs font-bold uppercase tracking-widest py-3 hover:bg-neutral-200 transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
+            className="mt-auto w-full border border-neutral-800 bg-white text-black font-mono text-[10px] font-bold uppercase tracking-widest py-3 hover:bg-neutral-200 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 focus-ring btn-sweep"
           >
             {status === "calculating" ? <Cpu className="w-4 h-4 animate-pulse" /> : <Ship className="w-4 h-4" />}
             {status === "calculating" ? "Calculating Routes..." : "Generate Optimal Charter"}
@@ -181,7 +181,7 @@ export default function CharteringPage() {
               <div className="border border-neutral-800 p-5 bg-neutral-900/30">
                 <div className="flex items-start justify-between mb-4">
                   <div>
-                    <h2 className="text-lg font-mono font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                    <h2 className="text-sm font-medium uppercase tracking-wide font-mono text-white flex items-center gap-2">
                       <CheckCircle2 className="w-5 h-5 text-white" />
                       Vessel Type Optimization
                     </h2>
@@ -216,11 +216,11 @@ export default function CharteringPage() {
 
               {/* Middle: Market Entry */}
               <div className="border border-neutral-800 p-5 bg-neutral-900/30">
-                <h2 className="text-sm font-mono font-bold text-white uppercase tracking-wider flex items-center gap-2 mb-4">
+                <h2 className="text-sm font-medium uppercase tracking-wide font-mono text-white flex items-center gap-2 mb-4">
                   <Clock className="w-4 h-4 text-white" />
                   Optimal Market Entry Timing
                 </h2>
-                <p className="text-xs font-mono text-neutral-400 mb-4">
+                <p className="text-xs text-neutral-400 mb-4">
                   AI Time-series analysis indicates high volatility on the {result?.originName} route due to seasonal demand.
                 </p>
                 <div className="flex items-center gap-4 border border-neutral-700 p-3">
@@ -234,14 +234,14 @@ export default function CharteringPage() {
 
               {/* Bottom: Financials (Spot vs Multi-voyage) */}
               <div className="border border-neutral-800 p-5 bg-neutral-900/30">
-                <h2 className="text-sm font-mono font-bold text-white uppercase tracking-wider flex items-center gap-2 mb-6">
+                <h2 className="text-sm font-medium uppercase tracking-wide font-mono text-white flex items-center gap-2 mb-6">
                   <TrendingDown className="w-4 h-4 text-white" />
                   Financial Projection: Spot vs Multi-Voyage
                 </h2>
                 
                 <div className="flex flex-col gap-4">
                   <div className="flex items-center justify-between">
-                    <div className="text-xs font-mono text-neutral-400 uppercase tracking-widest">Reactive Single Spot Contract</div>
+                    <div className="text-xs text-neutral-400 uppercase tracking-widest">Reactive Single Spot Contract</div>
                     <div className="text-sm font-mono text-white">${result.spotRate} / MT</div>
                   </div>
                   <div className="flex items-center justify-between border-b border-neutral-800 pb-4">
