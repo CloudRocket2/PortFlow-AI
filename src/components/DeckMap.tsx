@@ -251,12 +251,11 @@ export default function DeckMap() {
       data: ships,
       pickable: true,
       getPosition: d => d.coordinates,
-      getIcon: d => ({
-        url: "data:image/svg+xml;charset=utf-8,%3Csvg%20viewBox%3D%220%200%2024%2024%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M12%202L2%2022L12%2018L22%2022L12%202Z%22%20fill%3D%22white%22%2F%3E%3C%2Fsvg%3E",
-        width: 24,
-        height: 24,
-        mask: true
-      }),
+      iconAtlas: 'data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMjQgMjQiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTEyIDJMMiAyMkwxMiAxOEwyMiAyMkwxMiAyWiIgZmlsbD0id2hpdGUiLz48L3N2Zz4=',
+      iconMapping: {
+        ship: { x: 0, y: 0, width: 24, height: 24, mask: true }
+      },
+      getIcon: () => 'ship',
       sizeScale: 1,
       getSize: d => d.isSelected ? 35 : 25,
       getColor: d => d.isSelected ? [0, 255, 0] : [0, 200, 255],
@@ -266,7 +265,6 @@ export default function DeckMap() {
       },
       onHover: info => setHoverInfo(info.object ? { ...info, type: 'ship' } : null)
     }),
-
   ];
 
   return (
@@ -376,6 +374,7 @@ export default function DeckMap() {
           mapLib={maplibregl as any}
           mapStyle="https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json"
           reuseMaps
+          style={{ width: '100%', height: '100%', position: 'absolute', top: 0, left: 0 }}
         />
       </DeckGL>
     </div>
