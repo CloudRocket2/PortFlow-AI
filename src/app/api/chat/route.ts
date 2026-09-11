@@ -35,7 +35,7 @@ Your knowledge base covers India's East Coast ports: Haldia, Sagar-Sandheads, Pa
     }));
 
     const response = await groq.chat.completions.create({
-      model: "llama-3.1-70b-versatile", // Powerful, fast open-source model perfect for reasoning
+      model: "openai/gpt-oss-120b", // Updated to the latest active Groq model
       temperature: 0.2,
       messages: [
         { role: "system", content: systemPrompt },
