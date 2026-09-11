@@ -154,24 +154,6 @@ export default function Sidebar() {
         ))}
       </nav>
 
-      {/* User & Logout */}
-      <div className="p-2.5 border-t border-neutral-800/60">
-        {!collapsed && userName && (
-          <div className="px-2.5 py-2 mb-1">
-            <p className="text-xs font-mono text-neutral-600 uppercase tracking-widest">Signed in</p>
-            <p className="text-sm text-neutral-400 truncate mt-0.5">{userName}</p>
-          </div>
-        )}
-        <button
-          onClick={handleLogout}
-          className="focus-ring w-full flex items-center gap-2.5 px-2.5 py-2 text-sm text-neutral-500 hover:text-neutral-200 hover:bg-white/[0.03] transition-all duration-200 rounded-lg"
-          title={collapsed ? "Sign Out" : undefined}
-        >
-          <LogOut className="w-[18px] h-[18px] shrink-0" />
-          {!collapsed && <span className="font-medium">Sign Out</span>}
-        </button>
-      </div>
-
       {/* Collapse Toggle */}
       <button
         onClick={() => setCollapsed(!collapsed)}
