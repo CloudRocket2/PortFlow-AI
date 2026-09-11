@@ -69,7 +69,7 @@ export default function AILogsPage() {
             PortFlow AI Logs
           </h1>
           <p className="text-sm text-neutral-500 mt-1">
-            Real-time operations intelligence powered by Gemini 3.6 Flash.
+            Real-time operations intelligence powered by Llama 3.1 70B on Groq.
           </p>
         </div>
         <button 
