@@ -61,7 +61,7 @@ export default function Header() {
     <header className="flex items-center justify-between bg-[#060606] border-b border-neutral-800/60 px-6 h-14 shrink-0 z-50 relative">
       {/* Left: Dynamic Page Title */}
       <div>
-        <h2 className="text-sm font-semibold text-white">{pageInfo.title}</h2>
+        <h2 className="text-base font-semibold text-white">{pageInfo.title}</h2>
         <p className="text-[11px] text-neutral-500 mt-0.5">{pageInfo.subtitle}</p>
       </div>
 
@@ -81,11 +81,11 @@ export default function Header() {
           {showNotifications && (
             <div className="absolute top-full right-0 mt-2 w-[380px] minimal-panel shadow-2xl overflow-hidden animate-slide-in">
               <div className="p-4 border-b border-neutral-800/60 flex items-center justify-between">
-                <h3 className="text-xs font-semibold text-white flex items-center gap-2">
+                <h3 className="text-sm font-semibold text-white flex items-center gap-2">
                   <Bell className="w-3.5 h-3.5 text-cyan-400" />
                   Regulatory Intelligence
                 </h3>
-                <span className="text-[10px] font-mono bg-cyan-500/10 text-cyan-400 px-2 py-0.5 rounded-full border border-cyan-500/20">
+                <span className="text-xs font-mono bg-cyan-500/10 text-cyan-400 px-2 py-0.5 rounded-full border border-cyan-500/20">
                   3 new
                 </span>
               </div>
@@ -97,7 +97,7 @@ export default function Header() {
                   >
                     <div className="flex items-start justify-between mb-1.5">
                       <span
-                        className={`text-xs font-medium ${
+                        className={`text-sm font-medium ${
                           alert.type === "high"
                             ? "text-rose-400"
                             : alert.type === "medium"
@@ -107,7 +107,7 @@ export default function Header() {
                       >
                         {alert.title}
                       </span>
-                      <span className="text-[10px] text-neutral-600 font-mono">{alert.time}</span>
+                      <span className="text-xs text-neutral-600 font-mono">{alert.time}</span>
                     </div>
                     <p className="text-[11px] text-neutral-500 leading-relaxed group-hover:text-neutral-400 transition-colors">
                       {alert.desc}
@@ -126,7 +126,7 @@ export default function Header() {
 
         {/* User Avatar */}
         <div className="w-8 h-8 rounded-full bg-gradient-to-br from-cyan-500/20 to-violet-500/20 border border-neutral-700/60 flex items-center justify-center">
-          <span className="text-[10px] font-semibold text-neutral-300">{userInitials}</span>
+          <span className="text-xs font-semibold text-neutral-300">{userInitials}</span>
         </div>
       </div>
     </header>

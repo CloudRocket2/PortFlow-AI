@@ -86,20 +86,20 @@ export default function MultiVoyageLedger() {
       <div className="minimal-panel p-4 flex flex-col relative overflow-hidden">
         <div className="flex items-center justify-between border-b border-neutral-800/60 pb-4 mb-4">
           <div>
-            <h2 className="text-sm font-medium uppercase tracking-wide font-mono text-white flex items-center gap-2">
+            <h2 className="text-base font-medium uppercase tracking-wide font-mono text-white flex items-center gap-2">
               <Route className="w-4 h-4 text-cyan-400" />
               AI Multi-Voyage Contract Ledger
             </h2>
-            <p className="text-xs text-neutral-500 mt-1">
+            <p className="text-sm text-neutral-500 mt-1">
               Consolidating spot shipments into predictive multi-voyage schedules
             </p>
           </div>
           
           <div className="flex items-center gap-3">
-            <button onClick={exportCSV} className="text-xs font-mono text-neutral-400 hover:text-white transition-colors flex items-center gap-1 border border-neutral-700 px-2 py-1 rounded-lg">
+            <button onClick={exportCSV} className="text-sm font-mono text-neutral-400 hover:text-white transition-colors flex items-center gap-1 border border-neutral-700 px-2 py-1 rounded-lg">
               <Download className="w-3 h-3" /> CSV
             </button>
-            <button onClick={handleExportPDF} className="text-xs font-mono text-neutral-400 hover:text-white transition-colors flex items-center gap-1 border border-neutral-700 px-2 py-1 rounded-lg">
+            <button onClick={handleExportPDF} className="text-sm font-mono text-neutral-400 hover:text-white transition-colors flex items-center gap-1 border border-neutral-700 px-2 py-1 rounded-lg">
               <Download className="w-3 h-3" /> PDF
             </button>
             <div className="relative ml-2">
@@ -109,7 +109,7 @@ export default function MultiVoyageLedger() {
                 placeholder="SEARCH VOYAGE ID..." 
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="bg-neutral-900/50 border border-neutral-800 text-xs font-mono px-7 py-1.5 focus:outline-none focus:border-cyan-500/50 text-white w-48 rounded-lg transition-colors"
+                className="bg-neutral-900/50 border border-neutral-800 text-sm font-mono px-7 py-1.5 focus:outline-none focus:border-cyan-500/50 text-white w-48 rounded-lg transition-colors"
               />
             </div>
           </div>
@@ -118,7 +118,7 @@ export default function MultiVoyageLedger() {
         <div className="overflow-x-auto" id="ledger-table">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="border-b border-neutral-800 text-[10px] font-mono text-neutral-500 uppercase tracking-widest bg-neutral-900/30">
+              <tr className="border-b border-neutral-800 text-xs font-mono text-neutral-500 uppercase tracking-widest bg-neutral-900/30">
                 <th className="py-3 px-4 font-normal">Contract ID</th>
                 <th className="py-3 px-4 font-normal">Vessel / Class</th>
                 <th className="py-3 px-4 font-normal">Cargo Volume</th>
@@ -128,7 +128,7 @@ export default function MultiVoyageLedger() {
                 <th className="py-3 px-4 font-normal text-right">Status</th>
               </tr>
             </thead>
-            <tbody className="text-xs font-mono text-neutral-300">
+            <tbody className="text-sm font-mono text-neutral-300">
               {filteredVoyages.map((voyage, idx) => {
                 const isExecuted = voyage.status === "AI Executed" && voyage.realizedSavings !== null && voyage.realizedSavings !== undefined;
                 let variance = 0;
@@ -154,11 +154,11 @@ export default function MultiVoyageLedger() {
                     <td className="py-3 px-4">
                       <div className="flex flex-col">
                         <span className="text-white">{voyage.volume}</span>
-                        <span className="text-[9px] text-neutral-500">{voyage.cargo}</span>
+                        <span className="text-[10px] text-neutral-500">{voyage.cargo}</span>
                       </div>
                     </td>
                     <td className="py-3 px-4">
-                      <div className="flex items-center gap-2 text-[10px]">
+                      <div className="flex items-center gap-2 text-xs">
                         <span className="text-neutral-400">{voyage.origin}</span>
                         <ArrowRight className="w-3 h-3 text-neutral-600" />
                         <span className="text-white">{voyage.destination}</span>
@@ -181,23 +181,23 @@ export default function MultiVoyageLedger() {
                     </td>
                     <td className="py-2 px-4">
                       <div className="flex flex-col">
-                        <div className="text-neutral-400 text-[10px] flex items-center gap-1">
+                        <div className="text-neutral-400 text-xs flex items-center gap-1">
                           Pred: <span className="text-white font-bold tabular-nums">${(voyage.rawSavings / 1000000).toFixed(2)}M</span>
                         </div>
                         {isExecuted ? (
-                          <div className={`text-[10px] font-bold flex items-center gap-1 mt-0.5 tabular-nums ${variance < 0 ? 'text-amber-400' : 'text-emerald-400'}`}>
+                          <div className={`text-xs font-bold flex items-center gap-1 mt-0.5 tabular-nums ${variance < 0 ? 'text-amber-400' : 'text-emerald-400'}`}>
                             Real: ${(voyage.realizedSavings! / 1000000).toFixed(2)}M
-                            <span className={`px-1 py-0.5 rounded text-[9px] ${variance < 0 ? 'bg-amber-500/10' : 'bg-emerald-500/10'}`}>
+                            <span className={`px-1 py-0.5 rounded text-[10px] ${variance < 0 ? 'bg-amber-500/10' : 'bg-emerald-500/10'}`}>
                               {variance > 0 ? '+' : ''}{variance.toFixed(1)}%
                             </span>
                           </div>
                         ) : (
-                          <div className="text-neutral-600 text-[10px] mt-0.5">Real: Pending execution...</div>
+                          <div className="text-neutral-600 text-xs mt-0.5">Real: Pending execution...</div>
                         )}
                       </div>
                     </td>
                     <td className="py-3 px-4 text-right">
-                      <span className={`inline-flex items-center gap-1 px-2 py-1 text-[9px] uppercase tracking-widest border transition-colors duration-500 rounded-md ${
+                      <span className={`inline-flex items-center gap-1 px-2 py-1 text-[10px] uppercase tracking-widest border transition-colors duration-500 rounded-md ${
                         voyage.status === "AI Executed" ? "border-emerald-500/30 text-emerald-400 bg-emerald-500/10" : 
                         voyage.status === "Commercial Approval" ? "border-emerald-500/30 text-emerald-400 bg-emerald-500/10" :
                         voyage.status === "Legal Review Req." ? "border-amber-500/30 text-amber-400 bg-amber-500/10" :
@@ -214,7 +214,7 @@ export default function MultiVoyageLedger() {
             </tbody>
           </table>
           {filteredVoyages.length === 0 && (
-            <div className="py-8 text-center text-neutral-500 font-mono text-xs">
+            <div className="py-8 text-center text-neutral-500 font-mono text-sm">
               No voyages match the current search filter.
             </div>
           )}
@@ -240,7 +240,7 @@ export default function MultiVoyageLedger() {
             <div className="flex items-center justify-between p-6 border-b border-neutral-800">
               <div>
                 <h3 className="text-lg font-bold text-white font-mono">{selectedVoyage.id}</h3>
-                <p className="text-[10px] uppercase tracking-widest text-neutral-400 mt-1">Voyage Details & Compliance</p>
+                <p className="text-xs uppercase tracking-widest text-neutral-400 mt-1">Voyage Details & Compliance</p>
               </div>
               <button onClick={() => setSelectedVoyageId(null)} className="p-2 hover:bg-neutral-800 rounded-lg text-neutral-400 hover:text-white transition-colors">
                 <X className="w-5 h-5" />
@@ -251,23 +251,23 @@ export default function MultiVoyageLedger() {
               
               {/* AI Explainability & Scores */}
               <div className="flex flex-col gap-3">
-                <h4 className="text-[10px] uppercase tracking-widest text-neutral-500 flex items-center gap-2">
+                <h4 className="text-xs uppercase tracking-widest text-neutral-500 flex items-center gap-2">
                   <Zap className="w-3 h-3 text-cyan-400" /> Why did AI select this vessel?
                 </h4>
                 <div className="bg-black/50 border border-neutral-800 rounded-xl p-4 flex flex-col gap-3">
-                  <div className="flex justify-between items-center text-xs">
+                  <div className="flex justify-between items-center text-sm">
                     <span className="text-neutral-400">Commercial Score</span>
                     <span className="text-emerald-400 font-bold">{selectedVoyage.commercialScore}/100</span>
                   </div>
-                  <div className="flex justify-between items-center text-xs">
+                  <div className="flex justify-between items-center text-sm">
                     <span className="text-neutral-400">Operational Score</span>
                     <span className="text-emerald-400 font-bold">{selectedVoyage.operationalScore}/100</span>
                   </div>
-                  <div className="flex justify-between items-center text-xs border-b border-neutral-800 pb-3">
+                  <div className="flex justify-between items-center text-sm border-b border-neutral-800 pb-3">
                     <span className="text-neutral-400 flex items-center gap-1"><Scale className="w-3 h-3" /> Legal Score</span>
                     <span className={`font-bold ${selectedVoyage.legalScore! >= 90 ? 'text-emerald-400' : selectedVoyage.legalScore! >= 80 ? 'text-amber-400' : 'text-red-400'}`}>{selectedVoyage.legalScore}/100</span>
                   </div>
-                  <div className="flex justify-between items-center text-xs pt-1">
+                  <div className="flex justify-between items-center text-sm pt-1">
                     <span className="text-white font-bold uppercase">Overall AI Confidence</span>
                     <span className="text-white font-bold">{Math.round((selectedVoyage.commercialScore! + selectedVoyage.operationalScore! + selectedVoyage.legalScore!) / 3)}%</span>
                   </div>
@@ -276,10 +276,10 @@ export default function MultiVoyageLedger() {
 
               {/* Vessel Legal Passport */}
               <div className="flex flex-col gap-3">
-                <h4 className="text-[10px] uppercase tracking-widest text-neutral-500 flex items-center gap-2">
+                <h4 className="text-xs uppercase tracking-widest text-neutral-500 flex items-center gap-2">
                   <FileText className="w-3 h-3 text-emerald-400" /> Vessel Legal Passport
                 </h4>
-                <div className="bg-black/50 border border-neutral-800 rounded-xl p-4 flex flex-col gap-3 text-xs">
+                <div className="bg-black/50 border border-neutral-800 rounded-xl p-4 flex flex-col gap-3 text-sm">
                   <div className="flex justify-between"><span className="text-neutral-500">IMO</span><span className="text-neutral-300 font-mono">{selectedVoyage.vesselDetails.imo}</span></div>
                   <div className="flex justify-between"><span className="text-neutral-500">Flag</span><span className="text-neutral-300 font-mono">{selectedVoyage.vesselDetails.flag}</span></div>
                   <div className="flex justify-between"><span className="text-neutral-500">Owner</span><span className="text-neutral-300 font-mono">{selectedVoyage.vesselDetails.owner}</span></div>
@@ -304,10 +304,10 @@ export default function MultiVoyageLedger() {
 
               {/* Port Legal Status */}
               <div className="flex flex-col gap-3">
-                <h4 className="text-[10px] uppercase tracking-widest text-neutral-500 flex items-center gap-2">
+                <h4 className="text-xs uppercase tracking-widest text-neutral-500 flex items-center gap-2">
                   <ShieldCheck className="w-3 h-3 text-blue-400" /> Port Eligibility
                 </h4>
-                <div className="bg-black/50 border border-neutral-800 rounded-xl p-4 flex flex-col gap-4 text-xs">
+                <div className="bg-black/50 border border-neutral-800 rounded-xl p-4 flex flex-col gap-4 text-sm">
                   <div>
                     <div className="text-neutral-500 mb-1 font-mono">Origin: {selectedVoyage.origin}</div>
                     <div className={`flex items-center gap-1.5 ${selectedVoyage.originDetails.legalStatus === 'Compliant' ? 'text-emerald-400' : 'text-amber-400'}`}>

@@ -28,10 +28,10 @@ function KpiCard({ label, value, icon: Icon, accentBorder, accentText, subtitle 
         <Icon className="w-4 h-4" />
       </div>
       <div className="min-w-0">
-        <p className="text-[10px] font-mono uppercase tracking-widest text-neutral-500 leading-tight">{label}</p>
+        <p className="text-xs font-mono uppercase tracking-widest text-neutral-500 leading-tight">{label}</p>
         <p className="text-lg font-mono font-semibold text-white tabular-nums leading-tight">{value}</p>
         {subtitle && (
-          <p className="text-[10px] text-neutral-600 leading-tight mt-0.5">{subtitle}</p>
+          <p className="text-xs text-neutral-600 leading-tight mt-0.5">{subtitle}</p>
         )}
       </div>
     </div>
@@ -117,7 +117,7 @@ export default function DashboardPage() {
           <h2 className="text-[#00ff00] font-mono text-lg font-bold uppercase tracking-[0.3em] mb-4 drop-shadow-[0_0_8px_rgba(0,255,0,0.5)]">
             System Boot
           </h2>
-          <p className="text-neutral-500 font-mono text-xs uppercase tracking-widest h-4">
+          <p className="text-neutral-500 font-mono text-sm uppercase tracking-widest h-4">
             {bootLog}
           </p>
           <div className="mt-8 w-64 h-1 bg-neutral-900 overflow-hidden relative rounded-full">
@@ -153,11 +153,11 @@ export default function DashboardPage() {
         <div className="minimal-panel px-4 py-2.5 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
             <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_6px_rgba(52,211,153,0.5)]" />
-            <p className="text-xs font-mono uppercase tracking-widest text-emerald-400">
+            <p className="text-sm font-mono uppercase tracking-widest text-emerald-400">
               Global Bulk Radar Active
             </p>
           </div>
-          <p className="text-[10px] font-mono text-neutral-500">
+          <p className="text-xs font-mono text-neutral-500">
             AIS Fleet Architecture Ready
           </p>
         </div>

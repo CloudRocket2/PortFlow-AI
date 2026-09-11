@@ -134,44 +134,44 @@ export default function ScenariosPage() {
             </div>
             <form onSubmit={handleAdd} className="space-y-4">
               <div>
-                <label className="block text-xs text-neutral-500 mb-1">Strategy Name</label>
+                <label className="block text-sm text-neutral-500 mb-1">Strategy Name</label>
                 <input 
                   type="text" 
                   value={formData.name}
                   onChange={(e) => setFormData({...formData, name: e.target.value})}
-                  className="w-full bg-neutral-900/50 border border-neutral-800 rounded-lg px-3 py-2.5 text-xs font-mono text-white focus:outline-none focus:border-cyan-500/50 transition-colors"
+                  className="w-full bg-neutral-900/50 border border-neutral-800 rounded-lg px-3 py-2.5 text-sm font-mono text-white focus:outline-none focus:border-cyan-500/50 transition-colors"
                   required
                 />
               </div>
               <div>
-                <label className="block text-xs text-neutral-500 mb-1">Primary Strategy</label>
+                <label className="block text-sm text-neutral-500 mb-1">Primary Strategy</label>
                 <input 
                   type="text" 
                   value={formData.strategy}
                   onChange={(e) => setFormData({...formData, strategy: e.target.value})}
                   placeholder="e.g. Wait 2 weeks, then Spot"
-                  className="w-full bg-neutral-900/50 border border-neutral-800 rounded-lg px-3 py-2.5 text-xs font-mono text-white focus:outline-none focus:border-cyan-500/50 transition-colors"
+                  className="w-full bg-neutral-900/50 border border-neutral-800 rounded-lg px-3 py-2.5 text-sm font-mono text-white focus:outline-none focus:border-cyan-500/50 transition-colors"
                   required
                 />
               </div>
               <div>
-                <label className="block text-xs text-neutral-500 mb-1">Total Volume</label>
+                <label className="block text-sm text-neutral-500 mb-1">Total Volume</label>
                 <input 
                   type="text" 
                   value={formData.volume}
                   onChange={(e) => setFormData({...formData, volume: e.target.value})}
-                  className="w-full bg-neutral-900/50 border border-neutral-800 rounded-lg px-3 py-2.5 text-xs font-mono text-white focus:outline-none focus:border-cyan-500/50 transition-colors"
+                  className="w-full bg-neutral-900/50 border border-neutral-800 rounded-lg px-3 py-2.5 text-sm font-mono text-white focus:outline-none focus:border-cyan-500/50 transition-colors"
                   required
                 />
               </div>
               <div>
-                <label className="block text-xs text-neutral-500 mb-1">Execution Timing</label>
+                <label className="block text-sm text-neutral-500 mb-1">Execution Timing</label>
                 <input 
                   type="text" 
                   value={formData.timing}
                   onChange={(e) => setFormData({...formData, timing: e.target.value})}
                   placeholder="e.g. November 20"
-                  className="w-full bg-neutral-900/50 border border-neutral-800 rounded-lg px-3 py-2.5 text-xs font-mono text-white focus:outline-none focus:border-cyan-500/50 transition-colors"
+                  className="w-full bg-neutral-900/50 border border-neutral-800 rounded-lg px-3 py-2.5 text-sm font-mono text-white focus:outline-none focus:border-cyan-500/50 transition-colors"
                   required
                 />
               </div>
@@ -179,13 +179,13 @@ export default function ScenariosPage() {
                 <button 
                   type="button" 
                   onClick={() => setShowModal(false)}
-                  className="flex-1 bg-transparent border border-neutral-700 text-neutral-300 py-2.5 rounded-lg font-mono text-xs uppercase tracking-widest hover:bg-neutral-800 transition-colors focus-ring active:scale-[0.97]"
+                  className="flex-1 bg-transparent border border-neutral-700 text-neutral-300 py-2.5 rounded-lg font-mono text-sm uppercase tracking-widest hover:bg-neutral-800 transition-colors focus-ring active:scale-[0.97]"
                 >
                   Cancel
                 </button>
                 <button 
                   type="submit"
-                  className="flex-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-lg py-2.5 font-mono text-xs font-bold uppercase tracking-widest hover:bg-emerald-500/20 transition-colors focus-ring btn-sweep active:scale-[0.97]"
+                  className="flex-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-lg py-2.5 font-mono text-sm font-bold uppercase tracking-widest hover:bg-emerald-500/20 transition-colors focus-ring btn-sweep active:scale-[0.97]"
                 >
                   Generate
                 </button>
@@ -205,7 +205,7 @@ export default function ScenariosPage() {
             <h1 className="text-lg font-semibold text-white">
               Portfolio Scenarios
             </h1>
-            <p className="text-xs text-neutral-500 mt-1">
+            <p className="text-sm text-neutral-500 mt-1">
               Compare multi-voyage allocations, draft penalties, and volume trade-offs.
             </p>
           </div>
@@ -213,7 +213,7 @@ export default function ScenariosPage() {
         
         <button 
           onClick={() => setShowModal(true)}
-          className="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-4 py-2 rounded-lg text-xs font-mono font-bold uppercase tracking-wider hover:bg-emerald-500/20 transition-colors flex items-center gap-2 focus-ring btn-sweep active:scale-[0.97]"
+          className="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-4 py-2 rounded-lg text-sm font-mono font-bold uppercase tracking-wider hover:bg-emerald-500/20 transition-colors flex items-center gap-2 focus-ring btn-sweep active:scale-[0.97]"
         >
           <Plus className="w-4 h-4" />
           New Scenario
@@ -226,9 +226,9 @@ export default function ScenariosPage() {
         {scenarios.map((scenario) => (
           <div key={scenario.id} className={`minimal-panel p-6 border ${scenario.containerStyle} hover:scale-[1.01] hover:border-neutral-700/60 transition-all duration-300`}>
             <div className="flex items-center justify-between border-b border-current pb-4 mb-4" style={{ borderColor: scenario.isDefault && scenario.id === 'b' ? 'rgba(52,211,153,0.2)' : 'rgba(255,255,255,0.1)' }}>
-              <h2 className="text-sm font-medium text-white flex items-center gap-2 uppercase tracking-wide font-mono" style={{ color: scenario.id === 'b' ? 'var(--accent-emerald)' : 'white' }}>
+              <h2 className="text-base font-medium text-white flex items-center gap-2 uppercase tracking-wide font-mono" style={{ color: scenario.id === 'b' ? 'var(--accent-emerald)' : 'white' }}>
                 {scenario.name} 
-                <span className={`text-[10px] font-mono px-2 py-0.5 ml-2 rounded flex items-center gap-1.5 transition-all duration-200 hover:brightness-110 ${scenario.badgeStyle}`}>
+                <span className={`text-xs font-mono px-2 py-0.5 ml-2 rounded flex items-center gap-1.5 transition-all duration-200 hover:brightness-110 ${scenario.badgeStyle}`}>
                   {scenario.id === 'b' && <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_rgba(52,211,153,0.8)]" />}
                   {scenario.badge}
                 </span>
@@ -242,25 +242,25 @@ export default function ScenariosPage() {
             
             <div className="space-y-4">
               <div className="flex justify-between items-center bg-neutral-900/50 rounded-lg p-3 border border-neutral-800">
-                <div className={`text-[10px] font-mono uppercase tracking-widest ${scenario.id === 'b' ? 'text-emerald-400/70' : 'text-neutral-500'}`}>
+                <div className={`text-xs font-mono uppercase tracking-widest ${scenario.id === 'b' ? 'text-emerald-400/70' : 'text-neutral-500'}`}>
                   Primary Strategy
                 </div>
-                <div className="text-xs text-white">{scenario.strategy}</div>
+                <div className="text-sm text-white">{scenario.strategy}</div>
               </div>
               
               <div className="grid grid-cols-2 gap-4">
                 <div className="p-3 bg-neutral-900/50 rounded-lg border border-neutral-800">
-                  <div className="text-xs text-neutral-500 mb-1">Total Volume</div>
+                  <div className="text-sm text-neutral-500 mb-1">Total Volume</div>
                   <div className="text-2xl font-mono tabular-nums text-white">{scenario.volume}</div>
                 </div>
                 <div className="p-3 bg-neutral-900/50 rounded-lg border border-neutral-800">
-                  <div className="text-xs text-neutral-500 mb-1">Execution Timing</div>
+                  <div className="text-sm text-neutral-500 mb-1">Execution Timing</div>
                   <div className={`text-2xl font-mono tabular-nums flex items-center gap-2 ${scenario.id === 'b' ? 'text-emerald-400' : 'text-white'}`}>
                     {scenario.timing}
                   </div>
                 </div>
                 <div className="p-3 bg-neutral-900/50 rounded-lg border border-neutral-800">
-                  <div className="text-xs text-neutral-500 mb-1">Avg Freight Rate</div>
+                  <div className="text-sm text-neutral-500 mb-1">Avg Freight Rate</div>
                   <div className={`text-2xl font-mono tabular-nums flex items-center gap-2 ${scenario.id === 'b' ? 'text-emerald-400' : 'text-white'}`}>
                     {(scenario as any).hasTrendingIcon && <TrendingDown className="w-4 h-4" />} {scenario.rate}
                   </div>
@@ -272,7 +272,7 @@ export default function ScenariosPage() {
                   scenario.costColor === 'amber' ? 'bg-amber-500/10 border-amber-500/20' : 
                   'bg-blue-500/10 border-blue-500/20'
                 }`}>
-                  <div className={`text-xs mb-1 ${
+                  <div className={`text-sm mb-1 ${
                     scenario.costColor === 'rose' ? 'text-rose-400' : 
                     scenario.costColor === 'amber' ? 'text-amber-400' : 
                     'text-blue-400'
@@ -290,10 +290,10 @@ export default function ScenariosPage() {
               </div>
 
               <div className="mt-4 pt-4 border-t border-current" style={{ borderColor: scenario.isDefault && scenario.id === 'b' ? 'rgba(52,211,153,0.2)' : 'rgba(255,255,255,0.1)' }}>
-                <div className={`text-[10px] font-mono uppercase tracking-widest mb-2 ${scenario.id === 'b' ? 'text-emerald-400/70' : 'text-neutral-500'}`}>
+                <div className={`text-xs font-mono uppercase tracking-widest mb-2 ${scenario.id === 'b' ? 'text-emerald-400/70' : 'text-neutral-500'}`}>
                   Key Trade-offs
                 </div>
-                <ul className="space-y-2 text-xs text-neutral-400">
+                <ul className="space-y-2 text-sm text-neutral-400">
                   {scenario.tradeoffs.map((t, idx) => (
                     <li key={idx} className="flex items-start gap-2 animate-slide-in" style={{ animationDelay: `${idx * 0.05}s` }}>
                       <div className={`w-1.5 h-1.5 rounded-full mt-1 shrink-0 ${t.color}`} />

@@ -21,14 +21,14 @@ export default function TruckQueuePage() {
     <div className="space-y-6">
       <div>
         <h2 className="text-xl font-bold text-white">Truck Gate Queue</h2>
-        <p className="text-sm text-slate-400">Live operational terminal gate feed</p>
+        <p className="text-base text-slate-400">Live operational terminal gate feed</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         
         {/* Waiting Column */}
         <div className="bg-[#1e293b] rounded-xl border border-[#334155] p-4 flex flex-col h-[500px]">
-          <h3 className="text-sm font-semibold text-slate-300 mb-4 flex justify-between">
+          <h3 className="text-base font-semibold text-slate-300 mb-4 flex justify-between">
             WAITING OUTSIDE GATE <span className="bg-[#334155] px-2 rounded-full">2</span>
           </h3>
           <div className="space-y-3">
@@ -40,7 +40,7 @@ export default function TruckQueuePage() {
 
         {/* At Gate Column */}
         <div className="bg-[#1e293b] rounded-xl border border-[#334155] p-4 flex flex-col h-[500px]">
-          <h3 className="text-sm font-semibold text-amber-400 mb-4 flex justify-between">
+          <h3 className="text-base font-semibold text-amber-400 mb-4 flex justify-between">
             PROCESSING AT GATE <span className="bg-amber-500/20 px-2 rounded-full">1</span>
           </h3>
           <div className="space-y-3">
@@ -52,7 +52,7 @@ export default function TruckQueuePage() {
 
         {/* In Yard Column */}
         <div className="bg-[#1e293b] rounded-xl border border-[#334155] p-4 flex flex-col h-[500px]">
-          <h3 className="text-sm font-semibold text-green-400 mb-4 flex justify-between">
+          <h3 className="text-base font-semibold text-green-400 mb-4 flex justify-between">
             LOADING IN YARD <span className="bg-green-500/20 px-2 rounded-full">1</span>
           </h3>
           <div className="space-y-3">
@@ -71,15 +71,15 @@ function TruckCard({ truck }: { truck: TruckData }) {
   return (
     <div className="bg-[#0f172a] border border-[#334155] rounded-lg p-3">
       <div className="flex items-center justify-between mb-2">
-        <span className="text-sm font-mono font-bold text-white flex items-center gap-2">
+        <span className="text-base font-mono font-bold text-white flex items-center gap-2">
           <Truck className="w-4 h-4 text-blue-400" />
           {truck.plate}
         </span>
-        <span className="text-xs text-slate-500 flex items-center gap-1">
+        <span className="text-sm text-slate-500 flex items-center gap-1">
           <Clock className="w-3 h-3" /> {truck.wait}
         </span>
       </div>
-      <div className="text-xs text-slate-400 flex items-center gap-2">
+      <div className="text-sm text-slate-400 flex items-center gap-2">
         Pickup: <span className="text-blue-300 font-mono">{truck.assignedTo}</span>
       </div>
     </div>

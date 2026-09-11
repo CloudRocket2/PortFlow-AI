@@ -21,12 +21,12 @@ export default function PortInfraTable() {
         
         {/* Destination Ports */}
         <div>
-          <h3 className="text-sm font-mono text-[#00ff00] mb-3 flex items-center gap-2 uppercase">
+          <h3 className="text-base font-mono text-[#00ff00] mb-3 flex items-center gap-2 uppercase">
             <MapPin className="w-4 h-4" /> East Coast India (Destinations)
           </h3>
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs font-mono text-neutral-300">
-              <thead className="text-[10px] uppercase text-neutral-500 bg-neutral-900 border-b border-neutral-800">
+            <table className="w-full text-left text-sm font-mono text-neutral-300">
+              <thead className="text-xs uppercase text-neutral-500 bg-neutral-900 border-b border-neutral-800">
                 <tr>
                   <th className="px-3 py-2 font-normal">Port</th>
                   <th className="px-3 py-2 font-normal text-right">Draft (m)</th>
@@ -52,12 +52,12 @@ export default function PortInfraTable() {
 
         {/* Origin Ports */}
         <div>
-          <h3 className="text-sm font-mono text-[#00ff00] mb-3 flex items-center gap-2 uppercase">
+          <h3 className="text-base font-mono text-[#00ff00] mb-3 flex items-center gap-2 uppercase">
             <MapPin className="w-4 h-4" /> Global Origins
           </h3>
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs font-mono text-neutral-300">
-              <thead className="text-[10px] uppercase text-neutral-500 bg-neutral-900 border-b border-neutral-800">
+            <table className="w-full text-left text-sm font-mono text-neutral-300">
+              <thead className="text-xs uppercase text-neutral-500 bg-neutral-900 border-b border-neutral-800">
                 <tr>
                   <th className="px-3 py-2 font-normal">Port</th>
                   <th className="px-3 py-2 font-normal text-right">Draft (m)</th>

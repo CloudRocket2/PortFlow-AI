@@ -35,7 +35,7 @@ export default function DwellTimeChart() {
 
   if (loading || dwellTimeTrend.length === 0) {
     return (
-      <div className="minimal-panel p-5 h-[300px] flex items-center justify-center text-neutral-400 text-xs">
+      <div className="minimal-panel p-5 h-[300px] flex items-center justify-center text-neutral-400 text-sm">
         Loading trends...
       </div>
     );
@@ -57,10 +57,10 @@ export default function DwellTimeChart() {
       {/* Chart Header */}
       <div className="px-5 py-4 border-b border-neutral-800 flex items-center justify-between">
         <div>
-          <h3 className="text-sm font-semibold text-white">
+          <h3 className="text-base font-semibold text-white">
             Avg Lightering Delays - Last 7 Days
           </h3>
-          <p className="text-xs text-neutral-400 mt-0.5">
+          <p className="text-sm text-neutral-400 mt-0.5">
             Target: &lt; 24 hours &bull; Current avg:{" "}
             <span className={avgDwell > 24 ? "text-amber-400" : "text-[#00ff00]"}>
               {avgDwell.toFixed(1)}h
@@ -68,7 +68,7 @@ export default function DwellTimeChart() {
           </p>
         </div>
         <div
-          className={`flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-medium ${
+          className={`flex items-center gap-1 px-2.5 py-1 rounded-lg text-sm font-medium ${
             trendPercent < 0
               ? "bg-green-500/10 text-green-400"
               : "bg-red-500/10 text-red-400"

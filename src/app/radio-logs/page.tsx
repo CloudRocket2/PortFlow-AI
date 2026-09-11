@@ -102,7 +102,7 @@ export default function RadioLogsPage() {
             <Radio className="w-6 h-6" />
             VHF Radio Transcripts
           </h1>
-          <p className="text-xs font-mono text-neutral-500 mt-2 uppercase tracking-widest">
+          <p className="text-sm font-mono text-neutral-500 mt-2 uppercase tracking-widest">
             Live AI-Powered Speech-to-Text Translation
           </p>
         </div>
@@ -110,7 +110,7 @@ export default function RadioLogsPage() {
         <div className="flex items-center gap-4">
           <div className="px-4 py-2 border border-neutral-800 flex items-center gap-3">
             <Volume2 className="w-4 h-4 text-neutral-400" />
-            <span className="text-xs font-mono text-white uppercase tracking-widest">Live Audio Feed</span>
+            <span className="text-sm font-mono text-white uppercase tracking-widest">Live Audio Feed</span>
           </div>
           
           <button 
@@ -122,7 +122,7 @@ export default function RadioLogsPage() {
             }`}
           >
             <Mic className="w-4 h-4" />
-            <span className="text-xs font-mono uppercase tracking-widest">
+            <span className="text-sm font-mono uppercase tracking-widest">
               {isRecording ? "Recording..." : "Paused"}
             </span>
           </button>
@@ -134,9 +134,9 @@ export default function RadioLogsPage() {
         
         {/* Table Header */}
         <div className="grid grid-cols-12 gap-4 p-4 border-b border-neutral-800 bg-neutral-900/50">
-          <div className="col-span-2 text-[10px] font-mono text-neutral-500 uppercase tracking-widest">Time / Channel</div>
-          <div className="col-span-2 text-[10px] font-mono text-neutral-500 uppercase tracking-widest">Sender</div>
-          <div className="col-span-8 text-[10px] font-mono text-neutral-500 uppercase tracking-widest">Transcription (ENG / HIN)</div>
+          <div className="col-span-2 text-xs font-mono text-neutral-500 uppercase tracking-widest">Time / Channel</div>
+          <div className="col-span-2 text-xs font-mono text-neutral-500 uppercase tracking-widest">Sender</div>
+          <div className="col-span-8 text-xs font-mono text-neutral-500 uppercase tracking-widest">Transcription (ENG / HIN)</div>
         </div>
 
         {/* Scrollable List */}
@@ -146,17 +146,17 @@ export default function RadioLogsPage() {
               
               {/* Metadata */}
               <div className="col-span-2 flex flex-col gap-1">
-                <span className="text-xs font-mono text-white">
+                <span className="text-sm font-mono text-white">
                   {new Date(msg.timestamp).toLocaleTimeString([], { hour12: false, hour: '2-digit', minute:'2-digit', second:'2-digit' })}
                 </span>
-                <span className="text-[10px] font-mono uppercase text-neutral-500 border border-neutral-800 inline-block px-1.5 py-0.5 w-max mt-1">
+                <span className="text-xs font-mono uppercase text-neutral-500 border border-neutral-800 inline-block px-1.5 py-0.5 w-max mt-1">
                   {msg.channel}
                 </span>
               </div>
 
               {/* Sender */}
               <div className="col-span-2 flex items-start">
-                <span className="text-xs font-mono font-bold text-white uppercase tracking-wider bg-neutral-900 px-2 py-1">
+                <span className="text-sm font-mono font-bold text-white uppercase tracking-wider bg-neutral-900 px-2 py-1">
                   {msg.sender}
                 </span>
               </div>
@@ -164,12 +164,12 @@ export default function RadioLogsPage() {
               {/* Translation Payload */}
               <div className="col-span-8 flex flex-col gap-3 border-l border-neutral-800 pl-4">
                 <div>
-                  <span className="text-[10px] font-mono uppercase tracking-widest text-neutral-500 mb-1 block">English</span>
-                  <p className="text-sm text-white leading-relaxed">{msg.englishText}</p>
+                  <span className="text-xs font-mono uppercase tracking-widest text-neutral-500 mb-1 block">English</span>
+                  <p className="text-base text-white leading-relaxed">{msg.englishText}</p>
                 </div>
                 <div>
-                  <span className="text-[10px] font-mono uppercase tracking-widest text-neutral-500 mb-1 block">Hindi (हिंदी)</span>
-                  <p className="text-sm text-neutral-400 leading-relaxed font-sans">{msg.hindiText}</p>
+                  <span className="text-xs font-mono uppercase tracking-widest text-neutral-500 mb-1 block">Hindi (हिंदी)</span>
+                  <p className="text-base text-neutral-400 leading-relaxed font-sans">{msg.hindiText}</p>
                 </div>
               </div>
 
@@ -179,7 +179,7 @@ export default function RadioLogsPage() {
           {isRecording && (
             <div className="flex items-center gap-3 p-4 text-neutral-600">
               <div className="w-1.5 h-1.5 bg-neutral-600 rounded-full animate-ping" />
-              <span className="text-[10px] font-mono uppercase tracking-widest">Listening to port frequencies...</span>
+              <span className="text-xs font-mono uppercase tracking-widest">Listening to port frequencies...</span>
             </div>
           )}
         </div>

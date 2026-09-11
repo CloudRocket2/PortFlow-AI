@@ -31,16 +31,16 @@ export default function ModelPerformancePanel({ completedVoyages }: { completedV
   return (
     <div className="minimal-panel p-4 flex flex-col h-[300px]">
       <div className="flex items-center justify-between border-b border-neutral-800 pb-3 mb-4">
-        <h2 className="text-sm font-mono font-bold text-white uppercase tracking-wider flex items-center gap-2">
+        <h2 className="text-base font-mono font-bold text-white uppercase tracking-wider flex items-center gap-2">
           <Target className="w-4 h-4 text-white" />
           Model Performance Validation (Completed Contracts)
         </h2>
-        <div className="text-xs font-mono font-bold uppercase tracking-widest text-[#00ff00] bg-[#00ff00]/10 border border-[#00ff00]/30 px-3 py-1 flex items-center gap-2">
+        <div className="text-sm font-mono font-bold uppercase tracking-widest text-[#00ff00] bg-[#00ff00]/10 border border-[#00ff00]/30 px-3 py-1 flex items-center gap-2">
           <Activity className="w-3 h-3" />
           Avg Forecast Accuracy: {avgAccuracy}%
         </div>
       </div>
-      <div className="flex-1 min-h-0 text-xs font-mono">
+      <div className="flex-1 min-h-0 text-sm font-mono">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={chartData} margin={{ top: 10, right: 10, left: 10, bottom: 0 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#222" vertical={false} />

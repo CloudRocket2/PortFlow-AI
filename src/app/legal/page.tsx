@@ -61,7 +61,7 @@ export default function LegalCompliancePage() {
         <div className="flex items-center">
           <button 
             onClick={() => setActiveTab("vessel")}
-            className={`px-6 py-4 text-xs font-mono tracking-widest uppercase transition-colors relative focus-ring ${activeTab === "vessel" ? "text-emerald-400" : "text-neutral-500 hover:text-white"}`}
+            className={`px-6 py-4 text-sm font-mono tracking-widest uppercase transition-colors relative focus-ring ${activeTab === "vessel" ? "text-emerald-400" : "text-neutral-500 hover:text-white"}`}
           >
             <div className="flex items-center gap-2">
               <ShieldCheck className="w-4 h-4" />
@@ -72,7 +72,7 @@ export default function LegalCompliancePage() {
           
           <button 
             onClick={() => setActiveTab("charter")}
-            className={`px-6 py-4 text-xs font-mono tracking-widest uppercase transition-colors relative focus-ring ${activeTab === "charter" ? "text-emerald-400" : "text-neutral-500 hover:text-white"}`}
+            className={`px-6 py-4 text-sm font-mono tracking-widest uppercase transition-colors relative focus-ring ${activeTab === "charter" ? "text-emerald-400" : "text-neutral-500 hover:text-white"}`}
           >
             <div className="flex items-center gap-2">
               <Scale className="w-4 h-4" />
@@ -81,7 +81,7 @@ export default function LegalCompliancePage() {
             {activeTab === "charter" && <div className="absolute bottom-0 left-0 w-full h-0.5 bg-emerald-400 shadow-[0_0_8px_var(--accent-emerald)] transition-all duration-300" />}
           </button>
         </div>
-        <p className="text-[10px] font-mono uppercase tracking-widest text-neutral-500">
+        <p className="text-xs font-mono uppercase tracking-widest text-neutral-500">
           Powered by Gemini Contract Engine
         </p>
       </div>
@@ -92,11 +92,11 @@ export default function LegalCompliancePage() {
         {/* Left: Input Form */}
         <div className="minimal-panel p-6 flex flex-col gap-6">
           <div className="border-b border-neutral-800 pb-4">
-            <h2 className="text-sm font-medium text-white uppercase tracking-wide font-mono flex items-center gap-2 border-l-2 border-cyan-500/40 pl-3">
+            <h2 className="text-base font-medium text-white uppercase tracking-wide font-mono flex items-center gap-2 border-l-2 border-cyan-500/40 pl-3">
               <Search className="w-4 h-4" />
               Charter Risk Parameters
             </h2>
-            <p className="text-xs text-neutral-500 mt-1">
+            <p className="text-sm text-neutral-500 mt-1">
               Input voyage particulars for regulatory & sanctions screening
             </p>
           </div>
@@ -115,22 +115,22 @@ export default function LegalCompliancePage() {
               { label: "Discharge Port", key: "port" },
             ].map((field) => (
               <div key={field.key} className="flex flex-col gap-1.5">
-                <label className="text-xs text-neutral-500">{field.label}</label>
+                <label className="text-sm text-neutral-500">{field.label}</label>
                 <input 
                   type="text"
                   value={formData[field.key as keyof typeof formData]}
                   onChange={(e) => setFormData({...formData, [field.key]: e.target.value})}
-                  className="bg-neutral-900/50 border border-neutral-800 rounded-lg px-3 py-2.5 text-xs font-mono text-white focus:outline-none focus:border-cyan-500/50 transition-colors"
+                  className="bg-neutral-900/50 border border-neutral-800 rounded-lg px-3 py-2.5 text-sm font-mono text-white focus:outline-none focus:border-cyan-500/50 transition-colors"
                 />
               </div>
             ))}
             
             <div className="col-span-2 flex flex-col gap-1.5">
-              <label className="text-xs text-neutral-500">Freight/Charter Terms (e.g. Clauses)</label>
+              <label className="text-sm text-neutral-500">Freight/Charter Terms (e.g. Clauses)</label>
               <textarea 
                 value={formData.terms}
                 onChange={(e) => setFormData({...formData, terms: e.target.value})}
-                className="bg-neutral-900/50 border border-neutral-800 rounded-lg px-3 py-2.5 text-xs font-mono text-white focus:outline-none focus:border-cyan-500/50 transition-colors h-20 resize-none"
+                className="bg-neutral-900/50 border border-neutral-800 rounded-lg px-3 py-2.5 text-sm font-mono text-white focus:outline-none focus:border-cyan-500/50 transition-colors h-20 resize-none"
               />
             </div>
           </div>
@@ -139,7 +139,7 @@ export default function LegalCompliancePage() {
             <button 
               onClick={handleScan}
               disabled={isScanning}
-              className="w-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-lg py-3 text-xs font-mono font-bold uppercase tracking-wider hover:bg-emerald-500/20 transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed focus-ring btn-sweep active:scale-[0.97]"
+              className="w-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-lg py-3 text-sm font-mono font-bold uppercase tracking-wider hover:bg-emerald-500/20 transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed focus-ring btn-sweep active:scale-[0.97]"
             >
               {isScanning ? (
                 <>
@@ -161,7 +161,7 @@ export default function LegalCompliancePage() {
           {!resultsReady && !isScanning && (
             <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6 bg-black/40 backdrop-blur-sm z-10">
               <Scale className="w-12 h-12 text-neutral-800 mb-4" />
-              <p className="text-[10px] font-mono uppercase tracking-widest text-neutral-500">
+              <p className="text-xs font-mono uppercase tracking-widest text-neutral-500">
                 Awaiting voyage particulars...
               </p>
             </div>
@@ -173,10 +173,10 @@ export default function LegalCompliancePage() {
                 <div className="absolute inset-0 border-t-2 border-emerald-500 rounded-full animate-spin drop-shadow-[0_0_8px_rgba(255,255,255,0.2)] drop-shadow-[0_0_8px_rgba(52,211,153,0.6)]" style={{ animationDuration: '1s' }} />
                 <Scale className="w-6 h-6 text-emerald-400 animate-pulse" />
               </div>
-              <p className="text-[10px] font-mono uppercase tracking-widest text-emerald-400">
+              <p className="text-xs font-mono uppercase tracking-widest text-emerald-400">
                 Scanning Global Sanctions Database...
               </p>
-              <p className="text-[10px] font-mono uppercase tracking-widest text-neutral-500 mt-2">
+              <p className="text-xs font-mono uppercase tracking-widest text-neutral-500 mt-2">
                 Verifying Merchant Shipping Act Sec 406/407 Requirements...
               </p>
             </div>
@@ -184,14 +184,14 @@ export default function LegalCompliancePage() {
 
           <div className="flex items-center justify-between border-b border-neutral-800 pb-4 mb-6">
             <div>
-              <h2 className="text-sm font-medium text-white uppercase tracking-wide font-mono flex items-center gap-2 border-l-2 border-cyan-500/40 pl-3">
+              <h2 className="text-base font-medium text-white uppercase tracking-wide font-mono flex items-center gap-2 border-l-2 border-cyan-500/40 pl-3">
                 <ShieldCheck className="w-4 h-4" />
                 Compliance Scorecard
               </h2>
             </div>
             {resultsReady && (
               <div className="flex items-center gap-3">
-                <span className="text-[10px] font-mono text-neutral-500 uppercase tracking-widest">
+                <span className="text-xs font-mono text-neutral-500 uppercase tracking-widest">
                   OVERALL SCORE
                 </span>
                 <div className="px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-lg text-emerald-400 font-mono text-2xl tabular-nums flex items-center gap-2">
@@ -204,17 +204,17 @@ export default function LegalCompliancePage() {
           <div className="flex-1 overflow-y-auto pr-2">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="border-b border-neutral-800 text-[10px] font-mono text-neutral-500 uppercase tracking-widest">
+                <tr className="border-b border-neutral-800 text-xs font-mono text-neutral-500 uppercase tracking-widest">
                   <th className="py-3 px-2 font-normal">Legal Parameter</th>
                   <th className="py-3 px-2 font-normal text-right">Status</th>
                 </tr>
               </thead>
-              <tbody className="text-xs text-neutral-400">
+              <tbody className="text-sm text-neutral-400">
                 {parameters.map((param, idx) => (
                   <tr key={idx} className="border-b border-neutral-800/50 hover:bg-neutral-900/30 transition-colors animate-slide-in" style={{ animationDelay: `${idx * 0.05}s` }}>
                     <td className="py-4 px-2 text-neutral-300">{param.name}</td>
                     <td className="py-4 px-2 text-right">
-                      <div className={`inline-flex items-center gap-1.5 px-2 py-1 rounded border uppercase tracking-widest text-[10px] font-mono ${
+                      <div className={`inline-flex items-center gap-1.5 px-2 py-1 rounded border uppercase tracking-widest text-xs font-mono ${
                         param.type === "success" 
                           ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400" 
                           : "bg-amber-500/10 border-amber-500/20 text-amber-400"
@@ -232,7 +232,7 @@ export default function LegalCompliancePage() {
               <div className="mt-8 p-4 bg-amber-500/5 border border-amber-500/20 rounded-lg flex gap-3">
                 <AlertTriangle className="w-5 h-5 text-amber-400 shrink-0" />
                 <div className="flex flex-col gap-1">
-                  <h4 className="text-sm font-medium text-white uppercase tracking-wide font-mono">
+                  <h4 className="text-base font-medium text-white uppercase tracking-wide font-mono">
                     AI Remediation Advice
                   </h4>
                   <p className="text-[11px] text-neutral-400 leading-relaxed">
@@ -248,21 +248,21 @@ export default function LegalCompliancePage() {
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
           <div className="minimal-panel p-6 flex flex-col gap-4">
             <div className="border-b border-neutral-800 pb-4">
-              <h2 className="text-sm font-medium text-white uppercase tracking-wide font-mono flex items-center gap-2">
+              <h2 className="text-base font-medium text-white uppercase tracking-wide font-mono flex items-center gap-2">
                 <Search className="w-4 h-4" />
                 Charter Party Clause Input
               </h2>
-              <p className="text-xs text-neutral-500 mt-1">
+              <p className="text-sm text-neutral-500 mt-1">
                 Paste contract terms to evaluate against maritime law
               </p>
             </div>
             <textarea 
               placeholder="Paste charter party clauses here (e.g. Force Majeure, Demurrage, Arbitration)..."
-              className="flex-1 bg-neutral-900/50 border border-neutral-800 rounded-lg px-3 py-2.5 text-xs font-mono text-white focus:outline-none focus:border-cyan-500/50 transition-colors resize-none"
+              className="flex-1 bg-neutral-900/50 border border-neutral-800 rounded-lg px-3 py-2.5 text-sm font-mono text-white focus:outline-none focus:border-cyan-500/50 transition-colors resize-none"
               defaultValue="14. Force Majeure: Neither party shall be liable for failure to perform due to Acts of God, war, strikes, or port congestion exceeding 5 days..."
             />
             <button 
-              className="w-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-lg py-3 text-xs font-mono font-bold uppercase tracking-wider hover:bg-emerald-500/20 transition-all flex items-center justify-center gap-2 focus-ring btn-sweep active:scale-[0.97]"
+              className="w-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-lg py-3 text-sm font-mono font-bold uppercase tracking-wider hover:bg-emerald-500/20 transition-all flex items-center justify-center gap-2 focus-ring btn-sweep active:scale-[0.97]"
             >
               <Scale className="w-4 h-4" />
               ANALYZE CLAUSE RISKS
@@ -271,11 +271,11 @@ export default function LegalCompliancePage() {
 
           <div className="minimal-panel p-6">
             <div className="flex items-center justify-between border-b border-neutral-800 pb-4 mb-4">
-              <h2 className="text-sm font-medium text-white uppercase tracking-wide font-mono flex items-center gap-2">
+              <h2 className="text-base font-medium text-white uppercase tracking-wide font-mono flex items-center gap-2">
                 <ShieldCheck className="w-4 h-4 text-emerald-400" />
                 AI Risk Assessment
               </h2>
-              <span className="text-[10px] font-mono uppercase tracking-widest text-neutral-500">
+              <span className="text-xs font-mono uppercase tracking-widest text-neutral-500">
                 DISCLAIMER: NOT LEGAL ADVICE
               </span>
             </div>
@@ -283,7 +283,7 @@ export default function LegalCompliancePage() {
               <div className="p-4 border border-rose-500/20 bg-rose-500/5 rounded-lg flex gap-3">
                 <AlertTriangle className="w-5 h-5 text-rose-400 shrink-0" />
                 <div>
-                  <h4 className="text-sm font-medium text-white uppercase tracking-wide font-mono">High Risk: Force Majeure Ambiguity</h4>
+                  <h4 className="text-base font-medium text-white uppercase tracking-wide font-mono">High Risk: Force Majeure Ambiguity</h4>
                   <p className="text-[11px] text-neutral-400 mt-1 leading-relaxed">
                     Including "port congestion" in Force Majeure nullifies demurrage claims. Standard GENCON 94 does not excuse charterer from laytime/demurrage obligations due to congestion. 
                   </p>
@@ -296,7 +296,7 @@ export default function LegalCompliancePage() {
               <div className="p-4 border border-emerald-500/20 bg-emerald-500/5 rounded-lg flex gap-3">
                 <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
                 <div>
-                  <h4 className="text-sm font-medium text-white uppercase tracking-wide font-mono">Low Risk: Arbitration Venue</h4>
+                  <h4 className="text-base font-medium text-white uppercase tracking-wide font-mono">Low Risk: Arbitration Venue</h4>
                   <p className="text-[11px] text-neutral-400 mt-1 leading-relaxed">
                     Arbitration in London (LMAA terms) is standard and acceptable. No deviation from standard maritime practice detected.
                   </p>

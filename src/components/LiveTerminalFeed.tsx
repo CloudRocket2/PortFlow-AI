@@ -36,7 +36,7 @@ export default function LiveTerminalFeed() {
       <div className="px-4 py-3 border-b border-neutral-800 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Terminal className="w-4 h-4 text-white" />
-          <h3 className="text-[10px] font-mono tracking-widest uppercase text-white border-l-2 border-cyan-500/40 pl-3">Global AIS & AI Dispatch Log</h3>
+          <h3 className="text-xs font-mono tracking-widest uppercase text-white border-l-2 border-cyan-500/40 pl-3">Global AIS & AI Dispatch Log</h3>
         </div>
         <div className="flex items-center gap-1.5">
           <span className="relative flex h-2 w-2">
@@ -45,7 +45,7 @@ export default function LiveTerminalFeed() {
             )}
             <span className={`relative inline-flex rounded-full h-2 w-2 ${isConnected ? "bg-emerald-400 animate-pulse" : "bg-neutral-600"}`}></span>
           </span>
-          <span className="text-[10px] font-mono text-neutral-500 uppercase tracking-widest transition-all duration-200">
+          <span className="text-xs font-mono text-neutral-500 uppercase tracking-widest transition-all duration-200">
             {isConnected ? "Connected" : "Disconnected"}
           </span>
         </div>
@@ -54,13 +54,13 @@ export default function LiveTerminalFeed() {
       {/* Feed */}
       <div className="flex-1 overflow-y-auto p-4 space-y-3 hide-scrollbar relative">
         {events.length === 0 ? (
-          <div className="text-[10px] font-mono text-neutral-600 flex items-center justify-center h-full uppercase tracking-widest">
+          <div className="text-xs font-mono text-neutral-600 flex items-center justify-center h-full uppercase tracking-widest">
             Awaiting telemetry...
           </div>
         ) : (
           events.map((evt, i) => (
-            <div key={evt.id} className="flex gap-3 text-xs animate-slide-in pb-3 border-b border-neutral-900 last:border-0 hover:bg-white/[0.02] transition-colors duration-200 rounded p-1 -mx-1" style={{ animationDelay: `${i * 0.05}s` }}>
-              <div className="w-16 shrink-0 text-[10px] font-mono text-neutral-600 pt-0.5 flex flex-col items-start gap-1 tabular-nums">
+            <div key={evt.id} className="flex gap-3 text-sm animate-slide-in pb-3 border-b border-neutral-900 last:border-0 hover:bg-white/[0.02] transition-colors duration-200 rounded p-1 -mx-1" style={{ animationDelay: `${i * 0.05}s` }}>
+              <div className="w-16 shrink-0 text-xs font-mono text-neutral-600 pt-0.5 flex flex-col items-start gap-1 tabular-nums">
                 {formatTime(evt.timestamp)}
                 <div className={`px-1 py-0.5 rounded-sm bg-neutral-900 border border-neutral-800 ${getColor(evt.type)}`}>
                   {getIcon(evt.type)}
@@ -70,7 +70,7 @@ export default function LiveTerminalFeed() {
                 <span className={`font-mono font-bold mr-2 uppercase text-white`}>
                   {evt.vesselId}
                 </span>
-                <span className="text-[10px] uppercase font-mono tracking-widest text-neutral-500 block mt-1">{evt.details}</span>
+                <span className="text-xs uppercase font-mono tracking-widest text-neutral-500 block mt-1">{evt.details}</span>
               </div>
             </div>
           ))

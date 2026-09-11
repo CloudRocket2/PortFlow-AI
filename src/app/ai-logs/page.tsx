@@ -68,13 +68,13 @@ export default function AILogsPage() {
             <BrainCircuit className="w-5 h-5 text-emerald-400" />
             PortFlow AI Logs
           </h1>
-          <p className="text-xs text-neutral-500 mt-1">
+          <p className="text-sm text-neutral-500 mt-1">
             Real-time operations intelligence powered by Gemini 3.6 Flash.
           </p>
         </div>
         <button 
           onClick={clearConversation}
-          className="flex items-center gap-2 px-3 py-1.5 bg-neutral-900 border border-neutral-800 hover:bg-neutral-800 text-neutral-400 hover:text-white rounded-lg text-xs font-mono transition-colors focus-ring active:scale-[0.97]"
+          className="flex items-center gap-2 px-3 py-1.5 bg-neutral-900 border border-neutral-800 hover:bg-neutral-800 text-neutral-400 hover:text-white rounded-lg text-sm font-mono transition-colors focus-ring active:scale-[0.97]"
           title="Clear Conversation"
         >
           <Trash2 className="w-4 h-4" />
@@ -83,7 +83,7 @@ export default function AILogsPage() {
       </div>
 
       {error && (
-        <div className="mb-4 bg-rose-500/10 border border-rose-500/20 text-rose-400 px-4 py-3 rounded-lg flex items-center gap-3 text-sm">
+        <div className="mb-4 bg-rose-500/10 border border-rose-500/20 text-rose-400 px-4 py-3 rounded-lg flex items-center gap-3 text-base">
           <AlertCircle className="w-5 h-5 flex-shrink-0" />
           <p>{error}</p>
         </div>
@@ -138,7 +138,7 @@ export default function AILogsPage() {
               <button 
                 key={idx}
                 onClick={() => setInput(q)}
-                className="text-[10px] uppercase font-mono tracking-widest border border-cyan-500/20 text-cyan-400 bg-cyan-500/5 px-3 py-1.5 rounded-full hover:bg-cyan-500/10 transition-all duration-200 whitespace-nowrap focus-ring hover:scale-[1.03] active:scale-[0.97]"
+                className="text-xs uppercase font-mono tracking-widest border border-cyan-500/20 text-cyan-400 bg-cyan-500/5 px-3 py-1.5 rounded-full hover:bg-cyan-500/10 transition-all duration-200 whitespace-nowrap focus-ring hover:scale-[1.03] active:scale-[0.97]"
               >
                 {q}
               </button>
@@ -154,7 +154,7 @@ export default function AILogsPage() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="ASK ABOUT LIGHTERING DELAYS, DRAFT LIMITS, OR GENERAL BULK LOGISTICS..."
-              className="flex-1 bg-neutral-950 border border-neutral-800 rounded-lg text-white font-mono text-xs px-4 py-3 focus:outline-none focus:border-cyan-500/50 transition-colors"
+              className="flex-1 bg-neutral-950 border border-neutral-800 rounded-lg text-white font-mono text-sm px-4 py-3 focus:outline-none focus:border-cyan-500/50 transition-colors"
             />
             <button
               type="submit"

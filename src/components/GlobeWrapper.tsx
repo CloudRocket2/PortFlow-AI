@@ -111,7 +111,7 @@ export default function GlobeWrapper() {
   };
 
   if (!mounted) {
-    return <div className="w-full h-full bg-[#020202] flex items-center justify-center animate-pulse text-xs font-mono text-[#00ff00]">Initializing Radar Array...</div>;
+    return <div className="w-full h-full bg-[#020202] flex items-center justify-center animate-pulse text-sm font-mono text-[#00ff00]">Initializing Radar Array...</div>;
   }
 
   const SHOW_LABELS_ZOOM_THRESHOLD = 3;
@@ -151,7 +151,7 @@ export default function GlobeWrapper() {
           <div className="flex justify-between items-start mb-3 border-b border-neutral-800 pb-2">
             <div>
               <h3 className="text-white font-mono font-bold uppercase tracking-wider">{selectedShipInfo.name}</h3>
-              <p className="text-[#00ff00] text-[10px] font-mono uppercase tracking-widest mt-1">
+              <p className="text-[#00ff00] text-xs font-mono uppercase tracking-widest mt-1">
                 Vessel in Transit
               </p>
             </div>
@@ -160,7 +160,7 @@ export default function GlobeWrapper() {
             </button>
           </div>
 
-          <div className="space-y-2 text-xs font-mono">
+          <div className="space-y-2 text-sm font-mono">
             <div className="flex justify-between">
               <span className="text-neutral-500">Route</span>
               <span className="text-white text-right">{selectedShipInfo.routeStr}</span>

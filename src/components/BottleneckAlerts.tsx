@@ -79,7 +79,7 @@ export default function BottleneckAlerts() {
 
   if (loading) {
     return (
-      <div className="minimal-panel p-5 flex items-center justify-center text-neutral-500 text-xs font-mono uppercase tracking-widest">
+      <div className="minimal-panel p-5 flex items-center justify-center text-neutral-500 text-sm font-mono uppercase tracking-widest">
         Scanning port anomalies...
       </div>
     );
@@ -88,10 +88,10 @@ export default function BottleneckAlerts() {
   return (
     <div className="minimal-panel hover:scale-[1.005] hover:border-neutral-700/60 transition-all duration-300 p-5">
       <div className="flex items-center justify-between mb-3 border-b border-neutral-800 pb-2">
-        <h3 className="text-[10px] font-mono tracking-widest uppercase text-white border-l-2 border-cyan-500/40 pl-2">
+        <h3 className="text-xs font-mono tracking-widest uppercase text-white border-l-2 border-cyan-500/40 pl-2">
           Active Bottlenecks
         </h3>
-        <span className="text-[10px] text-neutral-500 font-mono flex items-center gap-1 uppercase tracking-widest transition-all duration-200">
+        <span className="text-xs text-neutral-500 font-mono flex items-center gap-1 uppercase tracking-widest transition-all duration-200">
           <div className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse" />
           LIVE SCAN
         </span>
@@ -100,7 +100,7 @@ export default function BottleneckAlerts() {
       <div className="space-y-3">
         {alerts.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-6 text-neutral-600">
-            <p className="text-[10px] font-mono uppercase tracking-widest">No bottlenecks detected</p>
+            <p className="text-xs font-mono uppercase tracking-widest">No bottlenecks detected</p>
           </div>
         ) : (
           alerts.map((a, i) => {
@@ -124,37 +124,37 @@ export default function BottleneckAlerts() {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between mb-0.5">
                     <div className="flex items-center gap-2">
-                      <span className="text-xs font-mono font-bold text-white uppercase truncate transition-all duration-200">
+                      <span className="text-sm font-mono font-bold text-white uppercase truncate transition-all duration-200">
                         {a.title}
                       </span>
                       {!isResolving && (
-                        <span className={`text-[10px] uppercase font-mono tracking-widest border px-1 rounded transition-all duration-200 ${config.text} ${config.border}`}>
+                        <span className={`text-xs uppercase font-mono tracking-widest border px-1 rounded transition-all duration-200 ${config.text} ${config.border}`}>
                           {a.severity}
                         </span>
                       )}
                     </div>
                     {!isResolving && (
-                      <span className="text-[10px] text-neutral-600 font-mono whitespace-nowrap tabular-nums">
+                      <span className="text-xs text-neutral-600 font-mono whitespace-nowrap tabular-nums">
                         {a.time}
                       </span>
                     )}
                   </div>
                   
-                  <p className="text-[10px] font-mono text-neutral-500 leading-relaxed uppercase tracking-widest mt-1">
+                  <p className="text-xs font-mono text-neutral-500 leading-relaxed uppercase tracking-widest mt-1">
                     {isResolving ? "AI generating rerouting instructions..." : a.message}
                   </p>
                   
                   {canResolve && !isResolving && (
                     <button 
                       onClick={() => resolveAlert(a.id)}
-                      className="mt-3 flex items-center gap-1.5 px-3 py-1.5 text-[9px] font-mono tracking-widest uppercase border border-neutral-700 hover:border-emerald-500/20 hover:text-emerald-400 text-neutral-400 rounded transition-all duration-200 focus-ring btn-sweep active:scale-[0.97]"
+                      className="mt-3 flex items-center gap-1.5 px-3 py-1.5 text-[10px] font-mono tracking-widest uppercase border border-neutral-700 hover:border-emerald-500/20 hover:text-emerald-400 text-neutral-400 rounded transition-all duration-200 focus-ring btn-sweep active:scale-[0.97]"
                     >
                       <BrainCircuit className="w-3 h-3" />
                       Deploy AI Fix
                     </button>
                   )}
                   {isResolving && (
-                    <div className="mt-3 flex items-center gap-1.5 text-[9px] font-mono tracking-widest uppercase text-emerald-400 transition-all duration-200">
+                    <div className="mt-3 flex items-center gap-1.5 text-[10px] font-mono tracking-widest uppercase text-emerald-400 transition-all duration-200">
                       <Loader2 className="w-3 h-3 animate-spin" />
                       Resolving...
                     </div>

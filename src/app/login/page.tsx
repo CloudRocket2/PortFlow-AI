@@ -150,7 +150,7 @@ export default function LoginPage() {
           <h1 className="text-2xl font-bold uppercase tracking-[0.25em] text-white">
             PortFlow OS
           </h1>
-          <p className="text-xs text-neutral-500">
+          <p className="text-sm text-neutral-500">
             Secure terminal authentication
           </p>
         </div>
@@ -161,7 +161,7 @@ export default function LoginPage() {
           {/* Left Column: Role Selector */}
           <div className="lg:col-span-5 minimal-panel flex flex-col h-[480px]">
             <div className="px-5 py-3.5 border-b border-neutral-800/60">
-              <h2 className="text-xs font-medium uppercase tracking-wide text-neutral-500">
+              <h2 className="text-sm font-medium uppercase tracking-wide text-neutral-500">
                 Select Identity Profile
               </h2>
             </div>
@@ -188,7 +188,7 @@ export default function LoginPage() {
                       <role.icon className={`w-4 h-4 ${isSelected ? role.accent : "text-neutral-600"}`} />
                     </div>
                     <div className="min-w-0">
-                      <div className={`text-sm font-semibold ${isSelected ? "text-white" : "text-neutral-300"}`}>
+                      <div className={`text-base font-semibold ${isSelected ? "text-white" : "text-neutral-300"}`}>
                         {role.title}
                       </div>
                       <div className="text-[11px] text-neutral-500 mt-0.5 truncate">
@@ -204,10 +204,10 @@ export default function LoginPage() {
           {/* Right Column: Details & Auth */}
           <div className="lg:col-span-7 minimal-panel h-[480px] flex flex-col">
             <div className="px-5 py-3.5 border-b border-neutral-800/60 flex justify-between items-center">
-              <h2 className="text-xs font-medium uppercase tracking-wide text-neutral-500">
+              <h2 className="text-sm font-medium uppercase tracking-wide text-neutral-500">
                 Clearance Matrix
               </h2>
-              <span className={`text-[10px] font-mono uppercase tracking-widest px-2.5 py-1 rounded-md border ${selectedRole.accentBg} ${selectedRole.accent}`}>
+              <span className={`text-xs font-mono uppercase tracking-widest px-2.5 py-1 rounded-md border ${selectedRole.accentBg} ${selectedRole.accent}`}>
                 {selectedRole.clearance}
               </span>
             </div>
@@ -217,36 +217,36 @@ export default function LoginPage() {
               <div className="flex-1 flex flex-col gap-5">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="text-xs text-neutral-500 mb-2 block">Operator Email</label>
+                    <label className="text-sm text-neutral-500 mb-2 block">Operator Email</label>
                     <input
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       required
-                      className="focus-ring w-full bg-neutral-900/50 border border-neutral-800 rounded-lg px-3 py-2.5 text-sm font-mono text-white focus:outline-none focus:border-cyan-500/50 transition-colors"
+                      className="focus-ring w-full bg-neutral-900/50 border border-neutral-800 rounded-lg px-3 py-2.5 text-base font-mono text-white focus:outline-none focus:border-cyan-500/50 transition-colors"
                       placeholder="Enter email..."
                     />
                   </div>
                   <div>
-                    <label className="text-xs text-neutral-500 mb-2 block">Security Passkey</label>
+                    <label className="text-sm text-neutral-500 mb-2 block">Security Passkey</label>
                     <input
                       type="password"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       placeholder="Enter password..."
-                      className="focus-ring w-full bg-neutral-900/50 border border-neutral-800 rounded-lg px-3 py-2.5 text-sm font-mono text-white focus:outline-none focus:border-cyan-500/50 transition-colors"
+                      className="focus-ring w-full bg-neutral-900/50 border border-neutral-800 rounded-lg px-3 py-2.5 text-base font-mono text-white focus:outline-none focus:border-cyan-500/50 transition-colors"
                       required
                     />
                   </div>
                 </div>
 
                 <div>
-                  <div className="text-xs text-neutral-500 mb-3">Authorized Modules</div>
+                  <div className="text-sm text-neutral-500 mb-3">Authorized Modules</div>
                   <ul className="grid grid-cols-2 gap-2.5">
                     {selectedRole.features.map((feature, i) => (
                       <li key={i} className="flex items-center gap-2.5 animate-slide-in" style={{ animationDelay: `${i * 0.06}s` }}>
                         <div className={`w-1.5 h-1.5 rounded-full ${selectedRole.accent.replace("text-", "bg-")} shrink-0`} />
-                        <span className="text-xs text-neutral-400">{feature}</span>
+                        <span className="text-sm text-neutral-400">{feature}</span>
                       </li>
                     ))}
                   </ul>
@@ -256,7 +256,7 @@ export default function LoginPage() {
               {/* Login Button Area */}
               <div className="pt-5 mt-auto border-t border-neutral-800/60">
                 {error && (
-                  <div className="text-rose-400 text-xs mb-4 text-center border border-rose-900/40 bg-rose-900/10 py-2.5 rounded-lg">
+                  <div className="text-rose-400 text-sm mb-4 text-center border border-rose-900/40 bg-rose-900/10 py-2.5 rounded-lg">
                     {error}
                   </div>
                 )}
@@ -265,19 +265,19 @@ export default function LoginPage() {
                   <div className="flex flex-col gap-3">
                     <div className="h-12 border border-neutral-800 bg-neutral-900/50 relative overflow-hidden flex items-center justify-center rounded-lg">
                       <div className="absolute inset-0 bg-white/5 animate-pulse" />
-                      <span className="text-xs font-mono text-white relative z-10 flex items-center gap-2">
+                      <span className="text-sm font-mono text-white relative z-10 flex items-center gap-2">
                         <Fingerprint className="w-4 h-4 animate-bounce" />
                         Authenticating...
                       </span>
                     </div>
-                    <p className="text-[10px] font-mono text-neutral-500 text-center">
+                    <p className="text-xs font-mono text-neutral-500 text-center">
                       {progress}
                     </p>
                   </div>
                 ) : (
                   <button
                     type="submit"
-                    className="focus-ring btn-sweep w-full h-12 bg-white text-black font-medium text-sm uppercase tracking-wider hover:bg-neutral-200 transition-colors flex items-center justify-center gap-2.5 rounded-lg"
+                    className="focus-ring btn-sweep w-full h-12 bg-white text-black font-medium text-base uppercase tracking-wider hover:bg-neutral-200 transition-colors flex items-center justify-center gap-2.5 rounded-lg"
                   >
                     <Key className="w-4 h-4" />
                     Initialize Session

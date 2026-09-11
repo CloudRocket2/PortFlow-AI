@@ -103,7 +103,7 @@ export default function Sidebar() {
             <Anchor className="w-4 h-4 text-cyan-400" />
           </div>
           {!collapsed && (
-            <span className="font-semibold text-sm tracking-wider uppercase text-white/90">
+            <span className="font-semibold text-base tracking-wider uppercase text-white/90">
               PortFlow
             </span>
           )}
@@ -115,7 +115,7 @@ export default function Sidebar() {
         {filteredSections.map((section, sectionIdx) => (
           <div key={section.label} className={sectionIdx > 0 ? "mt-4" : ""}>
             {!collapsed && (
-              <p className="text-[10px] font-mono uppercase tracking-widest text-neutral-600 px-2.5 mb-2">
+              <p className="text-xs font-mono uppercase tracking-widest text-neutral-600 px-2.5 mb-2">
                 {section.label}
               </p>
             )}
@@ -129,7 +129,7 @@ export default function Sidebar() {
                   key={href}
                   href={href}
                   title={collapsed ? label : undefined}
-                  className={`focus-ring flex items-center gap-2.5 px-2.5 py-2 text-xs tracking-wide transition-all duration-200 rounded-lg group
+                  className={`focus-ring flex items-center gap-2.5 px-2.5 py-2 text-sm tracking-wide transition-all duration-200 rounded-lg group
                     ${
                       isActive
                         ? "bg-white/[0.06] text-white border-l-2 border-cyan-400 ml-0 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]"
@@ -151,13 +151,13 @@ export default function Sidebar() {
       <div className="p-2.5 border-t border-neutral-800/60">
         {!collapsed && userName && (
           <div className="px-2.5 py-2 mb-1">
-            <p className="text-[10px] font-mono text-neutral-600 uppercase tracking-widest">Signed in</p>
-            <p className="text-xs text-neutral-400 truncate mt-0.5">{userName}</p>
+            <p className="text-xs font-mono text-neutral-600 uppercase tracking-widest">Signed in</p>
+            <p className="text-sm text-neutral-400 truncate mt-0.5">{userName}</p>
           </div>
         )}
         <button
           onClick={handleLogout}
-          className="focus-ring w-full flex items-center gap-2.5 px-2.5 py-2 text-xs text-neutral-500 hover:text-neutral-200 hover:bg-white/[0.03] transition-all duration-200 rounded-lg"
+          className="focus-ring w-full flex items-center gap-2.5 px-2.5 py-2 text-sm text-neutral-500 hover:text-neutral-200 hover:bg-white/[0.03] transition-all duration-200 rounded-lg"
           title={collapsed ? "Sign Out" : undefined}
         >
           <LogOut className="w-[18px] h-[18px] shrink-0" />

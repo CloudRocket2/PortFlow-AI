@@ -52,13 +52,13 @@ export default function ForecastPage() {
       {activeToast && (
         <div className="absolute top-4 left-1/2 -translate-x-1/2 z-50 bg-black border border-emerald-500/20 p-4 shadow-[0_0_20px_rgba(16,185,129,0.2)] animate-slide-in flex flex-col gap-3 min-w-[400px]">
           <div className="flex justify-between items-start">
-            <div className="flex items-center gap-2 text-emerald-400 font-mono font-bold text-sm uppercase tracking-wider">
+            <div className="flex items-center gap-2 text-emerald-400 font-mono font-bold text-base uppercase tracking-wider">
               <BellRing className="w-4 h-4 animate-pulse" />
               {activeToast.title}
             </div>
             <button onClick={() => setActiveToast(null)} className="text-neutral-500 hover:text-white"><X className="w-4 h-4" /></button>
           </div>
-          <div className="text-xs font-mono text-white">
+          <div className="text-sm font-mono text-white">
             {activeToast.message}
           </div>
           <button 
@@ -66,7 +66,7 @@ export default function ForecastPage() {
               setActiveToast(null);
               setShowEmailPreview(true);
             }}
-            className="mt-2 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-mono font-bold uppercase tracking-widest py-1.5 px-3 hover:bg-emerald-500/20 flex items-center justify-center gap-2"
+            className="mt-2 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-mono font-bold uppercase tracking-widest py-1.5 px-3 hover:bg-emerald-500/20 flex items-center justify-center gap-2"
           >
             <Mail className="w-3 h-3" /> View Simulated Email
           </button>
@@ -78,22 +78,22 @@ export default function ForecastPage() {
         <div className="fixed inset-0 z-[60] bg-black/80 flex items-center justify-center backdrop-blur-sm p-4">
           <div className="bg-[#111] border border-neutral-700 w-full max-w-xl shadow-2xl animate-slide-in">
             <div className="bg-neutral-900 border-b border-neutral-800 p-3 flex justify-between items-center">
-              <div className="text-xs text-neutral-400 uppercase tracking-widest flex items-center gap-2">
+              <div className="text-sm text-neutral-400 uppercase tracking-widest flex items-center gap-2">
                 <Mail className="w-4 h-4" /> Email Preview
               </div>
               <button onClick={() => setShowEmailPreview(false)} className="text-neutral-500 hover:text-white"><X className="w-4 h-4" /></button>
             </div>
-            <div className="p-2 bg-amber-500/10 border-b border-amber-500/20 text-amber-500 text-[10px] font-mono uppercase tracking-widest text-center">
+            <div className="p-2 bg-amber-500/10 border-b border-amber-500/20 text-amber-500 text-xs font-mono uppercase tracking-widest text-center">
               Simulated email alert — no real email is sent in this prototype.
             </div>
             <div className="p-6 flex flex-col gap-4 font-sans bg-white text-black rounded-b">
               <div>
-                <div className="text-sm text-neutral-500">From: PortFlow AI Alerts &lt;no-reply@portflow.ai&gt;</div>
-                <div className="text-sm text-neutral-500">To: Chartering Team</div>
+                <div className="text-base text-neutral-500">From: PortFlow AI Alerts &lt;no-reply@portflow.ai&gt;</div>
+                <div className="text-base text-neutral-500">To: Chartering Team</div>
                 <div className="text-lg font-bold mt-2">AI Market Alert: Optimal Entry Window Open</div>
               </div>
               <div className="h-px bg-neutral-200 w-full" />
-              <div className="text-sm leading-relaxed space-y-3">
+              <div className="text-base leading-relaxed space-y-3">
                 <p>Hello Team,</p>
                 <p>The PortFlow predictive model has detected an optimal market entry window for the following route based on a sudden dip in the Baltic Dry Index and favorable port congestion metrics:</p>
                 <ul className="list-disc pl-5 font-bold">
@@ -103,11 +103,11 @@ export default function ForecastPage() {
                 </ul>
                 <p><strong>Projected Savings:</strong> $420,000 compared to the trailing 30-day average if locked in within the next 48 hours.</p>
                 <div className="pt-4">
-                  <button onClick={() => setShowEmailPreview(false)} className="bg-blue-600 text-white px-4 py-2 rounded text-sm font-bold shadow hover:bg-blue-700 transition-colors">
+                  <button onClick={() => setShowEmailPreview(false)} className="bg-blue-600 text-white px-4 py-2 rounded text-base font-bold shadow hover:bg-blue-700 transition-colors">
                     Review Recommendation in PortFlow
                   </button>
                 </div>
-                <p className="text-xs text-neutral-500 pt-4 border-t border-neutral-200 mt-4">
+                <p className="text-sm text-neutral-500 pt-4 border-t border-neutral-200 mt-4">
                   You received this because you are subscribed to market alerts for Australia → India routes.
                 </p>
               </div>
@@ -123,12 +123,12 @@ export default function ForecastPage() {
             <Globe className="w-5 h-5" />
             Global Risk & AI Market Forecasting
           </h1>
-          <p className="text-xs text-neutral-500 mt-1">
+          <p className="text-sm text-neutral-500 mt-1">
             Early Warnings, Deadheading Prevention, and Spot Rate Predictions
           </p>
         </div>
         <div className="flex items-center gap-4">
-          <div className="text-[10px] font-mono border border-neutral-800 px-3 py-1 text-neutral-400 uppercase tracking-widest bg-neutral-900/50">
+          <div className="text-xs font-mono border border-neutral-800 px-3 py-1 text-neutral-400 uppercase tracking-widest bg-neutral-900/50">
             Module: SIGMA-9
           </div>
           <button 
@@ -144,7 +144,7 @@ export default function ForecastPage() {
         {isAlertsMenuOpen && (
           <div className="absolute top-16 right-0 w-96 bg-[#0a0a0a] border border-neutral-800 shadow-2xl z-40 flex flex-col">
             <div className="p-4 border-b border-neutral-800 bg-black flex justify-between items-center">
-              <h3 className="text-sm font-medium uppercase tracking-wide font-mono text-white">Alert Preferences</h3>
+              <h3 className="text-base font-medium uppercase tracking-wide font-mono text-white">Alert Preferences</h3>
               <button onClick={() => setIsAlertsMenuOpen(false)} className="text-neutral-500 hover:text-white"><X className="w-4 h-4"/></button>
             </div>
             
@@ -159,26 +159,26 @@ export default function ForecastPage() {
                   </div>
                 </div>
                 <div>
-                  <div className="text-xs font-mono font-bold text-white mb-1">Subscribe: Newcastle → Haldia (Panamax)</div>
-                  <div className="text-[10px] font-mono text-neutral-400">Receive push alerts and email notifications when AI detects optimal market entry conditions.</div>
+                  <div className="text-sm font-mono font-bold text-white mb-1">Subscribe: Newcastle → Haldia (Panamax)</div>
+                  <div className="text-xs font-mono text-neutral-400">Receive push alerts and email notifications when AI detects optimal market entry conditions.</div>
                 </div>
               </div>
             </div>
 
             <div className="flex-1 overflow-y-auto max-h-96">
-              <div className="p-3 text-[10px] font-mono font-bold text-neutral-500 uppercase tracking-widest bg-black sticky top-0 border-b border-neutral-800">
+              <div className="p-3 text-xs font-mono font-bold text-neutral-500 uppercase tracking-widest bg-black sticky top-0 border-b border-neutral-800">
                 Alert History
               </div>
               <div className="flex flex-col">
                 {alertHistory.map((alert) => (
                   <div key={alert.id} className="p-4 border-b border-neutral-800/50 hover:bg-neutral-900/30">
                     <div className="flex justify-between items-start mb-2">
-                      <div className={`text-[10px] font-mono font-bold uppercase tracking-widest ${alert.type === 'success' ? 'text-emerald-400' : 'text-amber-500'}`}>
+                      <div className={`text-xs font-mono font-bold uppercase tracking-widest ${alert.type === 'success' ? 'text-emerald-400' : 'text-amber-500'}`}>
                         {alert.title}
                       </div>
-                      <div className="text-[9px] font-mono text-neutral-600">{alert.timestamp}</div>
+                      <div className="text-[10px] font-mono text-neutral-600">{alert.timestamp}</div>
                     </div>
-                    <div className="text-xs font-mono text-neutral-300">
+                    <div className="text-sm font-mono text-neutral-300">
                       {alert.message}
                     </div>
                     {alert.type === 'success' && (
@@ -187,7 +187,7 @@ export default function ForecastPage() {
                           setIsAlertsMenuOpen(false);
                           setShowEmailPreview(true);
                         }}
-                        className="mt-2 text-[10px] font-mono text-emerald-400 hover:underline flex items-center gap-1"
+                        className="mt-2 text-xs font-mono text-emerald-400 hover:underline flex items-center gap-1"
                       >
                         <Mail className="w-3 h-3" /> View simulated email
                       </button>
@@ -209,7 +209,7 @@ export default function ForecastPage() {
           {/* Left Column: Risk Mitigation */}
           <div className="flex flex-col gap-6">
           <div className="minimal-panel hover:scale-[1.005] hover:border-neutral-700/60 transition-all duration-300 p-5 flex flex-col gap-4">
-            <h2 className="text-sm font-medium uppercase tracking-wide font-mono text-white flex items-center gap-2 border-b border-neutral-800 pb-3 border-l-2 border-cyan-500/40 pl-3">
+            <h2 className="text-base font-medium uppercase tracking-wide font-mono text-white flex items-center gap-2 border-b border-neutral-800 pb-3 border-l-2 border-cyan-500/40 pl-3">
               <ShieldAlert className="w-4 h-4 text-white" />
               Risk Mitigation Alerts
             </h2>
@@ -218,14 +218,14 @@ export default function ForecastPage() {
               {/* Alert 1 */}
               <div className="border-l-2 border-white pl-4 py-2 bg-neutral-900/30 animate-slide-in" style={{ animationDelay: '0.1s' }}>
                 <div className="flex justify-between items-start mb-1">
-                  <div className="text-[10px] font-mono text-white uppercase tracking-widest font-bold transition-all duration-200">Severe Weather Warning</div>
-                  <div className="text-[10px] font-mono text-neutral-500 tabular-nums">2 HRS AGO</div>
+                  <div className="text-xs font-mono text-white uppercase tracking-widest font-bold transition-all duration-200">Severe Weather Warning</div>
+                  <div className="text-xs font-mono text-neutral-500 tabular-nums">2 HRS AGO</div>
                 </div>
-                <div className="text-xs text-neutral-400">
+                <div className="text-sm text-neutral-400">
                   Typhoon expected near Indonesia (Kalimantan) loading ports in 72 hours. 
                   Expect 3-4 days of berthing delays. 
                 </div>
-                <div className="mt-2 text-[10px] font-mono text-neutral-500 uppercase tracking-widest flex items-center gap-1 transition-all duration-200">
+                <div className="mt-2 text-xs font-mono text-neutral-500 uppercase tracking-widest flex items-center gap-1 transition-all duration-200">
                   <ArrowRight className="w-3 h-3" /> Impact: Spot rates for coal expected to jump 8%.
                 </div>
               </div>
@@ -233,13 +233,13 @@ export default function ForecastPage() {
               {/* Alert 2 */}
               <div className="border-l-2 border-neutral-700 pl-4 py-2 animate-slide-in" style={{ animationDelay: '0.2s' }}>
                 <div className="flex justify-between items-start mb-1">
-                  <div className="text-[10px] font-mono text-neutral-300 uppercase tracking-widest font-bold transition-all duration-200">Port Congestion</div>
-                  <div className="text-[10px] font-mono text-neutral-500 tabular-nums">14 HRS AGO</div>
+                  <div className="text-xs font-mono text-neutral-300 uppercase tracking-widest font-bold transition-all duration-200">Port Congestion</div>
+                  <div className="text-xs font-mono text-neutral-500 tabular-nums">14 HRS AGO</div>
                 </div>
-                <div className="text-xs text-neutral-400">
+                <div className="text-sm text-neutral-400">
                   Australia (Newcastle) reporting massive queues for Panamax vessels due to crane maintenance.
                 </div>
-                <div className="mt-2 text-[10px] font-mono text-neutral-500 uppercase tracking-widest flex items-center gap-1 transition-all duration-200">
+                <div className="mt-2 text-xs font-mono text-neutral-500 uppercase tracking-widest flex items-center gap-1 transition-all duration-200">
                   <ArrowRight className="w-3 h-3" /> Impact: 48 hour turnaround delay.
                 </div>
               </div>
@@ -247,7 +247,7 @@ export default function ForecastPage() {
           </div>
 
           <div className="minimal-panel hover:scale-[1.005] hover:border-neutral-700/60 transition-all duration-300 p-5 flex flex-col gap-4 flex-1 min-h-[350px]">
-             <h2 className="text-sm font-medium uppercase tracking-wide font-mono text-white flex items-center gap-2 border-b border-neutral-800 pb-3 shrink-0 border-l-2 border-cyan-500/40 pl-3">
+             <h2 className="text-base font-medium uppercase tracking-wide font-mono text-white flex items-center gap-2 border-b border-neutral-800 pb-3 shrink-0 border-l-2 border-cyan-500/40 pl-3">
               <Activity className="w-4 h-4 text-white" />
               Macro Volatility Index
             </h2>
@@ -259,11 +259,11 @@ export default function ForecastPage() {
 
         {/* Right Column: Idle Scenario Management (Deadheading) */}
         <div className="minimal-panel hover:scale-[1.005] hover:border-neutral-700/60 transition-all duration-300 p-5 flex flex-col gap-4">
-          <h2 className="text-sm font-medium uppercase tracking-wide font-mono text-white flex items-center gap-2 border-b border-neutral-800 pb-3 border-l-2 border-cyan-500/40 pl-3">
+          <h2 className="text-base font-medium uppercase tracking-wide font-mono text-white flex items-center gap-2 border-b border-neutral-800 pb-3 border-l-2 border-cyan-500/40 pl-3">
             <Route className="w-4 h-4 text-white" />
             Idle Scenario Management (Deadhead Prevention)
           </h2>
-          <p className="text-[10px] font-mono text-neutral-500 uppercase tracking-widest mb-2">
+          <p className="text-xs font-mono text-neutral-500 uppercase tracking-widest mb-2">
             AI-suggested alternative employment routes to minimize empty vessel transit.
           </p>
 
@@ -272,35 +272,35 @@ export default function ForecastPage() {
             {/* Scenario 1 */}
             <div className="border border-neutral-800 p-4 bg-black hover:border-neutral-700 transition-all duration-300">
               <div className="flex items-center justify-between mb-3 border-b border-neutral-800 pb-2">
-                <div className="text-xs font-mono font-bold text-white uppercase tracking-widest flex items-center gap-2 transition-all duration-200">
+                <div className="text-sm font-mono font-bold text-white uppercase tracking-widest flex items-center gap-2 transition-all duration-200">
                   <Ship className="w-4 h-4" />
                   MV Pacific Horizon (Supramax)
                 </div>
-                <div className="text-[10px] font-mono text-neutral-500 transition-all duration-200">Status: Discharging</div>
+                <div className="text-xs font-mono text-neutral-500 transition-all duration-200">Status: Discharging</div>
               </div>
               
               <div className="grid grid-cols-2 gap-4 mb-4">
                 <div>
-                  <div className="text-[10px] font-mono text-neutral-500 uppercase tracking-widest mb-1 transition-all duration-200">Current Location</div>
-                  <div className="text-xs font-mono text-white flex items-center gap-1 transition-all duration-200">
+                  <div className="text-xs font-mono text-neutral-500 uppercase tracking-widest mb-1 transition-all duration-200">Current Location</div>
+                  <div className="text-sm font-mono text-white flex items-center gap-1 transition-all duration-200">
                     <MapPin className="w-3 h-3 text-neutral-500" /> Vizag Port, India
                   </div>
                 </div>
                 <div>
-                  <div className="text-[10px] font-mono text-neutral-500 uppercase tracking-widest mb-1 transition-all duration-200">Predicted Idle Time</div>
-                  <div className="text-xs font-mono text-white tabular-nums transition-all duration-200">Starts in 48 Hours</div>
+                  <div className="text-xs font-mono text-neutral-500 uppercase tracking-widest mb-1 transition-all duration-200">Predicted Idle Time</div>
+                  <div className="text-sm font-mono text-white tabular-nums transition-all duration-200">Starts in 48 Hours</div>
                 </div>
               </div>
 
               <div className="border border-neutral-800 p-3 bg-neutral-900/50">
-                <div className="text-[10px] font-mono text-white uppercase tracking-widest font-bold mb-2 flex items-center gap-2 transition-all duration-200">
+                <div className="text-xs font-mono text-white uppercase tracking-widest font-bold mb-2 flex items-center gap-2 transition-all duration-200">
                   <AlertTriangle className="w-3 h-3 text-amber-400" />
                   AI Alternative Employment Route
                 </div>
-                <p className="text-xs text-neutral-400">
+                <p className="text-sm text-neutral-400">
                   Instead of deadheading back to Australia empty, secure a short-term Iron Ore cargo from Vizag to China (Guangzhou). Market demand for Supramax on this route is currently elevated.
                 </p>
-                <div className="mt-3 text-[10px] font-mono text-emerald-400 font-bold uppercase tracking-widest border border-emerald-500/20 bg-emerald-500/10 px-2 py-1 inline-block tabular-nums transition-all duration-200">
+                <div className="mt-3 text-xs font-mono text-emerald-400 font-bold uppercase tracking-widest border border-emerald-500/20 bg-emerald-500/10 px-2 py-1 inline-block tabular-nums transition-all duration-200">
                   Estimated Savings: $145,000
                 </div>
               </div>
@@ -309,35 +309,35 @@ export default function ForecastPage() {
             {/* Scenario 2 */}
             <div className="border border-neutral-800 p-4 bg-black hover:border-neutral-700 transition-all duration-300">
               <div className="flex items-center justify-between mb-3 border-b border-neutral-800 pb-2">
-                <div className="text-xs font-mono font-bold text-white uppercase tracking-widest flex items-center gap-2 transition-all duration-200">
+                <div className="text-sm font-mono font-bold text-white uppercase tracking-widest flex items-center gap-2 transition-all duration-200">
                   <Ship className="w-4 h-4" />
                   Maersk Sentinel (Panamax)
                 </div>
-                <div className="text-[10px] font-mono text-neutral-500 transition-all duration-200">Status: En Route</div>
+                <div className="text-xs font-mono text-neutral-500 transition-all duration-200">Status: En Route</div>
               </div>
               
               <div className="grid grid-cols-2 gap-4 mb-4">
                 <div>
-                  <div className="text-[10px] font-mono text-neutral-500 uppercase tracking-widest mb-1 transition-all duration-200">Current Location</div>
-                  <div className="text-xs font-mono text-white flex items-center gap-1 transition-all duration-200">
+                  <div className="text-xs font-mono text-neutral-500 uppercase tracking-widest mb-1 transition-all duration-200">Current Location</div>
+                  <div className="text-sm font-mono text-white flex items-center gap-1 transition-all duration-200">
                     <MapPin className="w-3 h-3 text-neutral-500" /> Approaching Haldia
                   </div>
                 </div>
                 <div>
-                  <div className="text-[10px] font-mono text-neutral-500 uppercase tracking-widest mb-1 transition-all duration-200">Predicted Idle Time</div>
-                  <div className="text-xs font-mono text-white tabular-nums transition-all duration-200">Starts in 6 Days</div>
+                  <div className="text-xs font-mono text-neutral-500 uppercase tracking-widest mb-1 transition-all duration-200">Predicted Idle Time</div>
+                  <div className="text-sm font-mono text-white tabular-nums transition-all duration-200">Starts in 6 Days</div>
                 </div>
               </div>
 
               <div className="border border-neutral-800 p-3 bg-neutral-900/50">
-                <div className="text-[10px] font-mono text-white uppercase tracking-widest font-bold mb-2 flex items-center gap-2 transition-all duration-200">
+                <div className="text-xs font-mono text-white uppercase tracking-widest font-bold mb-2 flex items-center gap-2 transition-all duration-200">
                   <AlertTriangle className="w-3 h-3 text-amber-400" />
                   AI Alternative Employment Route
                 </div>
-                <p className="text-xs text-neutral-400">
+                <p className="text-sm text-neutral-400">
                   Sub-optimal positioning. Suggest routing vessel to Dhamra post-discharge for a backhaul fertilizer cargo to Southeast Asia, perfectly matching the Panamax LOA profile.
                 </p>
-                <div className="mt-3 text-[10px] font-mono text-emerald-400 font-bold uppercase tracking-widest border border-emerald-500/20 bg-emerald-500/10 px-2 py-1 inline-block tabular-nums transition-all duration-200">
+                <div className="mt-3 text-xs font-mono text-emerald-400 font-bold uppercase tracking-widest border border-emerald-500/20 bg-emerald-500/10 px-2 py-1 inline-block tabular-nums transition-all duration-200">
                   Estimated Savings: $92,000
                 </div>
               </div>

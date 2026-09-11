@@ -34,15 +34,15 @@ export default function FreightForecastChart() {
       <div className="flex-1 minimal-panel hover:scale-[1.005] hover:border-neutral-700/60 transition-all duration-300 p-5 flex flex-col">
         <div className="flex items-start justify-between border-b border-neutral-800 pb-3 mb-6">
           <div>
-            <h2 className="text-sm font-mono font-bold text-white uppercase tracking-wider flex items-center gap-2 border-l-2 border-cyan-500/40 pl-3">
+            <h2 className="text-base font-mono font-bold text-white uppercase tracking-wider flex items-center gap-2 border-l-2 border-cyan-500/40 pl-3">
               <Clock className="w-4 h-4 text-white" />
               Spot Freight Rate Forecast (Capesize)
             </h2>
             <div className="flex items-center gap-3 mt-2">
-              <span className="text-[9px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 border border-emerald-500/20 flex items-center gap-1 transition-all duration-200">
+              <span className="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 border border-emerald-500/20 flex items-center gap-1 transition-all duration-200">
                 <BrainCircuit className="w-3 h-3" /> MODEL: ENSEMBLE (XGBOOST + LSTM)
               </span>
-              <span className="text-[9px] font-mono text-neutral-400 uppercase tracking-widest bg-neutral-900 px-2 py-0.5 border border-neutral-800 transition-all duration-200">
+              <span className="text-[10px] font-mono text-neutral-400 uppercase tracking-widest bg-neutral-900 px-2 py-0.5 border border-neutral-800 transition-all duration-200">
                 CONFIDENCE: 95% CI
               </span>
             </div>
@@ -52,19 +52,19 @@ export default function FreightForecastChart() {
             <div className="flex gap-2">
               <button 
                 onClick={() => setViewMode('short-term')}
-                className={`px-3 py-1 text-[10px] uppercase font-mono tracking-wider border hover:brightness-110 active:scale-[0.97] transition-all duration-200 ${viewMode === 'short-term' ? 'bg-emerald-500/10 border-emerald-400 text-emerald-400' : 'bg-transparent border-neutral-700 text-neutral-500 hover:text-white'}`}
+                className={`px-3 py-1 text-xs uppercase font-mono tracking-wider border hover:brightness-110 active:scale-[0.97] transition-all duration-200 ${viewMode === 'short-term' ? 'bg-emerald-500/10 border-emerald-400 text-emerald-400' : 'bg-transparent border-neutral-700 text-neutral-500 hover:text-white'}`}
               >
                 Short-Term (Q4)
               </button>
               <button 
                 onClick={() => setViewMode('seasonality')}
-                className={`px-3 py-1 text-[10px] uppercase font-mono tracking-wider border hover:brightness-110 active:scale-[0.97] transition-all duration-200 ${viewMode === 'seasonality' ? 'bg-emerald-500/10 border-emerald-400 text-emerald-400' : 'bg-transparent border-neutral-700 text-neutral-500 hover:text-white'}`}
+                className={`px-3 py-1 text-xs uppercase font-mono tracking-wider border hover:brightness-110 active:scale-[0.97] transition-all duration-200 ${viewMode === 'seasonality' ? 'bg-emerald-500/10 border-emerald-400 text-emerald-400' : 'bg-transparent border-neutral-700 text-neutral-500 hover:text-white'}`}
               >
                 Seasonality View
               </button>
             </div>
             {viewMode === 'short-term' && (
-              <label className="flex items-center gap-2 text-[10px] font-mono text-neutral-400 cursor-pointer hover:text-white transition-colors">
+              <label className="flex items-center gap-2 text-xs font-mono text-neutral-400 cursor-pointer hover:text-white transition-colors">
                 <input 
                   type="checkbox" 
                   checked={showBacktest} 
@@ -156,31 +156,31 @@ export default function FreightForecastChart() {
 
       {/* AI Overview Section */}
       <div className="w-full xl:w-1/3 minimal-panel hover:scale-[1.005] hover:border-neutral-700/60 transition-all duration-300 p-5 bg-neutral-900/40 flex flex-col">
-        <h2 className="text-sm font-mono font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-2 border-b border-emerald-500/30 pb-3 mb-4 border-l-2 border-cyan-500/40 pl-3">
+        <h2 className="text-base font-mono font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-2 border-b border-emerald-500/30 pb-3 mb-4 border-l-2 border-cyan-500/40 pl-3">
           <Sparkles className="w-4 h-4" />
           Realtime AI Market Overview
         </h2>
         
         <div className="flex-1 flex flex-col gap-4">
           <div className="p-3 bg-black border border-neutral-800 transition-all duration-300 hover:border-neutral-700">
-            <div className="text-[10px] font-mono text-neutral-500 uppercase tracking-widest mb-1 transition-all duration-200">Current Spot Rate</div>
+            <div className="text-xs font-mono text-neutral-500 uppercase tracking-widest mb-1 transition-all duration-200">Current Spot Rate</div>
             <div className="text-2xl font-mono text-white font-bold flex items-center gap-2 tabular-nums">
-              $15.90 <span className="text-xs text-neutral-500 font-normal">/ MT</span>
+              $15.90 <span className="text-sm text-neutral-500 font-normal">/ MT</span>
             </div>
           </div>
           
           <div className="p-3 bg-emerald-500/5 border border-emerald-500/20 transition-all duration-300 hover:border-emerald-500/40">
-            <div className="text-[10px] font-mono text-emerald-400/70 uppercase tracking-widest mb-1 flex items-center justify-between transition-all duration-200">
+            <div className="text-xs font-mono text-emerald-400/70 uppercase tracking-widest mb-1 flex items-center justify-between transition-all duration-200">
               Projected {viewMode === 'short-term' ? '30-Day' : 'Seasonal'} Low
               <TrendingDown className="w-3 h-3 animate-bounce" />
             </div>
             <div className="text-2xl font-mono text-emerald-400 font-bold flex items-center gap-2 tabular-nums">
-              {viewMode === 'short-term' ? '$14.90' : '$12.50'} <span className="text-xs text-emerald-400/50 font-normal transition-all duration-200">/ MT ({viewMode === 'short-term' ? 'Dec 10' : 'Feb 2026'})</span>
+              {viewMode === 'short-term' ? '$14.90' : '$12.50'} <span className="text-sm text-emerald-400/50 font-normal transition-all duration-200">/ MT ({viewMode === 'short-term' ? 'Dec 10' : 'Feb 2026'})</span>
             </div>
           </div>
 
-          <div className="mt-2 text-xs font-mono text-neutral-300 leading-relaxed border-l-2 border-emerald-400 pl-3 py-1">
-            <span className="text-emerald-400 font-bold uppercase tracking-widest text-[10px] block mb-1 transition-all duration-200">AI Recommendation</span>
+          <div className="mt-2 text-sm font-mono text-neutral-300 leading-relaxed border-l-2 border-emerald-400 pl-3 py-1">
+            <span className="text-emerald-400 font-bold uppercase tracking-widest text-xs block mb-1 transition-all duration-200">AI Recommendation</span>
             {viewMode === 'short-term' ? (
               <span className="animate-in fade-in duration-300">
                 The neural forecasting model anticipates a sharp peak around mid-November due to seasonal congestion, followed by a sudden drop in rates as port queues clear. 
@@ -198,44 +198,44 @@ export default function FreightForecastChart() {
 
           {/* Model Inputs Legend */}
           <div className="mt-auto pt-4 border-t border-neutral-800">
-            <div className="text-[10px] font-mono text-neutral-500 uppercase tracking-widest mb-2 transition-all duration-200">Live Model Inputs (Feature Importance)</div>
+            <div className="text-xs font-mono text-neutral-500 uppercase tracking-widest mb-2 transition-all duration-200">Live Model Inputs (Feature Importance)</div>
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Activity className="w-3 h-3 text-emerald-400" />
-                  <span className="text-xs font-mono text-neutral-300 transition-all duration-200">Baltic Dry Index</span>
+                  <span className="text-sm font-mono text-neutral-300 transition-all duration-200">Baltic Dry Index</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-16 h-1 bg-neutral-800 rounded-full overflow-hidden">
                     <div className="h-full bg-emerald-400 w-[45%]" />
                   </div>
-                  <span className="text-[10px] font-mono text-neutral-500 tabular-nums">45%</span>
+                  <span className="text-xs font-mono text-neutral-500 tabular-nums">45%</span>
                 </div>
               </div>
               
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Flame className="w-3 h-3 text-amber-500" />
-                  <span className="text-xs font-mono text-neutral-300 transition-all duration-200">Bunker Fuel Prices</span>
+                  <span className="text-sm font-mono text-neutral-300 transition-all duration-200">Bunker Fuel Prices</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-16 h-1 bg-neutral-800 rounded-full overflow-hidden">
                     <div className="h-full bg-amber-500 w-[30%]" />
                   </div>
-                  <span className="text-[10px] font-mono text-neutral-500 tabular-nums">30%</span>
+                  <span className="text-xs font-mono text-neutral-500 tabular-nums">30%</span>
                 </div>
               </div>
 
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <CalendarDays className="w-3 h-3 text-blue-500" />
-                  <span className="text-xs font-mono text-neutral-300 transition-all duration-200">Seasonal Index</span>
+                  <span className="text-sm font-mono text-neutral-300 transition-all duration-200">Seasonal Index</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-16 h-1 bg-neutral-800 rounded-full overflow-hidden">
                     <div className="h-full bg-blue-500 w-[15%]" />
                   </div>
-                  <span className="text-[10px] font-mono text-neutral-500 tabular-nums">15%</span>
+                  <span className="text-xs font-mono text-neutral-500 tabular-nums">15%</span>
                 </div>
               </div>
             </div>
