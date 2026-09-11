@@ -9,7 +9,7 @@ import LiveTerminalFeed from "@/components/LiveTerminalFeed";
 import { usePortFlowData } from "@/context/PortFlowContext";
 import dynamic from "next/dynamic";
 
-const GlobeWrapper = dynamic(() => import("@/components/GlobeWrapper"), { ssr: false });
+const DeckMap = dynamic(() => import("@/components/DeckMap"), { ssr: false });
 
 export default function DashboardPage() {
   const [bootSequence, setBootSequence] = useState(true);
@@ -137,8 +137,8 @@ export default function DashboardPage() {
 
         {/* Row 1: Globe + Side Panels */}
         <div className="flex flex-col xl:flex-row gap-5">
-          <div className="w-full xl:w-2/3 flex flex-col min-h-[800px] xl:h-[900px] shrink-0 minimal-panel relative overflow-hidden">
-            <GlobeWrapper />
+          <div className="w-full xl:w-2/3 flex flex-col min-h-[600px] xl:h-[700px] shrink-0 minimal-panel relative overflow-hidden p-0 border-0">
+            <DeckMap />
           </div>
           <div className="w-full xl:w-1/3 flex flex-col gap-5">
             <DwellTimeChart />
