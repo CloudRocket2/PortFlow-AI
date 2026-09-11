@@ -81,23 +81,23 @@ export default function FreightForecastChart() {
           <ResponsiveContainer width="100%" height="100%">
             {viewMode === 'short-term' ? (
               <ComposedChart data={formattedShortTermData} margin={{ top: 20, right: 30, left: -20, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#222" vertical={false} />
-                <XAxis dataKey="date" stroke="#666" fontSize={10} tickMargin={10} axisLine={false} tickLine={false} />
-                <YAxis stroke="#666" fontSize={10} tickFormatter={(val) => `$${val}`} axisLine={false} tickLine={false} domain={['dataMin - 1', 'dataMax + 1']} />
+                <CartesianGrid strokeDasharray="3 3" stroke="var(--chart-grid)" vertical={false} />
+                <XAxis dataKey="date" stroke="var(--chart-axis)" fontSize={10} tickMargin={10} axisLine={false} tickLine={false} />
+                <YAxis stroke="var(--chart-axis)" fontSize={10} tickFormatter={(val) => `$${val}`} axisLine={false} tickLine={false} domain={['dataMin - 1', 'dataMax + 1']} />
                 
                 <Tooltip 
                   contentStyle={{ backgroundColor: "#000", border: "1px solid #333", fontSize: "12px", fontFamily: "monospace" }} 
                   itemStyle={{ color: "#fff" }}
                 />
                 
-                <ReferenceLine x={presentDay} stroke="#666" strokeDasharray="3 3" label={{ position: 'top', value: 'TODAY', fill: '#666', fontSize: 10, fontFamily: 'monospace' }} />
+                <ReferenceLine x={presentDay} stroke="var(--chart-axis)" strokeDasharray="3 3" label={{ position: 'top', value: 'TODAY', fill: "var(--chart-axis)", fontSize: 10, fontFamily: 'monospace' }} />
 
                 {/* Confidence Interval Area */}
                 <Area 
                   type="monotone" 
                   dataKey="confidenceRange" 
                   stroke="none" 
-                  fill="#34d399" 
+                  fill="var(--route-active)" 
                   fillOpacity={0.08} 
                   name="95% Confidence Interval" 
                 />
@@ -106,7 +106,7 @@ export default function FreightForecastChart() {
                 <Line 
                   type="monotone" 
                   dataKey="actual" 
-                  stroke="#ffffff" 
+                  stroke="var(--chart-line)" 
                   strokeWidth={2} 
                   dot={{ r: 3, fill: "#000", stroke: "#ffffff", strokeWidth: 2 }} 
                   activeDot={{ r: 6 }} 
@@ -118,7 +118,7 @@ export default function FreightForecastChart() {
                   <Line 
                     type="monotone" 
                     dataKey="predictedBacktest" 
-                    stroke="#aaaaaa" 
+                    stroke="var(--chart-line-alt)" 
                     strokeWidth={1.5} 
                     strokeDasharray="4 4" 
                     dot={false} 
@@ -131,7 +131,7 @@ export default function FreightForecastChart() {
                 <Line 
                   type="monotone" 
                   dataKey="predicted" 
-                  stroke="#34d399" 
+                  stroke="var(--route-active)" 
                   strokeWidth={2} 
                   strokeDasharray="5 5" 
                   dot={{ r: 3, fill: "#000", stroke: "#34d399", strokeWidth: 2 }} 
@@ -141,13 +141,13 @@ export default function FreightForecastChart() {
               </ComposedChart>
             ) : (
               <LineChart data={MULTI_YEAR_SEASONALITY_DATA} margin={{ top: 20, right: 30, left: -20, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#222" vertical={false} />
-                <XAxis dataKey="month" stroke="#666" fontSize={10} tickMargin={10} axisLine={false} tickLine={false} />
-                <YAxis stroke="#666" fontSize={10} tickFormatter={(val) => `$${val}`} axisLine={false} tickLine={false} domain={['dataMin - 1', 'dataMax + 1']} />
+                <CartesianGrid strokeDasharray="3 3" stroke="var(--chart-grid)" vertical={false} />
+                <XAxis dataKey="month" stroke="var(--chart-axis)" fontSize={10} tickMargin={10} axisLine={false} tickLine={false} />
+                <YAxis stroke="var(--chart-axis)" fontSize={10} tickFormatter={(val) => `$${val}`} axisLine={false} tickLine={false} domain={['dataMin - 1', 'dataMax + 1']} />
                 <Tooltip contentStyle={{ backgroundColor: "#000", border: "1px solid #333", fontSize: "12px", fontFamily: "monospace" }} />
-                <Line type="monotone" dataKey="2024" stroke="#666666" strokeWidth={1.5} dot={false} activeDot={{ r: 4 }} name="2024 Actual" />
-                <Line type="monotone" dataKey="2025" stroke="#ffffff" strokeWidth={2} dot={false} activeDot={{ r: 4 }} name="2025 Actual" />
-                <Line type="monotone" dataKey="2026_Predicted" stroke="#34d399" strokeWidth={2} strokeDasharray="5 5" dot={{ r: 2, fill: "#000", stroke: "#34d399" }} activeDot={{ r: 6, fill: "#34d399" }} name="2026 Predicted" />
+                <Line type="monotone" dataKey="2024" stroke="var(--chart-axis)" strokeWidth={1.5} dot={false} activeDot={{ r: 4 }} name="2024 Actual" />
+                <Line type="monotone" dataKey="2025" stroke="var(--chart-line)" strokeWidth={2} dot={false} activeDot={{ r: 4 }} name="2025 Actual" />
+                <Line type="monotone" dataKey="2026_Predicted" stroke="var(--route-active)" strokeWidth={2} strokeDasharray="5 5" dot={{ r: 2, fill: "#000", stroke: "#34d399" }} activeDot={{ r: 6, fill: "#34d399" }} name="2026 Predicted" />
               </LineChart>
             )}
           </ResponsiveContainer>

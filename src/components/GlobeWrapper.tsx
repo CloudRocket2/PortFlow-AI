@@ -66,7 +66,7 @@ export default function GlobeWrapper() {
         originName: origin.name,
         destName: dest.name,
         waypoints: [[origin.lng, origin.lat] as [number, number], ...intermediate, [dest.lng, dest.lat] as [number, number]],
-        color: isSelected ? "#00ff00" : c.status === "AI Executed" ? "#00ff00" : "#444444",
+        color: isSelected ? "var(--route-active)" : c.status === "AI Executed" ? "var(--route-active)" : "var(--route-idle)",
         isSelected
       };
     }).filter(Boolean) as any[];
@@ -116,7 +116,7 @@ export default function GlobeWrapper() {
   };
 
   if (!mounted) {
-    return <div className="w-full h-full bg-[#020202] flex items-center justify-center animate-pulse text-sm font-mono text-[#00ff00]">Initializing Radar Array...</div>;
+    return <div className="w-full h-full bg-[#020202] flex items-center justify-center animate-pulse text-sm font-mono text-cyan-400">Initializing Radar Array...</div>;
   }
 
   const SHOW_LABELS_ZOOM_THRESHOLD = 3;
@@ -129,7 +129,7 @@ export default function GlobeWrapper() {
   const selectedPortInfo = markers.find(m => m.id === selectedPortId);
 
   return (
-    <div className="w-full h-full relative bg-[#000000] rounded-xl overflow-hidden shadow-[inset_0_0_50px_rgba(0,255,0,0.05)] border border-[#111111] group">
+    <div className="w-full h-full relative bg-black rounded-xl overflow-hidden shadow-inner border border-[#111111] group">
       
       {/* Search & Filter Bar */}
       <div className="absolute top-4 left-4 z-10 w-64 bg-neutral-900/90 backdrop-blur border border-neutral-800 rounded-lg p-2 shadow-xl flex items-center gap-2">
@@ -171,19 +171,19 @@ export default function GlobeWrapper() {
       <div className="absolute bottom-16 right-4 z-10 flex flex-col gap-2">
         <button 
           onClick={handleZoomIn}
-          className="p-2 bg-neutral-900/80 border border-neutral-700 text-neutral-400 hover:text-white hover:border-[#00ff00] transition-colors rounded shadow-lg"
+          className="p-2 bg-neutral-900/80 border border-neutral-700 text-neutral-400 hover:text-white hover:border-cyan-400 transition-colors rounded shadow-lg"
         >
           <ZoomIn className="w-4 h-4" />
         </button>
         <button 
           onClick={handleReset}
-          className="p-2 bg-neutral-900/80 border border-neutral-700 text-neutral-400 hover:text-white hover:border-[#00ff00] transition-colors rounded shadow-lg"
+          className="p-2 bg-neutral-900/80 border border-neutral-700 text-neutral-400 hover:text-white hover:border-cyan-400 transition-colors rounded shadow-lg"
         >
           <RotateCcw className="w-4 h-4" />
         </button>
         <button 
           onClick={handleZoomOut}
-          className="p-2 bg-neutral-900/80 border border-neutral-700 text-neutral-400 hover:text-white hover:border-[#00ff00] transition-colors rounded shadow-lg"
+          className="p-2 bg-neutral-900/80 border border-neutral-700 text-neutral-400 hover:text-white hover:border-cyan-400 transition-colors rounded shadow-lg"
         >
           <ZoomOut className="w-4 h-4" />
         </button>
@@ -249,13 +249,13 @@ export default function GlobeWrapper() {
                 <Geography
                   key={geo.rsmKey}
                   geography={geo}
-                  fill="#0a150f"
-                  stroke="#1a3324"
+                  fill="var(--map-fill)"
+                  stroke="var(--map-stroke)"
                   strokeWidth={0.5}
                   style={{
                     default: { outline: "none" },
-                    hover: { fill: "#0f1f16", outline: "none" },
-                    pressed: { fill: "#0f1f16", outline: "none" },
+                    hover: { fill: "var(--map-hover)", outline: "none" },
+                    pressed: { fill: "var(--map-hover)", outline: "none" },
                   }}
                 />
               ))
@@ -285,7 +285,7 @@ export default function GlobeWrapper() {
           {markers.map((marker) => {
             const isHovered = hoveredNode === marker.id;
             const hasIssue = marker.legalStatus && marker.legalStatus !== "Compliant";
-            const iconColor = hasIssue ? "#f59e0b" : "#00ff00";
+            const iconColor = hasIssue ? "#f59e0b" : "var(--route-active)";
 
             return (
               <Marker 
@@ -316,7 +316,7 @@ export default function GlobeWrapper() {
                       style={{
                         fontFamily: "monospace",
                         fontSize: `${10 / position.zoom}px`,
-                        fill: "white",
+                        fill: "var(--map-text)",
                         pointerEvents: "none",
                         textShadow: "0 2px 4px rgba(0,0,0,0.8)"
                       }}
@@ -344,7 +344,7 @@ export default function GlobeWrapper() {
               >
                 <g transform={`translate(${-6 / position.zoom}, ${-6 / position.zoom})`}>
                   <Ship 
-                    color={isSelected ? "#ffffff" : isHovered ? "#00ff00" : "#aaaaaa"} 
+                    color={isSelected ? "var(--map-text)" : isHovered ? "var(--route-active)" : "var(--map-stroke)"} 
                     size={12 / position.zoom} 
                   />
                 </g>
@@ -356,7 +356,7 @@ export default function GlobeWrapper() {
                     style={{
                       fontFamily: "monospace",
                       fontSize: `${8 / position.zoom}px`,
-                      fill: isSelected ? "#00ff00" : "#ffffff",
+                      fill: isSelected ? "var(--route-active)" : "var(--map-text)",
                       pointerEvents: "none",
                       textShadow: "0 1px 2px rgba(0,0,0,0.9)"
                     }}

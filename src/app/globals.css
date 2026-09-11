@@ -2,6 +2,17 @@
 @import "maplibre-gl/dist/maplibre-gl.css";
 
 :root {
+  --chart-grid: #222222;
+  --chart-axis: #666666;
+  --chart-line: #ffffff;
+  --chart-line-alt: #aaaaaa;
+  --map-text: #ffffff;
+  --route-active: #22d3ee;
+  --route-idle: #444444;
+  --map-fill: #0a150f;
+  --map-stroke: #1a3324;
+  --map-hover: #0f1f16;
+  --map-ocean: transparent;
   --background: #000000;
   --foreground: #f0f0f0;
   --sidebar-bg: #050505;
@@ -206,6 +217,17 @@ body {
 
 /* ── Light Mode Overrides ─────────────────────────────── */
 .light-mode {
+  --chart-grid: #e7e5e4;
+  --chart-axis: #a8a29e;
+  --chart-line: #292524;
+  --chart-line-alt: #a8a29e;
+  --map-text: #1c1917; /* stone-900 */
+  --route-active: #0891b2; /* cyan-600 */
+  --route-idle: #d6d3d1; /* stone-300 */
+  --map-fill: #e7e5e4; /* stone-200 for land */
+  --map-stroke: #d6d3d1; /* stone-300 for borders */
+  --map-hover: #d6d3d1; /* stone-300 for hover */
+  --map-ocean: #fdfbf7; /* match cream background for seamless look */
   --background: #fdfbf7; /* Warm cream white / off-white */
   --foreground: #1c1917; /* Very dark warm gray (stone-900) */
   --sidebar-bg: #ffffff;
@@ -328,4 +350,78 @@ body {
 /* Map area */
 .light-mode .bg-\[\#0a0a0a\] {
   background-color: #fdfbf7 !important;
+}
+
+/* Accent Colors - Darken for Legibility in Light Mode */
+.light-mode .text-cyan-400,
+.light-mode .text-cyan-500 {
+  color: #0891b2 !important; /* cyan-600 */
+}
+.light-mode .hover\:text-cyan-300:hover,
+.light-mode .hover\:text-cyan-400:hover {
+  color: #0e7490 !important; /* cyan-700 */
+}
+
+.light-mode .text-emerald-400,
+.light-mode .text-emerald-500 {
+  color: #059669 !important; /* emerald-600 */
+}
+.light-mode .hover\:text-emerald-300:hover,
+.light-mode .hover\:text-emerald-400:hover {
+  color: #047857 !important; /* emerald-700 */
+}
+
+.light-mode .text-amber-400,
+.light-mode .text-amber-500 {
+  color: #d97706 !important; /* amber-600 */
+}
+.light-mode .hover\:text-amber-300:hover,
+.light-mode .hover\:text-amber-400:hover {
+  color: #b45309 !important; /* amber-700 */
+}
+
+.light-mode .text-rose-400,
+.light-mode .text-rose-500 {
+  color: #e11d48 !important; /* rose-600 */
+}
+.light-mode .hover\:text-rose-300:hover,
+.light-mode .hover\:text-rose-400:hover {
+  color: #be123c !important; /* rose-700 */
+}
+
+.light-mode .text-violet-400,
+.light-mode .text-violet-500 {
+  color: #7c3aed !important; /* violet-600 */
+}
+.light-mode .hover\:text-violet-300:hover,
+.light-mode .hover\:text-violet-400:hover {
+  color: #6d28d9 !important; /* violet-700 */
+}
+
+.light-mode .text-blue-400,
+.light-mode .text-blue-500 {
+  color: #2563eb !important; /* blue-600 */
+}
+.light-mode .hover\:text-blue-300:hover,
+.light-mode .hover\:text-blue-400:hover {
+  color: #1d4ed8 !important; /* blue-700 */
+}
+
+/* Background Accents (like bg-cyan-500/10) */
+.light-mode .bg-cyan-500\/10,
+.light-mode .bg-cyan-500\/20 {
+  background-color: rgba(8, 145, 178, 0.1) !important;
+}
+.light-mode .hover\:bg-cyan-500\/10:hover,
+.light-mode .hover\:bg-cyan-500\/20:hover {
+  background-color: rgba(8, 145, 178, 0.15) !important;
+}
+
+.light-mode .bg-emerald-500\/10,
+.light-mode .bg-emerald-500\/20 {
+  background-color: rgba(5, 150, 105, 0.1) !important;
+}
+.light-mode .bg-rose-500\/10,
+.light-mode .bg-rose-500\/20 {
+  background-color: rgba(225, 29, 72, 0.1) !important;
 }

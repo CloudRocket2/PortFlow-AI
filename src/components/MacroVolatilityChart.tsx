@@ -51,24 +51,24 @@ export default function MacroVolatilityChart() {
             <CartesianGrid strokeDasharray="3 3" stroke="#333" vertical={false} />
             <XAxis 
               dataKey="date" 
-              stroke="#666" 
+              stroke="var(--chart-axis)" 
               fontSize={10} 
               tickLine={false} 
               axisLine={false} 
-              tick={{ fill: '#666' }}
+              tick={{ fill: "var(--chart-axis)" }}
             />
             <YAxis 
-              stroke="#666" 
+              stroke="var(--chart-axis)" 
               fontSize={10} 
               tickLine={false} 
               axisLine={false}
               domain={[0, 100]}
               ticks={[0, 50, 100]}
-              tick={{ fill: '#666' }}
+              tick={{ fill: "var(--chart-axis)" }}
             />
             <Tooltip
               contentStyle={{ backgroundColor: '#111', borderColor: '#333', fontSize: '12px', fontFamily: 'monospace' }}
-              itemStyle={{ color: '#fff' }}
+              itemStyle={{ color: "var(--chart-line)" }}
               labelStyle={{ color: '#888' }}
             />
             <ReferenceLine x="Nov 05" stroke="#fff" strokeDasharray="3 3" opacity={0.3} />
