@@ -108,7 +108,10 @@ export default function GlobeWrapper() {
   };
 
   const handleMoveEnd = (pos: { coordinates: [number, number]; zoom: number }) => {
-    setPosition(pos);
+    let [lng, lat] = pos.coordinates;
+    lng = Math.max(-180, Math.min(180, lng));
+    lat = Math.max(-80, Math.min(80, lat));
+    setPosition({ coordinates: [lng, lat], zoom: pos.zoom });
   };
 
   if (!mounted) {
@@ -183,35 +186,7 @@ export default function GlobeWrapper() {
         </button>
       </div>
 
-      {/* Docked Detail Panel for Selected Vessel */}
-      {selectedVoyageId && selectedRouteInfo && selectedShipInfo && (
-        <div className="absolute top-4 right-4 z-20 w-80 bg-neutral-900 border border-cyan-500/50 rounded-xl p-5 shadow-2xl animate-slide-in">
-          <div className="flex justify-between items-start mb-4">
-            <h3 className="text-lg font-bold text-white flex items-center gap-2">
-              <Ship className="w-5 h-5 text-cyan-400" />
-              {selectedShipInfo.name}
-            </h3>
-            <button onClick={() => setSelectedVoyageId(null)} className="text-neutral-500 hover:text-white"><X className="w-4 h-4" /></button>
-          </div>
-          <div className="space-y-3">
-            <div className="flex justify-between border-b border-neutral-800 pb-2">
-              <span className="text-xs text-neutral-500 uppercase font-mono">Route</span>
-              <span className="text-sm text-neutral-300">{selectedShipInfo.routeStr}</span>
-            </div>
-            <div className="flex justify-between border-b border-neutral-800 pb-2">
-              <span className="text-xs text-neutral-500 uppercase font-mono">Cargo</span>
-              <span className="text-sm text-neutral-300">{selectedShipInfo.cargo}</span>
-            </div>
-            <div className="flex justify-between border-b border-neutral-800 pb-2">
-              <span className="text-xs text-neutral-500 uppercase font-mono">ETA</span>
-              <span className="text-sm text-cyan-400 font-mono">{selectedShipInfo.eta}</span>
-            </div>
-          </div>
-          <button className="w-full mt-4 bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 py-2 rounded-lg text-sm font-bold uppercase tracking-wider transition-colors">
-            View Contract Details
-          </button>
-        </div>
-      )}
+
 
       {/* The Map */}
       <ComposableMap
@@ -286,7 +261,7 @@ export default function GlobeWrapper() {
                   </g>
                 )}
 
-                {(isHovered || isZoomedIn) && (
+                {isHovered && (
                   <text
                     textAnchor="middle"
                     y={-12 / position.zoom}
@@ -325,7 +300,7 @@ export default function GlobeWrapper() {
                   />
                 </g>
                 
-                {(isHovered || isSelected || isZoomedIn) && (
+                {(isHovered || isSelected) && (
                   <text
                     textAnchor="middle"
                     y={14 / position.zoom}
