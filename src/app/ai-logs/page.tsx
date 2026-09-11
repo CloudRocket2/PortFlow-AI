@@ -74,7 +74,7 @@ export default function AILogsPage() {
         </div>
         <button 
           onClick={clearConversation}
-          className="flex items-center gap-2 px-3 py-1.5 bg-neutral-900 border border-neutral-800 hover:bg-neutral-800 text-neutral-400 hover:text-white rounded-lg text-xs font-mono transition-colors focus-ring"
+          className="flex items-center gap-2 px-3 py-1.5 bg-neutral-900 border border-neutral-800 hover:bg-neutral-800 text-neutral-400 hover:text-white rounded-lg text-xs font-mono transition-colors focus-ring active:scale-[0.97]"
           title="Clear Conversation"
         >
           <Trash2 className="w-4 h-4" />
@@ -94,7 +94,7 @@ export default function AILogsPage() {
         {/* Messages */}
         <div ref={scrollRef} className="flex-1 overflow-y-auto p-6 space-y-6">
           {messages.map((msg, i) => (
-            <div key={i} className={`flex gap-4 ${msg.role === "user" ? "flex-row-reverse" : "flex-row"}`}>
+            <div key={i} className={`flex gap-4 animate-slide-in ${msg.role === "user" ? "flex-row-reverse" : "flex-row"}`} style={{ animationDelay: `${i * 0.05}s` }}>
               {/* Avatar */}
               <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
                 msg.role === "user" ? "bg-cyan-500/20 text-cyan-400" : "bg-emerald-500/20 text-emerald-400"
@@ -113,7 +113,7 @@ export default function AILogsPage() {
             </div>
           ))}
           {loading && (
-            <div className="flex gap-4 flex-row">
+            <div className="flex gap-4 flex-row animate-slide-in">
               <div className="w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
                 <Bot className="w-4 h-4" />
               </div>
@@ -138,7 +138,7 @@ export default function AILogsPage() {
               <button 
                 key={idx}
                 onClick={() => setInput(q)}
-                className="text-[10px] uppercase font-mono tracking-widest border border-cyan-500/20 text-cyan-400 bg-cyan-500/5 px-3 py-1.5 rounded-full hover:bg-cyan-500/10 transition-colors whitespace-nowrap focus-ring"
+                className="text-[10px] uppercase font-mono tracking-widest border border-cyan-500/20 text-cyan-400 bg-cyan-500/5 px-3 py-1.5 rounded-full hover:bg-cyan-500/10 transition-all duration-200 whitespace-nowrap focus-ring hover:scale-[1.03] active:scale-[0.97]"
               >
                 {q}
               </button>
@@ -147,7 +147,7 @@ export default function AILogsPage() {
 
           <form 
             onSubmit={(e) => { e.preventDefault(); handleSend(); }}
-            className="flex gap-3"
+            className="flex gap-3 focus-within:ring-1 focus-within:ring-cyan-500/30 rounded-lg"
           >
             <input
               type="text"
@@ -159,7 +159,7 @@ export default function AILogsPage() {
             <button
               type="submit"
               disabled={!input.trim() || loading}
-              className="bg-cyan-500/10 border border-cyan-500/20 rounded-lg hover:bg-cyan-500/20 disabled:opacity-30 text-cyan-400 px-5 flex items-center justify-center transition-colors focus-ring"
+              className="bg-cyan-500/10 border border-cyan-500/20 rounded-lg hover:bg-cyan-500/20 disabled:opacity-30 text-cyan-400 px-5 flex items-center justify-center transition-colors focus-ring active:scale-[0.97]"
             >
               <Send className="w-4 h-4" />
             </button>

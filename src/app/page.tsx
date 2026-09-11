@@ -23,7 +23,7 @@ interface KpiProps {
 
 function KpiCard({ label, value, icon: Icon, accentBorder, accentText, subtitle }: KpiProps) {
   return (
-    <div className={`minimal-panel flex items-center gap-3.5 px-4 py-3 border-l-2 ${accentBorder}`}>
+    <div className={`minimal-panel flex items-center gap-3.5 px-4 py-3 border-l-2 ${accentBorder} hover:scale-[1.01] hover:border-opacity-80 transition-all duration-300 cursor-default`}>
       <div className={`w-9 h-9 rounded-lg border ${accentBorder} ${accentText} flex items-center justify-center shrink-0 bg-black/40`}>
         <Icon className="w-4 h-4" />
       </div>

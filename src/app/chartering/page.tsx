@@ -90,7 +90,7 @@ export default function CharteringPage() {
   };
 
   return (
-    <div className="flex flex-col gap-6 h-full animate-page-enter">
+    <div className="flex flex-col gap-6 h-full w-full max-w-[1600px] mx-auto animate-page-enter">
       <div className="flex items-center justify-between border-b border-neutral-800 pb-4">
         <div>
           <h1 className="text-lg font-semibold text-white flex items-center gap-3">
@@ -101,7 +101,7 @@ export default function CharteringPage() {
             Predictive Freight & Infrastructure Alignment Model
           </p>
         </div>
-        <div className="text-[10px] font-mono border border-neutral-800 px-3 py-1 text-neutral-400 uppercase tracking-widest bg-neutral-900/50">
+        <div className="text-[10px] font-mono border border-neutral-800 px-3 py-1 text-neutral-400 uppercase tracking-widest bg-neutral-900/50 transition-all duration-200">
           Module: OMEGA-7
         </div>
       </div>
@@ -109,7 +109,7 @@ export default function CharteringPage() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 flex-1">
         
         {/* Left Column: Input Form */}
-        <div className="lg:col-span-4 minimal-panel p-6 flex flex-col gap-6">
+        <div className="lg:col-span-4 minimal-panel hover:scale-[1.005] hover:border-neutral-700/60 transition-all duration-300 p-6 flex flex-col gap-6">
           <div>
             <label className="text-xs text-neutral-500 block mb-2">Origin Port (Loading)</label>
             <select className="w-full bg-neutral-900/50 border border-neutral-800 rounded-lg px-3 py-2.5 text-xs font-mono text-white focus:outline-none focus:border-cyan-500/50 transition-colors" value={originKey} onChange={e => setOriginKey(e.target.value)}>
@@ -135,14 +135,14 @@ export default function CharteringPage() {
             </div>
             <div>
               <label className="text-xs text-neutral-500 block mb-2">Volume (MT)</label>
-              <input type="number" className="w-full bg-neutral-900/50 border border-neutral-800 rounded-lg px-3 py-2.5 text-xs font-mono text-white focus:outline-none focus:border-cyan-500/50 transition-colors" value={volume} onChange={e => setVolume(e.target.value)} />
+              <input type="number" className="w-full bg-neutral-900/50 border border-neutral-800 rounded-lg px-3 py-2.5 text-xs font-mono text-white tabular-nums focus:outline-none focus:border-cyan-500/50 transition-colors" value={volume} onChange={e => setVolume(e.target.value)} />
             </div>
           </div>
 
           <button 
             onClick={handleOptimize}
             disabled={status === "calculating"}
-            className="mt-auto w-full border border-neutral-800 bg-white text-black font-mono text-[10px] font-bold uppercase tracking-widest py-3 hover:bg-neutral-200 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 focus-ring btn-sweep"
+            className="mt-auto w-full border border-neutral-800 bg-white text-black font-mono text-[10px] font-bold uppercase tracking-widest py-3 hover:bg-neutral-200 transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 focus-ring btn-sweep active:scale-[0.97]"
           >
             {status === "calculating" ? <Cpu className="w-4 h-4 animate-pulse" /> : <Ship className="w-4 h-4" />}
             {status === "calculating" ? "Calculating Routes..." : "Generate Optimal Charter"}
@@ -150,12 +150,12 @@ export default function CharteringPage() {
         </div>
 
         {/* Right Column: AI Output */}
-        <div className="lg:col-span-8 minimal-panel flex flex-col relative overflow-hidden">
+        <div className="lg:col-span-8 minimal-panel hover:scale-[1.005] hover:border-neutral-700/60 transition-all duration-300 flex flex-col relative overflow-hidden">
           
           {status === "idle" && (
             <div className="absolute inset-0 flex flex-col items-center justify-center text-neutral-600">
               <Cpu className="w-12 h-12 mb-4 opacity-20" />
-              <p className="font-mono text-xs uppercase tracking-widest">Awaiting Logistics Parameters</p>
+              <p className="font-mono text-[10px] uppercase tracking-widest transition-all duration-200">Awaiting Logistics Parameters</p>
             </div>
           )}
 
@@ -163,7 +163,7 @@ export default function CharteringPage() {
             <div className="absolute inset-0 p-8 flex flex-col justify-end bg-black">
               <div className="space-y-3">
                 {logs.map((log, i) => (
-                  <div key={i} className="font-mono text-xs text-neutral-400 flex items-center gap-3 animate-slide-in">
+                  <div key={i} className="font-mono text-xs text-neutral-400 flex items-center gap-3 animate-slide-in" style={{ animationDelay: `${i * 0.1}s` }}>
                     <span className="text-white">&gt;</span> {log}
                   </div>
                 ))}
@@ -178,10 +178,10 @@ export default function CharteringPage() {
             <div className="absolute inset-0 overflow-y-auto hide-scrollbar p-6 flex flex-col gap-6 animate-slide-in">
               
               {/* Top: Vessel Recommendation */}
-              <div className="border border-neutral-800 p-5 bg-neutral-900/30">
+              <div className="border border-neutral-800 p-5 bg-neutral-900/30 animate-slide-in" style={{ animationDelay: '0.1s' }}>
                 <div className="flex items-start justify-between mb-4">
                   <div>
-                    <h2 className="text-sm font-medium uppercase tracking-wide font-mono text-white flex items-center gap-2">
+                    <h2 className="text-sm font-medium uppercase tracking-wide font-mono text-white flex items-center gap-2 border-l-2 border-cyan-500/40 pl-3">
                       <CheckCircle2 className="w-5 h-5 text-white" />
                       Vessel Type Optimization
                     </h2>
@@ -195,17 +195,17 @@ export default function CharteringPage() {
                 </div>
                 
                 <div className="grid grid-cols-2 gap-4 mt-6">
-                  <div className="border-l-2 border-red-900 pl-3">
-                    <div className="text-[10px] font-mono text-red-500 uppercase tracking-widest mb-1 flex items-center gap-1">
+                  <div className="border-l-2 border-rose-500/60 pl-3">
+                    <div className="text-[10px] font-mono text-rose-400 uppercase tracking-widest mb-1 flex items-center gap-1 transition-all duration-200">
                       <ShieldAlert className="w-3 h-3" /> {result.rejectedVessel} Rejected
                     </div>
                     <p className="text-xs font-mono text-neutral-300">
                       {result.rejectedReason}
                     </p>
                   </div>
-                  <div className="border-l-2 border-white pl-3">
-                    <div className="text-[10px] font-mono text-neutral-400 uppercase tracking-widest mb-1 flex items-center gap-1">
-                      <Anchor className="w-3 h-3 text-white" /> {result.approvedVessel} Approved
+                  <div className="border-l-2 border-emerald-500/60 pl-3">
+                    <div className="text-[10px] font-mono text-emerald-400 uppercase tracking-widest mb-1 flex items-center gap-1 transition-all duration-200">
+                      <Anchor className="w-3 h-3" /> {result.approvedVessel} Approved
                     </div>
                     <p className="text-xs font-mono text-neutral-300">
                       {result.approvedReason}
@@ -215,42 +215,42 @@ export default function CharteringPage() {
               </div>
 
               {/* Middle: Market Entry */}
-              <div className="border border-neutral-800 p-5 bg-neutral-900/30">
-                <h2 className="text-sm font-medium uppercase tracking-wide font-mono text-white flex items-center gap-2 mb-4">
+              <div className="border border-neutral-800 p-5 bg-neutral-900/30 animate-slide-in" style={{ animationDelay: '0.2s' }}>
+                <h2 className="text-sm font-medium uppercase tracking-wide font-mono text-white flex items-center gap-2 mb-4 border-l-2 border-cyan-500/40 pl-3">
                   <Clock className="w-4 h-4 text-white" />
                   Optimal Market Entry Timing
                 </h2>
                 <p className="text-xs text-neutral-400 mb-4">
                   AI Time-series analysis indicates high volatility on the {result?.originName} route due to seasonal demand.
                 </p>
-                <div className="flex items-center gap-4 border border-neutral-700 p-3">
-                  <AlertTriangle className="w-5 h-5 text-white animate-pulse" />
+                <div className="flex items-center gap-4 border border-neutral-700 p-3 hover:bg-neutral-800/50 transition-colors duration-300">
+                  <AlertTriangle className="w-5 h-5 text-amber-400 animate-pulse" />
                   <div>
-                    <div className="text-xs font-mono text-white uppercase tracking-widest">Recommendation: Enter market in 4-6 days.</div>
-                    <div className="text-[10px] font-mono text-neutral-500">Wait for minor dip before Q3 rally. Securing now risks a 5% premium.</div>
+                    <div className="text-xs font-mono text-white uppercase tracking-widest transition-all duration-200">Recommendation: Enter market in 4-6 days.</div>
+                    <div className="text-[10px] font-mono text-neutral-500 transition-all duration-200">Wait for minor dip before Q3 rally. Securing now risks a 5% premium.</div>
                   </div>
                 </div>
               </div>
 
               {/* Bottom: Financials (Spot vs Multi-voyage) */}
-              <div className="border border-neutral-800 p-5 bg-neutral-900/30">
-                <h2 className="text-sm font-medium uppercase tracking-wide font-mono text-white flex items-center gap-2 mb-6">
+              <div className="border border-neutral-800 p-5 bg-neutral-900/30 animate-slide-in" style={{ animationDelay: '0.3s' }}>
+                <h2 className="text-sm font-medium uppercase tracking-wide font-mono text-white flex items-center gap-2 mb-6 border-l-2 border-cyan-500/40 pl-3">
                   <TrendingDown className="w-4 h-4 text-white" />
                   Financial Projection: Spot vs Multi-Voyage
                 </h2>
                 
                 <div className="flex flex-col gap-4">
                   <div className="flex items-center justify-between">
-                    <div className="text-xs text-neutral-400 uppercase tracking-widest">Reactive Single Spot Contract</div>
-                    <div className="text-sm font-mono text-white">${result.spotRate} / MT</div>
+                    <div className="text-xs text-neutral-400 uppercase tracking-widest transition-all duration-200">Reactive Single Spot Contract</div>
+                    <div className="text-sm font-mono text-white tabular-nums">${result.spotRate} / MT</div>
                   </div>
                   <div className="flex items-center justify-between border-b border-neutral-800 pb-4">
-                    <div className="text-xs font-mono text-white font-bold uppercase tracking-widest">Proactive Multi-Voyage (6 Months)</div>
-                    <div className="text-sm font-mono text-white font-bold border-b border-white">${result.multiRate} / MT</div>
+                    <div className="text-xs font-mono text-white font-bold uppercase tracking-widest transition-all duration-200">Proactive Multi-Voyage (6 Months)</div>
+                    <div className="text-sm font-mono text-white font-bold border-b border-white tabular-nums">${result.multiRate} / MT</div>
                   </div>
                   <div className="flex items-center justify-between pt-2">
-                    <div className="text-[10px] font-mono text-neutral-500 uppercase tracking-widest">Total Projected Logistics Savings</div>
-                    <div className="text-lg font-mono text-white font-bold flex items-center gap-2">
+                    <div className="text-[10px] font-mono text-neutral-500 uppercase tracking-widest transition-all duration-200">Total Projected Logistics Savings</div>
+                    <div className="text-lg font-mono text-emerald-400 font-bold flex items-center gap-2 tabular-nums">
                       <ArrowRight className="w-4 h-4" />
                       {result.savings}
                     </div>

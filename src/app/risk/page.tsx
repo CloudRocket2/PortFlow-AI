@@ -84,7 +84,7 @@ export default function RiskCentrePage() {
           <div className="p-6 border-b border-neutral-800 flex items-center gap-3">
             <Anchor className="w-5 h-5 text-blue-400" />
             <div>
-              <h2 className="text-sm font-medium text-white uppercase tracking-wide font-mono">
+              <h2 className="text-sm font-medium text-white uppercase tracking-wide font-mono border-l-2 border-cyan-500/40 pl-3">
                 Vessel Admiralty Search
               </h2>
               <p className="text-xs text-neutral-500 mt-1">
@@ -105,16 +105,16 @@ export default function RiskCentrePage() {
               <button 
                 type="submit"
                 disabled={isSearchingVessel || !vesselQuery.trim()}
-                className="bg-blue-500/10 text-blue-400 border border-blue-500/20 rounded-lg px-6 py-2.5 text-xs font-mono font-bold uppercase tracking-wider hover:bg-blue-500/20 transition-all disabled:opacity-50 flex items-center gap-2 focus-ring btn-sweep"
+                className="bg-blue-500/10 text-blue-400 border border-blue-500/20 rounded-lg px-6 py-2.5 text-xs font-mono font-bold uppercase tracking-wider hover:bg-blue-500/20 transition-all disabled:opacity-50 flex items-center gap-2 focus-ring btn-sweep active:scale-[0.97]"
               >
-                {isSearchingVessel ? <Loader2 className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4" />}
+                {isSearchingVessel ? <Loader2 className="w-4 h-4 animate-spin drop-shadow-[0_0_8px_rgba(255,255,255,0.2)]" /> : <Search className="w-4 h-4" />}
                 Query
               </button>
             </form>
 
             {isSearchingVessel && (
               <div className="flex flex-col items-center justify-center py-20 text-blue-400">
-                <Loader2 className="w-8 h-8 animate-spin mb-4" />
+                <Loader2 className="w-8 h-8 animate-spin drop-shadow-[0_0_8px_rgba(255,255,255,0.2)] mb-4" />
                 <p className="text-[10px] font-mono uppercase tracking-widest">Scanning Global Admiralty Databases...</p>
               </div>
             )}
@@ -136,7 +136,7 @@ export default function RiskCentrePage() {
                   <h4 className="text-[10px] font-mono uppercase tracking-widest text-neutral-500 mb-3">Recorded Claims & Liens</h4>
                   <div className="space-y-2">
                     {vesselResults.claims.map((claim: any, idx: number) => (
-                      <div key={idx} className="p-3 bg-neutral-900/30 border border-neutral-800 rounded-lg flex justify-between items-center">
+                      <div key={idx} className="p-3 bg-neutral-900/30 border border-neutral-800 rounded-lg flex justify-between items-center animate-slide-in" style={{ animationDelay: `${idx * 0.05}s` }}>
                         <div>
                           <p className="text-sm font-medium text-white">{claim.type}</p>
                           <p className="text-xs text-neutral-500">{claim.date}</p>
@@ -171,7 +171,7 @@ export default function RiskCentrePage() {
           <div className="p-6 border-b border-neutral-800 flex items-center gap-3">
             <Scale className="w-5 h-5 text-violet-400" />
             <div>
-              <h2 className="text-sm font-medium text-white uppercase tracking-wide font-mono">
+              <h2 className="text-sm font-medium text-white uppercase tracking-wide font-mono border-l-2 border-cyan-500/40 pl-3">
                 Maritime Case Law AI
               </h2>
               <p className="text-xs text-neutral-500 mt-1">
@@ -192,16 +192,16 @@ export default function RiskCentrePage() {
               <button 
                 type="submit"
                 disabled={isSearchingLaw || !lawQuery.trim()}
-                className="bg-violet-500/10 text-violet-400 border border-violet-500/20 rounded-lg px-6 py-2.5 text-xs font-mono font-bold uppercase tracking-wider hover:bg-violet-500/20 transition-all disabled:opacity-50 flex items-center gap-2 focus-ring btn-sweep"
+                className="bg-violet-500/10 text-violet-400 border border-violet-500/20 rounded-lg px-6 py-2.5 text-xs font-mono font-bold uppercase tracking-wider hover:bg-violet-500/20 transition-all disabled:opacity-50 flex items-center gap-2 focus-ring btn-sweep active:scale-[0.97]"
               >
-                {isSearchingLaw ? <Loader2 className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4" />}
+                {isSearchingLaw ? <Loader2 className="w-4 h-4 animate-spin drop-shadow-[0_0_8px_rgba(255,255,255,0.2)]" /> : <Search className="w-4 h-4" />}
                 Search
               </button>
             </form>
 
             {isSearchingLaw && (
               <div className="flex flex-col items-center justify-center py-20 text-violet-400 flex-1">
-                <Loader2 className="w-8 h-8 animate-spin mb-4" />
+                <Loader2 className="w-8 h-8 animate-spin drop-shadow-[0_0_8px_rgba(255,255,255,0.2)] mb-4" />
                 <p className="text-[10px] font-mono uppercase tracking-widest">Searching Legal Precedents...</p>
               </div>
             )}
@@ -209,7 +209,7 @@ export default function RiskCentrePage() {
             {lawResults && !isSearchingLaw && (
               <div className="animate-in fade-in slide-in-from-bottom-2 flex-1 overflow-y-auto space-y-4 pr-2">
                 {lawResults.map((result: any, idx: number) => (
-                  <div key={idx} className="p-4 bg-neutral-900/30 border border-neutral-800 rounded-lg hover:border-violet-500/30 transition-colors">
+                  <div key={idx} className="p-4 bg-neutral-900/30 border border-neutral-800 rounded-lg hover:border-violet-500/30 transition-all duration-300 animate-slide-in hover:scale-[1.01]" style={{ animationDelay: `${idx * 0.05}s` }}>
                     <div className="flex justify-between items-start mb-2">
                       <h3 className="text-sm font-medium text-white">{result.case}</h3>
                       <FileText className="w-4 h-4 text-neutral-500" />

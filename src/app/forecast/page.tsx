@@ -45,11 +45,12 @@ export default function ForecastPage() {
   }, [isSubscribed]);
 
   return (
-    <div className="flex flex-col gap-6 h-full relative animate-page-enter">
+    <div className="flex flex-col gap-6 h-full relative max-w-[1600px] mx-auto animate-page-enter w-full">
+
       
       {/* Active Toast Notification */}
       {activeToast && (
-        <div className="absolute top-4 left-1/2 -translate-x-1/2 z-50 bg-black border border-emerald-500/20 p-4 shadow-[0_0_20px_rgba(16,185,129,0.2)] animate-in slide-in-from-top-4 flex flex-col gap-3 min-w-[400px]">
+        <div className="absolute top-4 left-1/2 -translate-x-1/2 z-50 bg-black border border-emerald-500/20 p-4 shadow-[0_0_20px_rgba(16,185,129,0.2)] animate-slide-in flex flex-col gap-3 min-w-[400px]">
           <div className="flex justify-between items-start">
             <div className="flex items-center gap-2 text-emerald-400 font-mono font-bold text-sm uppercase tracking-wider">
               <BellRing className="w-4 h-4 animate-pulse" />
@@ -75,7 +76,7 @@ export default function ForecastPage() {
       {/* Email Preview Modal */}
       {showEmailPreview && (
         <div className="fixed inset-0 z-[60] bg-black/80 flex items-center justify-center backdrop-blur-sm p-4">
-          <div className="bg-[#111] border border-neutral-700 w-full max-w-xl shadow-2xl">
+          <div className="bg-[#111] border border-neutral-700 w-full max-w-xl shadow-2xl animate-slide-in">
             <div className="bg-neutral-900 border-b border-neutral-800 p-3 flex justify-between items-center">
               <div className="text-xs text-neutral-400 uppercase tracking-widest flex items-center gap-2">
                 <Mail className="w-4 h-4" /> Email Preview
@@ -152,9 +153,9 @@ export default function ForecastPage() {
                 <div className="pt-1">
                   <div 
                     onClick={() => setIsSubscribed(!isSubscribed)}
-                    className={`w-10 h-5 rounded-full p-1 cursor-pointer transition-colors ${isSubscribed ? 'bg-emerald-400' : 'bg-neutral-700'}`}
+                    className={`w-10 h-5 rounded-full p-1 cursor-pointer transition-colors duration-300 ${isSubscribed ? 'bg-emerald-400' : 'bg-neutral-700'}`}
                   >
-                    <div className={`w-3 h-3 bg-white rounded-full transition-transform ${isSubscribed ? 'translate-x-5' : 'translate-x-0'}`} />
+                    <div className={`w-3 h-3 bg-white rounded-full transition-transform duration-300 ${isSubscribed ? 'translate-x-5' : 'translate-x-0'}`} />
                   </div>
                 </div>
                 <div>
@@ -207,46 +208,46 @@ export default function ForecastPage() {
           
           {/* Left Column: Risk Mitigation */}
           <div className="flex flex-col gap-6">
-          <div className="minimal-panel p-5 flex flex-col gap-4">
-            <h2 className="text-sm font-medium uppercase tracking-wide font-mono text-white flex items-center gap-2 border-b border-neutral-800 pb-3">
+          <div className="minimal-panel hover:scale-[1.005] hover:border-neutral-700/60 transition-all duration-300 p-5 flex flex-col gap-4">
+            <h2 className="text-sm font-medium uppercase tracking-wide font-mono text-white flex items-center gap-2 border-b border-neutral-800 pb-3 border-l-2 border-cyan-500/40 pl-3">
               <ShieldAlert className="w-4 h-4 text-white" />
               Risk Mitigation Alerts
             </h2>
             
             <div className="flex flex-col gap-3">
               {/* Alert 1 */}
-              <div className="border-l-2 border-white pl-4 py-2 bg-neutral-900/30">
+              <div className="border-l-2 border-white pl-4 py-2 bg-neutral-900/30 animate-slide-in" style={{ animationDelay: '0.1s' }}>
                 <div className="flex justify-between items-start mb-1">
-                  <div className="text-[10px] font-mono text-white uppercase tracking-widest font-bold">Severe Weather Warning</div>
-                  <div className="text-[10px] font-mono text-neutral-500">2 HRS AGO</div>
+                  <div className="text-[10px] font-mono text-white uppercase tracking-widest font-bold transition-all duration-200">Severe Weather Warning</div>
+                  <div className="text-[10px] font-mono text-neutral-500 tabular-nums">2 HRS AGO</div>
                 </div>
                 <div className="text-xs text-neutral-400">
                   Typhoon expected near Indonesia (Kalimantan) loading ports in 72 hours. 
                   Expect 3-4 days of berthing delays. 
                 </div>
-                <div className="mt-2 text-[10px] font-mono text-neutral-500 uppercase tracking-widest flex items-center gap-1">
+                <div className="mt-2 text-[10px] font-mono text-neutral-500 uppercase tracking-widest flex items-center gap-1 transition-all duration-200">
                   <ArrowRight className="w-3 h-3" /> Impact: Spot rates for coal expected to jump 8%.
                 </div>
               </div>
 
               {/* Alert 2 */}
-              <div className="border-l-2 border-neutral-700 pl-4 py-2">
+              <div className="border-l-2 border-neutral-700 pl-4 py-2 animate-slide-in" style={{ animationDelay: '0.2s' }}>
                 <div className="flex justify-between items-start mb-1">
-                  <div className="text-[10px] font-mono text-neutral-300 uppercase tracking-widest font-bold">Port Congestion</div>
-                  <div className="text-[10px] font-mono text-neutral-500">14 HRS AGO</div>
+                  <div className="text-[10px] font-mono text-neutral-300 uppercase tracking-widest font-bold transition-all duration-200">Port Congestion</div>
+                  <div className="text-[10px] font-mono text-neutral-500 tabular-nums">14 HRS AGO</div>
                 </div>
                 <div className="text-xs text-neutral-400">
                   Australia (Newcastle) reporting massive queues for Panamax vessels due to crane maintenance.
                 </div>
-                <div className="mt-2 text-[10px] font-mono text-neutral-500 uppercase tracking-widest flex items-center gap-1">
+                <div className="mt-2 text-[10px] font-mono text-neutral-500 uppercase tracking-widest flex items-center gap-1 transition-all duration-200">
                   <ArrowRight className="w-3 h-3" /> Impact: 48 hour turnaround delay.
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="minimal-panel p-5 flex flex-col gap-4 flex-1 min-h-[350px]">
-             <h2 className="text-sm font-medium uppercase tracking-wide font-mono text-white flex items-center gap-2 border-b border-neutral-800 pb-3 shrink-0">
+          <div className="minimal-panel hover:scale-[1.005] hover:border-neutral-700/60 transition-all duration-300 p-5 flex flex-col gap-4 flex-1 min-h-[350px]">
+             <h2 className="text-sm font-medium uppercase tracking-wide font-mono text-white flex items-center gap-2 border-b border-neutral-800 pb-3 shrink-0 border-l-2 border-cyan-500/40 pl-3">
               <Activity className="w-4 h-4 text-white" />
               Macro Volatility Index
             </h2>
@@ -257,8 +258,8 @@ export default function ForecastPage() {
         </div>
 
         {/* Right Column: Idle Scenario Management (Deadheading) */}
-        <div className="minimal-panel p-5 flex flex-col gap-4">
-          <h2 className="text-sm font-medium uppercase tracking-wide font-mono text-white flex items-center gap-2 border-b border-neutral-800 pb-3">
+        <div className="minimal-panel hover:scale-[1.005] hover:border-neutral-700/60 transition-all duration-300 p-5 flex flex-col gap-4">
+          <h2 className="text-sm font-medium uppercase tracking-wide font-mono text-white flex items-center gap-2 border-b border-neutral-800 pb-3 border-l-2 border-cyan-500/40 pl-3">
             <Route className="w-4 h-4 text-white" />
             Idle Scenario Management (Deadhead Prevention)
           </h2>
@@ -269,74 +270,74 @@ export default function ForecastPage() {
           <div className="flex flex-col gap-4">
             
             {/* Scenario 1 */}
-            <div className="border border-neutral-800 p-4 bg-black">
+            <div className="border border-neutral-800 p-4 bg-black hover:border-neutral-700 transition-all duration-300">
               <div className="flex items-center justify-between mb-3 border-b border-neutral-800 pb-2">
-                <div className="text-xs font-mono font-bold text-white uppercase tracking-widest flex items-center gap-2">
+                <div className="text-xs font-mono font-bold text-white uppercase tracking-widest flex items-center gap-2 transition-all duration-200">
                   <Ship className="w-4 h-4" />
                   MV Pacific Horizon (Supramax)
                 </div>
-                <div className="text-[10px] font-mono text-neutral-500">Status: Discharging</div>
+                <div className="text-[10px] font-mono text-neutral-500 transition-all duration-200">Status: Discharging</div>
               </div>
               
               <div className="grid grid-cols-2 gap-4 mb-4">
                 <div>
-                  <div className="text-[10px] font-mono text-neutral-500 uppercase tracking-widest mb-1">Current Location</div>
-                  <div className="text-xs font-mono text-white flex items-center gap-1">
+                  <div className="text-[10px] font-mono text-neutral-500 uppercase tracking-widest mb-1 transition-all duration-200">Current Location</div>
+                  <div className="text-xs font-mono text-white flex items-center gap-1 transition-all duration-200">
                     <MapPin className="w-3 h-3 text-neutral-500" /> Vizag Port, India
                   </div>
                 </div>
                 <div>
-                  <div className="text-[10px] font-mono text-neutral-500 uppercase tracking-widest mb-1">Predicted Idle Time</div>
-                  <div className="text-xs font-mono text-white">Starts in 48 Hours</div>
+                  <div className="text-[10px] font-mono text-neutral-500 uppercase tracking-widest mb-1 transition-all duration-200">Predicted Idle Time</div>
+                  <div className="text-xs font-mono text-white tabular-nums transition-all duration-200">Starts in 48 Hours</div>
                 </div>
               </div>
 
               <div className="border border-neutral-800 p-3 bg-neutral-900/50">
-                <div className="text-[10px] font-mono text-white uppercase tracking-widest font-bold mb-2 flex items-center gap-2">
-                  <AlertTriangle className="w-3 h-3" />
+                <div className="text-[10px] font-mono text-white uppercase tracking-widest font-bold mb-2 flex items-center gap-2 transition-all duration-200">
+                  <AlertTriangle className="w-3 h-3 text-amber-400" />
                   AI Alternative Employment Route
                 </div>
                 <p className="text-xs text-neutral-400">
                   Instead of deadheading back to Australia empty, secure a short-term Iron Ore cargo from Vizag to China (Guangzhou). Market demand for Supramax on this route is currently elevated.
                 </p>
-                <div className="mt-3 text-[10px] font-mono text-white font-bold uppercase tracking-widest border border-white px-2 py-1 inline-block">
+                <div className="mt-3 text-[10px] font-mono text-emerald-400 font-bold uppercase tracking-widest border border-emerald-500/20 bg-emerald-500/10 px-2 py-1 inline-block tabular-nums transition-all duration-200">
                   Estimated Savings: $145,000
                 </div>
               </div>
             </div>
 
             {/* Scenario 2 */}
-            <div className="border border-neutral-800 p-4 bg-black">
+            <div className="border border-neutral-800 p-4 bg-black hover:border-neutral-700 transition-all duration-300">
               <div className="flex items-center justify-between mb-3 border-b border-neutral-800 pb-2">
-                <div className="text-xs font-mono font-bold text-white uppercase tracking-widest flex items-center gap-2">
+                <div className="text-xs font-mono font-bold text-white uppercase tracking-widest flex items-center gap-2 transition-all duration-200">
                   <Ship className="w-4 h-4" />
                   Maersk Sentinel (Panamax)
                 </div>
-                <div className="text-[10px] font-mono text-neutral-500">Status: En Route</div>
+                <div className="text-[10px] font-mono text-neutral-500 transition-all duration-200">Status: En Route</div>
               </div>
               
               <div className="grid grid-cols-2 gap-4 mb-4">
                 <div>
-                  <div className="text-[10px] font-mono text-neutral-500 uppercase tracking-widest mb-1">Current Location</div>
-                  <div className="text-xs font-mono text-white flex items-center gap-1">
+                  <div className="text-[10px] font-mono text-neutral-500 uppercase tracking-widest mb-1 transition-all duration-200">Current Location</div>
+                  <div className="text-xs font-mono text-white flex items-center gap-1 transition-all duration-200">
                     <MapPin className="w-3 h-3 text-neutral-500" /> Approaching Haldia
                   </div>
                 </div>
                 <div>
-                  <div className="text-[10px] font-mono text-neutral-500 uppercase tracking-widest mb-1">Predicted Idle Time</div>
-                  <div className="text-xs font-mono text-white">Starts in 6 Days</div>
+                  <div className="text-[10px] font-mono text-neutral-500 uppercase tracking-widest mb-1 transition-all duration-200">Predicted Idle Time</div>
+                  <div className="text-xs font-mono text-white tabular-nums transition-all duration-200">Starts in 6 Days</div>
                 </div>
               </div>
 
               <div className="border border-neutral-800 p-3 bg-neutral-900/50">
-                <div className="text-[10px] font-mono text-white uppercase tracking-widest font-bold mb-2 flex items-center gap-2">
-                  <AlertTriangle className="w-3 h-3" />
+                <div className="text-[10px] font-mono text-white uppercase tracking-widest font-bold mb-2 flex items-center gap-2 transition-all duration-200">
+                  <AlertTriangle className="w-3 h-3 text-amber-400" />
                   AI Alternative Employment Route
                 </div>
                 <p className="text-xs text-neutral-400">
                   Sub-optimal positioning. Suggest routing vessel to Dhamra post-discharge for a backhaul fertilizer cargo to Southeast Asia, perfectly matching the Panamax LOA profile.
                 </p>
-                <div className="mt-3 text-[10px] font-mono text-white font-bold uppercase tracking-widest border border-white px-2 py-1 inline-block">
+                <div className="mt-3 text-[10px] font-mono text-emerald-400 font-bold uppercase tracking-widest border border-emerald-500/20 bg-emerald-500/10 px-2 py-1 inline-block tabular-nums transition-all duration-200">
                   Estimated Savings: $92,000
                 </div>
               </div>

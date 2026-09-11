@@ -86,13 +86,13 @@ export default function BottleneckAlerts() {
   }
 
   return (
-    <div className="minimal-panel p-5">
-      <div className="flex items-center justify-between mb-3">
-        <h3 className="text-[10px] font-mono tracking-widest uppercase text-white">
+    <div className="minimal-panel hover:scale-[1.005] hover:border-neutral-700/60 transition-all duration-300 p-5">
+      <div className="flex items-center justify-between mb-3 border-b border-neutral-800 pb-2">
+        <h3 className="text-[10px] font-mono tracking-widest uppercase text-white border-l-2 border-cyan-500/40 pl-2">
           Active Bottlenecks
         </h3>
-        <span className="text-[10px] text-neutral-500 font-mono flex items-center gap-1 uppercase tracking-widest">
-          <div className="w-1.5 h-1.5 bg-white rounded-full animate-pulse" />
+        <span className="text-[10px] text-neutral-500 font-mono flex items-center gap-1 uppercase tracking-widest transition-all duration-200">
+          <div className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse" />
           LIVE SCAN
         </span>
       </div>
@@ -103,7 +103,7 @@ export default function BottleneckAlerts() {
             <p className="text-[10px] font-mono uppercase tracking-widest">No bottlenecks detected</p>
           </div>
         ) : (
-          alerts.map((a) => {
+          alerts.map((a, i) => {
             const config = severityConfig[a.severity] || severityConfig.INFO;
             const Icon = config.icon;
             const isResolving = resolvingIds.has(a.id);
@@ -112,23 +112,29 @@ export default function BottleneckAlerts() {
             return (
               <div
                 key={a.id}
-                className={`flex items-start gap-3 p-3 border border-neutral-800 rounded-lg transition-all ${isResolving ? 'bg-neutral-800/80 border-emerald-500/50' : 'bg-black/40 hover:bg-neutral-900/50'}`}
+                className={`flex items-start gap-3 p-3 border border-neutral-800 rounded-lg transition-all animate-slide-in ${isResolving ? 'bg-neutral-800/80 border-emerald-500/50' : 'bg-black/40 hover:bg-neutral-900/50'}`}
+                style={{ animationDelay: `${i * 0.08}s` }}
               >
-                <Icon className={`w-4 h-4 mt-0.5 shrink-0 ${isResolving ? 'text-emerald-400' : 'text-white'}`} />
+                <div className="relative mt-0.5 shrink-0">
+                  <Icon className={`w-4 h-4 ${isResolving ? 'text-emerald-400' : 'text-white'}`} />
+                  {a.severity === "CRITICAL" && !isResolving && (
+                    <div className="absolute -top-1 -right-1 w-2 h-2 bg-rose-500 rounded-full animate-pulse" />
+                  )}
+                </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between mb-0.5">
                     <div className="flex items-center gap-2">
-                      <span className="text-xs font-mono font-bold text-white uppercase truncate">
+                      <span className="text-xs font-mono font-bold text-white uppercase truncate transition-all duration-200">
                         {a.title}
                       </span>
                       {!isResolving && (
-                        <span className="text-[10px] uppercase font-mono tracking-widest text-neutral-400 border border-neutral-800 px-1 rounded">
+                        <span className={`text-[10px] uppercase font-mono tracking-widest border px-1 rounded transition-all duration-200 ${config.text} ${config.border}`}>
                           {a.severity}
                         </span>
                       )}
                     </div>
                     {!isResolving && (
-                      <span className="text-[10px] text-neutral-600 font-mono whitespace-nowrap">
+                      <span className="text-[10px] text-neutral-600 font-mono whitespace-nowrap tabular-nums">
                         {a.time}
                       </span>
                     )}
@@ -141,14 +147,14 @@ export default function BottleneckAlerts() {
                   {canResolve && !isResolving && (
                     <button 
                       onClick={() => resolveAlert(a.id)}
-                      className="mt-3 flex items-center gap-1.5 px-3 py-1.5 text-[9px] font-mono tracking-widest uppercase border border-neutral-700 hover:border-emerald-500/20 hover:text-emerald-400 text-neutral-400 rounded transition-colors"
+                      className="mt-3 flex items-center gap-1.5 px-3 py-1.5 text-[9px] font-mono tracking-widest uppercase border border-neutral-700 hover:border-emerald-500/20 hover:text-emerald-400 text-neutral-400 rounded transition-all duration-200 focus-ring btn-sweep active:scale-[0.97]"
                     >
                       <BrainCircuit className="w-3 h-3" />
                       Deploy AI Fix
                     </button>
                   )}
                   {isResolving && (
-                    <div className="mt-3 flex items-center gap-1.5 text-[9px] font-mono tracking-widest uppercase text-emerald-400">
+                    <div className="mt-3 flex items-center gap-1.5 text-[9px] font-mono tracking-widest uppercase text-emerald-400 transition-all duration-200">
                       <Loader2 className="w-3 h-3 animate-spin" />
                       Resolving...
                     </div>

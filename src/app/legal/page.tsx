@@ -67,7 +67,7 @@ export default function LegalCompliancePage() {
               <ShieldCheck className="w-4 h-4" />
               Vessel Compliance Check
             </div>
-            {activeTab === "vessel" && <div className="absolute bottom-0 left-0 w-full h-0.5 bg-emerald-400 shadow-[0_0_8px_var(--accent-emerald)]" />}
+            {activeTab === "vessel" && <div className="absolute bottom-0 left-0 w-full h-0.5 bg-emerald-400 shadow-[0_0_8px_var(--accent-emerald)] transition-all duration-300" />}
           </button>
           
           <button 
@@ -78,7 +78,7 @@ export default function LegalCompliancePage() {
               <Scale className="w-4 h-4" />
               Charter Party Analyzer
             </div>
-            {activeTab === "charter" && <div className="absolute bottom-0 left-0 w-full h-0.5 bg-emerald-400 shadow-[0_0_8px_var(--accent-emerald)]" />}
+            {activeTab === "charter" && <div className="absolute bottom-0 left-0 w-full h-0.5 bg-emerald-400 shadow-[0_0_8px_var(--accent-emerald)] transition-all duration-300" />}
           </button>
         </div>
         <p className="text-[10px] font-mono uppercase tracking-widest text-neutral-500">
@@ -92,7 +92,7 @@ export default function LegalCompliancePage() {
         {/* Left: Input Form */}
         <div className="minimal-panel p-6 flex flex-col gap-6">
           <div className="border-b border-neutral-800 pb-4">
-            <h2 className="text-sm font-medium text-white uppercase tracking-wide font-mono flex items-center gap-2">
+            <h2 className="text-sm font-medium text-white uppercase tracking-wide font-mono flex items-center gap-2 border-l-2 border-cyan-500/40 pl-3">
               <Search className="w-4 h-4" />
               Charter Risk Parameters
             </h2>
@@ -139,11 +139,11 @@ export default function LegalCompliancePage() {
             <button 
               onClick={handleScan}
               disabled={isScanning}
-              className="w-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-lg py-3 text-xs font-mono font-bold uppercase tracking-wider hover:bg-emerald-500/20 transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed focus-ring btn-sweep"
+              className="w-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-lg py-3 text-xs font-mono font-bold uppercase tracking-wider hover:bg-emerald-500/20 transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed focus-ring btn-sweep active:scale-[0.97]"
             >
               {isScanning ? (
                 <>
-                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <Loader2 className="w-4 h-4 animate-spin drop-shadow-[0_0_8px_rgba(255,255,255,0.2)]" />
                   ANALYZING COMPLIANCE & SANCTIONS...
                 </>
               ) : (
@@ -170,7 +170,7 @@ export default function LegalCompliancePage() {
           {isScanning && (
             <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6 bg-black/80 backdrop-blur-md z-10">
               <div className="w-16 h-16 border-2 border-emerald-500/30 rounded-full flex items-center justify-center mb-6 relative">
-                <div className="absolute inset-0 border-t-2 border-emerald-500 rounded-full animate-spin" style={{ animationDuration: '1s' }} />
+                <div className="absolute inset-0 border-t-2 border-emerald-500 rounded-full animate-spin drop-shadow-[0_0_8px_rgba(255,255,255,0.2)] drop-shadow-[0_0_8px_rgba(52,211,153,0.6)]" style={{ animationDuration: '1s' }} />
                 <Scale className="w-6 h-6 text-emerald-400 animate-pulse" />
               </div>
               <p className="text-[10px] font-mono uppercase tracking-widest text-emerald-400">
@@ -184,7 +184,7 @@ export default function LegalCompliancePage() {
 
           <div className="flex items-center justify-between border-b border-neutral-800 pb-4 mb-6">
             <div>
-              <h2 className="text-sm font-medium text-white uppercase tracking-wide font-mono flex items-center gap-2">
+              <h2 className="text-sm font-medium text-white uppercase tracking-wide font-mono flex items-center gap-2 border-l-2 border-cyan-500/40 pl-3">
                 <ShieldCheck className="w-4 h-4" />
                 Compliance Scorecard
               </h2>
@@ -211,7 +211,7 @@ export default function LegalCompliancePage() {
               </thead>
               <tbody className="text-xs text-neutral-400">
                 {parameters.map((param, idx) => (
-                  <tr key={idx} className="border-b border-neutral-800/50 hover:bg-neutral-900/30 transition-colors">
+                  <tr key={idx} className="border-b border-neutral-800/50 hover:bg-neutral-900/30 transition-colors animate-slide-in" style={{ animationDelay: `${idx * 0.05}s` }}>
                     <td className="py-4 px-2 text-neutral-300">{param.name}</td>
                     <td className="py-4 px-2 text-right">
                       <div className={`inline-flex items-center gap-1.5 px-2 py-1 rounded border uppercase tracking-widest text-[10px] font-mono ${
@@ -262,7 +262,7 @@ export default function LegalCompliancePage() {
               defaultValue="14. Force Majeure: Neither party shall be liable for failure to perform due to Acts of God, war, strikes, or port congestion exceeding 5 days..."
             />
             <button 
-              className="w-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-lg py-3 text-xs font-mono font-bold uppercase tracking-wider hover:bg-emerald-500/20 transition-all flex items-center justify-center gap-2 focus-ring btn-sweep"
+              className="w-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-lg py-3 text-xs font-mono font-bold uppercase tracking-wider hover:bg-emerald-500/20 transition-all flex items-center justify-center gap-2 focus-ring btn-sweep active:scale-[0.97]"
             >
               <Scale className="w-4 h-4" />
               ANALYZE CLAUSE RISKS

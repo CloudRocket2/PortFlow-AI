@@ -2,7 +2,7 @@
 
 import { Bell, User } from "lucide-react";
 import { usePathname } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 const PAGE_TITLES: Record<string, { title: string; subtitle: string }> = {
   "/": { title: "Fleet Command", subtitle: "Global vessel tracking & optimization" },
@@ -18,6 +18,7 @@ export default function Header() {
   const pathname = usePathname();
   const [showNotifications, setShowNotifications] = useState(false);
   const [userInitials, setUserInitials] = useState("PF");
+  const notifRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     fetch("/api/auth/me")
@@ -34,6 +35,19 @@ export default function Header() {
       })
       .catch(console.error);
   }, []);
+
+  // Click-outside to close notifications
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (notifRef.current && !notifRef.current.contains(e.target as Node)) {
+        setShowNotifications(false);
+      }
+    }
+    if (showNotifications) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [showNotifications]);
 
   const pageInfo = PAGE_TITLES[pathname] || PAGE_TITLES["/"];
 
@@ -54,7 +68,7 @@ export default function Header() {
       {/* Right: Actions */}
       <div className="flex items-center gap-3">
         {/* Notifications */}
-        <div className="relative">
+        <div className="relative" ref={notifRef}>
           <button
             onClick={() => setShowNotifications(!showNotifications)}
             className="focus-ring relative p-2 text-neutral-500 hover:text-neutral-200 hover:bg-white/[0.04] rounded-lg transition-all duration-200"

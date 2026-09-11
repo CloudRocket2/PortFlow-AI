@@ -31,21 +31,21 @@ export default function LiveTerminalFeed() {
   };
 
   return (
-    <div className="minimal-panel overflow-hidden flex flex-col h-[300px]">
+    <div className="minimal-panel hover:scale-[1.005] hover:border-neutral-700/60 transition-all duration-300 overflow-hidden flex flex-col h-[300px]">
       {/* Header */}
       <div className="px-4 py-3 border-b border-neutral-800 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Terminal className="w-4 h-4 text-white" />
-          <h3 className="text-[10px] font-mono tracking-widest uppercase text-white">Global AIS & AI Dispatch Log</h3>
+          <h3 className="text-[10px] font-mono tracking-widest uppercase text-white border-l-2 border-cyan-500/40 pl-3">Global AIS & AI Dispatch Log</h3>
         </div>
         <div className="flex items-center gap-1.5">
           <span className="relative flex h-2 w-2">
             {isConnected && (
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
             )}
-            <span className={`relative inline-flex rounded-full h-2 w-2 ${isConnected ? "bg-emerald-400" : "bg-neutral-600"}`}></span>
+            <span className={`relative inline-flex rounded-full h-2 w-2 ${isConnected ? "bg-emerald-400 animate-pulse" : "bg-neutral-600"}`}></span>
           </span>
-          <span className="text-[10px] font-mono text-neutral-500 uppercase tracking-widest">
+          <span className="text-[10px] font-mono text-neutral-500 uppercase tracking-widest transition-all duration-200">
             {isConnected ? "Connected" : "Disconnected"}
           </span>
         </div>
@@ -58,9 +58,9 @@ export default function LiveTerminalFeed() {
             Awaiting telemetry...
           </div>
         ) : (
-          events.map((evt) => (
-            <div key={evt.id} className="flex gap-3 text-xs animate-slide-in pb-3 border-b border-neutral-900 last:border-0">
-              <div className="w-16 shrink-0 text-[10px] font-mono text-neutral-600 pt-0.5 flex flex-col items-start gap-1">
+          events.map((evt, i) => (
+            <div key={evt.id} className="flex gap-3 text-xs animate-slide-in pb-3 border-b border-neutral-900 last:border-0 hover:bg-white/[0.02] transition-colors duration-200 rounded p-1 -mx-1" style={{ animationDelay: `${i * 0.05}s` }}>
+              <div className="w-16 shrink-0 text-[10px] font-mono text-neutral-600 pt-0.5 flex flex-col items-start gap-1 tabular-nums">
                 {formatTime(evt.timestamp)}
                 <div className={`px-1 py-0.5 rounded-sm bg-neutral-900 border border-neutral-800 ${getColor(evt.type)}`}>
                   {getIcon(evt.type)}

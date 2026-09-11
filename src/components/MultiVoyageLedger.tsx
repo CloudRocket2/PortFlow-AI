@@ -78,13 +78,13 @@ export default function MultiVoyageLedger() {
   return (
     <div className="flex flex-col gap-6 h-full relative">
       <div className="minimal-panel p-4 flex flex-col relative overflow-hidden">
-        <div className="flex items-center justify-between border-b border-neutral-800 pb-4 mb-4">
+        <div className="flex items-center justify-between border-b border-neutral-800/60 pb-4 mb-4">
           <div>
-            <h2 className="text-sm font-mono font-bold text-white uppercase tracking-wider flex items-center gap-2">
-              <Route className="w-4 h-4" />
+            <h2 className="text-sm font-medium uppercase tracking-wide font-mono text-white flex items-center gap-2">
+              <Route className="w-4 h-4 text-cyan-400" />
               AI Multi-Voyage Contract Ledger
             </h2>
-            <p className="text-[10px] font-mono text-neutral-500 uppercase tracking-widest mt-1">
+            <p className="text-xs text-neutral-500 mt-1">
               Consolidating spot shipments into predictive multi-voyage schedules
             </p>
           </div>
@@ -103,7 +103,7 @@ export default function MultiVoyageLedger() {
                 placeholder="SEARCH VOYAGE ID..." 
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="bg-neutral-900 border border-neutral-700 text-xs font-mono px-7 py-1.5 focus:outline-none focus:border-[#00ff00] text-white w-48 rounded-lg"
+                className="bg-neutral-900/50 border border-neutral-800 text-xs font-mono px-7 py-1.5 focus:outline-none focus:border-cyan-500/50 text-white w-48 rounded-lg transition-colors"
               />
             </div>
           </div>
@@ -134,8 +134,9 @@ export default function MultiVoyageLedger() {
                 return (
                   <tr 
                     key={voyage.id}
-                    className={`border-b border-neutral-800 hover:bg-neutral-900/50 transition-colors cursor-pointer ${isSelected ? 'bg-neutral-800/60' : idx % 2 === 0 ? 'bg-black/20' : 'bg-neutral-900/10'}`}
+                    className={`border-b border-neutral-800/50 hover:bg-white/[0.03] transition-all duration-200 cursor-pointer animate-slide-in ${isSelected ? 'bg-cyan-500/[0.04] border-l-2 border-l-cyan-400' : idx % 2 === 0 ? 'bg-black/20' : 'bg-neutral-900/10'}`}
                     onClick={() => setSelectedVoyageId(isSelected ? null : voyage.id)}
+                    style={{ animationDelay: `${idx * 0.03}s` }}
                   >
                     <td className="py-3 px-4 flex items-center gap-2">
                       <span className="text-white font-bold">{voyage.id}</span>
@@ -214,10 +215,18 @@ export default function MultiVoyageLedger() {
         </div>
       </div>
 
+      {/* Backdrop Overlay */}
+      {selectedVoyage && (
+        <div 
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 transition-opacity duration-300"
+          onClick={() => setSelectedVoyageId(null)}
+        />
+      )}
+
       {/* Slide-Over Drawer for Selected Voyage */}
       <div 
-        className={`fixed top-0 right-0 h-full w-[450px] minimal-panel !rounded-none !rounded-l-2xl z-50 transform transition-transform duration-500 ease-in-out flex flex-col ${selectedVoyage ? 'translate-x-0' : 'translate-x-full'}`}
-        style={{ boxShadow: selectedVoyage ? '-10px 0 30px rgba(0,0,0,0.8)' : 'none' }}
+        className={`fixed top-0 right-0 h-full w-[450px] bg-[#0a0a0a] border-l border-neutral-800/60 !rounded-none rounded-l-2xl z-50 transform transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] flex flex-col ${selectedVoyage ? 'translate-x-0' : 'translate-x-full'}`}
+        style={{ boxShadow: selectedVoyage ? '-10px 0 40px rgba(0,0,0,0.9)' : 'none' }}
       >
         {selectedVoyage && (
           <>

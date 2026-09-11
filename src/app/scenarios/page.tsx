@@ -125,7 +125,7 @@ export default function ScenariosPage() {
       {/* Modal Overlay */}
       {showModal && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-neutral-900 border border-neutral-800 p-6 w-full max-w-md rounded-xl shadow-2xl">
+          <div className="bg-neutral-900 border border-neutral-800 p-6 w-full max-w-md rounded-xl shadow-2xl animate-slide-in">
             <div className="flex justify-between items-center mb-6">
               <h3 className="text-lg font-semibold text-white">Configure New Scenario</h3>
               <button onClick={() => setShowModal(false)} className="text-neutral-500 hover:text-white transition-colors focus-ring">
@@ -179,13 +179,13 @@ export default function ScenariosPage() {
                 <button 
                   type="button" 
                   onClick={() => setShowModal(false)}
-                  className="flex-1 bg-transparent border border-neutral-700 text-neutral-300 py-2.5 rounded-lg font-mono text-xs uppercase tracking-widest hover:bg-neutral-800 transition-colors focus-ring"
+                  className="flex-1 bg-transparent border border-neutral-700 text-neutral-300 py-2.5 rounded-lg font-mono text-xs uppercase tracking-widest hover:bg-neutral-800 transition-colors focus-ring active:scale-[0.97]"
                 >
                   Cancel
                 </button>
                 <button 
                   type="submit"
-                  className="flex-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-lg py-2.5 font-mono text-xs font-bold uppercase tracking-widest hover:bg-emerald-500/20 transition-colors focus-ring btn-sweep"
+                  className="flex-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-lg py-2.5 font-mono text-xs font-bold uppercase tracking-widest hover:bg-emerald-500/20 transition-colors focus-ring btn-sweep active:scale-[0.97]"
                 >
                   Generate
                 </button>
@@ -213,7 +213,7 @@ export default function ScenariosPage() {
         
         <button 
           onClick={() => setShowModal(true)}
-          className="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-4 py-2 rounded-lg text-xs font-mono font-bold uppercase tracking-wider hover:bg-emerald-500/20 transition-colors flex items-center gap-2 focus-ring btn-sweep"
+          className="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-4 py-2 rounded-lg text-xs font-mono font-bold uppercase tracking-wider hover:bg-emerald-500/20 transition-colors flex items-center gap-2 focus-ring btn-sweep active:scale-[0.97]"
         >
           <Plus className="w-4 h-4" />
           New Scenario
@@ -224,16 +224,17 @@ export default function ScenariosPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         
         {scenarios.map((scenario) => (
-          <div key={scenario.id} className={`minimal-panel p-6 border ${scenario.containerStyle}`}>
+          <div key={scenario.id} className={`minimal-panel p-6 border ${scenario.containerStyle} hover:scale-[1.01] hover:border-neutral-700/60 transition-all duration-300`}>
             <div className="flex items-center justify-between border-b border-current pb-4 mb-4" style={{ borderColor: scenario.isDefault && scenario.id === 'b' ? 'rgba(52,211,153,0.2)' : 'rgba(255,255,255,0.1)' }}>
               <h2 className="text-sm font-medium text-white flex items-center gap-2 uppercase tracking-wide font-mono" style={{ color: scenario.id === 'b' ? 'var(--accent-emerald)' : 'white' }}>
                 {scenario.name} 
-                <span className={`text-[10px] font-mono px-2 py-0.5 ml-2 rounded ${scenario.badgeStyle}`}>
+                <span className={`text-[10px] font-mono px-2 py-0.5 ml-2 rounded flex items-center gap-1.5 transition-all duration-200 hover:brightness-110 ${scenario.badgeStyle}`}>
+                  {scenario.id === 'b' && <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_rgba(52,211,153,0.8)]" />}
                   {scenario.badge}
                 </span>
               </h2>
               {!scenario.isDefault && (
-                <button onClick={() => handleDelete(scenario.id)} className="text-neutral-500 hover:text-rose-400 transition-colors focus-ring rounded" title="Delete Scenario">
+                <button onClick={() => handleDelete(scenario.id)} className="text-neutral-500 hover:text-rose-400 hover:scale-110 transition-transform focus-ring rounded" title="Delete Scenario">
                   <Trash2 className="w-4 h-4" />
                 </button>
               )}
@@ -294,7 +295,7 @@ export default function ScenariosPage() {
                 </div>
                 <ul className="space-y-2 text-xs text-neutral-400">
                   {scenario.tradeoffs.map((t, idx) => (
-                    <li key={idx} className="flex items-start gap-2">
+                    <li key={idx} className="flex items-start gap-2 animate-slide-in" style={{ animationDelay: `${idx * 0.05}s` }}>
                       <div className={`w-1.5 h-1.5 rounded-full mt-1 shrink-0 ${t.color}`} />
                       {t.text}
                     </li>
