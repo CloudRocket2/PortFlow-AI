@@ -22,7 +22,9 @@ export default function OptimizerPanel() {
 
   const handleOptimize = async () => {
     setIsOptimizing(true);
-    await runFleetOptimization();
+    // Simulate AI thinking time to make the button state visible
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    runFleetOptimization();
     setIsOptimizing(false);
   };
 

@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { Ship, Search, ArrowRight, ShieldCheck, Route, Download, ChevronRight, Scale, FileText, CheckCircle2, AlertTriangle, Zap, X } from "lucide-react";
 import { usePortFlowData } from "@/context/PortFlowContext";
 
@@ -9,6 +10,11 @@ export default function MultiVoyageLedger() {
   const { contracts, routes, vessels, ports } = state;
 
   const [searchTerm, setSearchTerm] = useState("");
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Map SSOT data into the format the ledger table expects
   const voyages = useMemo(() => {
@@ -162,8 +168,8 @@ export default function MultiVoyageLedger() {
                       <div className="flex items-center gap-1.5">
                         {voyage.type.includes("Spot") ? (
                           <>
-                            <div className="w-1.5 h-1.5 rounded-full bg-[#00ff00] animate-pulse" />
-                            <span className="text-[#00ff00] font-bold">{voyage.type}</span>
+                            <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                            <span className="text-emerald-400 font-bold">{voyage.type}</span>
                           </>
                         ) : (
                           <>
@@ -176,12 +182,12 @@ export default function MultiVoyageLedger() {
                     <td className="py-2 px-4">
                       <div className="flex flex-col">
                         <div className="text-neutral-400 text-[10px] flex items-center gap-1">
-                          Pred: <span className="text-white font-bold">${(voyage.rawSavings / 1000000).toFixed(2)}M</span>
+                          Pred: <span className="text-white font-bold tabular-nums">${(voyage.rawSavings / 1000000).toFixed(2)}M</span>
                         </div>
                         {isExecuted ? (
-                          <div className={`text-[10px] font-bold flex items-center gap-1 mt-0.5 ${variance < 0 ? 'text-amber-400' : 'text-[#00ff00]'}`}>
+                          <div className={`text-[10px] font-bold flex items-center gap-1 mt-0.5 tabular-nums ${variance < 0 ? 'text-amber-400' : 'text-emerald-400'}`}>
                             Real: ${(voyage.realizedSavings! / 1000000).toFixed(2)}M
-                            <span className={`px-1 py-0.5 rounded text-[9px] ${variance < 0 ? 'bg-amber-400/10' : 'bg-[#00ff00]/10'}`}>
+                            <span className={`px-1 py-0.5 rounded text-[9px] ${variance < 0 ? 'bg-amber-500/10' : 'bg-emerald-500/10'}`}>
                               {variance > 0 ? '+' : ''}{variance.toFixed(1)}%
                             </span>
                           </div>
@@ -192,7 +198,7 @@ export default function MultiVoyageLedger() {
                     </td>
                     <td className="py-3 px-4 text-right">
                       <span className={`inline-flex items-center gap-1 px-2 py-1 text-[9px] uppercase tracking-widest border transition-colors duration-500 rounded-md ${
-                        voyage.status === "AI Executed" ? "border-[#00ff00]/30 text-[#00ff00] bg-[#00ff00]/10" : 
+                        voyage.status === "AI Executed" ? "border-emerald-500/30 text-emerald-400 bg-emerald-500/10" : 
                         voyage.status === "Commercial Approval" ? "border-emerald-500/30 text-emerald-400 bg-emerald-500/10" :
                         voyage.status === "Legal Review Req." ? "border-amber-500/30 text-amber-400 bg-amber-500/10" :
                         voyage.status === "Mgt Approval Pending" ? "border-blue-500/30 text-blue-400 bg-blue-500/10" :
@@ -215,19 +221,20 @@ export default function MultiVoyageLedger() {
         </div>
       </div>
 
-      {/* Backdrop Overlay */}
-      {selectedVoyage && (
-        <div 
-          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 transition-opacity duration-300"
-          onClick={() => setSelectedVoyageId(null)}
-        />
-      )}
+      {/* Drawer rendered in Portal to escape parent CSS transforms */}
+      {mounted && typeof document !== 'undefined' && createPortal(
+        <>
+          {/* Backdrop Overlay */}
+          <div 
+            className={`fixed inset-0 bg-black/50 backdrop-blur-sm z-40 transition-opacity duration-300 ${selectedVoyage ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+            onClick={() => setSelectedVoyageId(null)}
+          />
 
-      {/* Slide-Over Drawer for Selected Voyage */}
-      <div 
-        className={`fixed top-0 right-0 h-full w-[450px] bg-[#0a0a0a] border-l border-neutral-800/60 !rounded-none rounded-l-2xl z-50 transform transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] flex flex-col ${selectedVoyage ? 'translate-x-0' : 'translate-x-full'}`}
-        style={{ boxShadow: selectedVoyage ? '-10px 0 40px rgba(0,0,0,0.9)' : 'none' }}
-      >
+          {/* Slide-Over Drawer for Selected Voyage */}
+          <div 
+            className={`fixed top-0 right-0 h-full w-[450px] bg-[#0a0a0a] border-l border-neutral-800/60 !rounded-none rounded-l-2xl z-50 transform transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] flex flex-col ${selectedVoyage ? 'translate-x-0' : 'translate-x-full'}`}
+            style={{ boxShadow: selectedVoyage ? '-10px 0 40px rgba(0,0,0,0.9)' : 'none' }}
+          >
         {selectedVoyage && (
           <>
             <div className="flex items-center justify-between p-6 border-b border-neutral-800">
@@ -324,6 +331,7 @@ export default function MultiVoyageLedger() {
           </>
         )}
       </div>
+      </>, document.body)}
 
     </div>
   );
