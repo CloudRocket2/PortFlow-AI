@@ -68,9 +68,9 @@ const ROLES: Role[] = [
   {
     id: "OPS-09",
     email: "ops@portflow.com",
-    title: "Ops Coordinator",
-    clearance: "LEVEL 2 — SIGMA",
-    department: "Terminal Logistics",
+    title: "Vessel Operations",
+    clearance: "LEVEL 2 — BETA",
+    department: "Logistics",
     features: [
       "Global Bulk Radar",
       "AIS Dispatch Log",
@@ -80,6 +80,21 @@ const ROLES: Role[] = [
     accent: "text-violet-400",
     accentBg: "bg-violet-500/10 border-violet-500/20",
   },
+  {
+    id: "GOV-AUTH",
+    email: "authority@gov.in",
+    title: "Port Authority",
+    clearance: "LEVEL 6 — SIGMA-PRIME",
+    department: "Ministry of Ports",
+    features: [
+      "Enterprise Provisioning",
+      "Personnel Roster",
+      "Identity Management",
+    ],
+    icon: Shield,
+    accent: "text-indigo-400",
+    accentBg: "bg-indigo-500/10 border-indigo-500/20",
+  }
 ];
 
 export default function LoginPage() {
@@ -283,6 +298,12 @@ export default function LoginPage() {
                     Initialize Session
                   </button>
                 )}
+                
+                <div className="mt-4 text-center">
+                  <a href="/setup" className="text-xs text-neutral-500 hover:text-white transition-colors uppercase tracking-widest font-mono">
+                    New Identity? First-Time Setup
+                  </a>
+                </div>
               </div>
             </form>
           </div>

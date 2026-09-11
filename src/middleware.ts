@@ -3,7 +3,7 @@ import type { NextRequest } from "next/server";
 import { verifySessionToken } from "./lib/auth";
 
 // Public paths that do not require authentication
-const PUBLIC_PATHS = ["/login", "/api/auth/login", "/api/auth/logout", "/api/auth/me"];
+const PUBLIC_PATHS = ["/login", "/setup", "/api/auth/login", "/api/auth/logout", "/api/auth/me", "/api/auth/setup"];
 
 // Role-based access control map
 const ROLE_ACCESS: Record<string, string[]> = {
@@ -11,6 +11,7 @@ const ROLE_ACCESS: Record<string, string[]> = {
   "MGR-01": ["/", "/forecast", "/legal", "/chartering", "/scenarios"],
   "ANL-04": ["/forecast", "/risk", "/ai-logs"],
   "OPS-09": ["/"],
+  "GOV-AUTH": ["/admin"],
 };
 
 export async function middleware(request: NextRequest) {

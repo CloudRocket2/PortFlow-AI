@@ -19,6 +19,12 @@ import { useState, useEffect } from "react";
 
 const NAV_SECTIONS = [
   {
+    label: "Enterprise",
+    items: [
+      { label: "Provisioning", icon: Globe2, href: "/admin" },
+    ],
+  },
+  {
     label: "Operations",
     items: [
       { label: "Fleet Command", icon: Globe2, href: "/" },
@@ -47,6 +53,7 @@ const ROLE_ACCESS: Record<string, string[]> = {
   "MGR-01": ["/", "/forecast", "/legal", "/chartering", "/scenarios"],
   "ANL-04": ["/forecast", "/risk", "/ai-logs"],
   "OPS-09": ["/"],
+  "GOV-AUTH": ["/admin"],
 };
 
 export default function Sidebar() {

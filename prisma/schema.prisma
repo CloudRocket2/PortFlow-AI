@@ -87,13 +87,15 @@ model ContainerEvent {
 
 // 🔐 User (Authentication & Roles)
 model User {
-  id            String   @id @default(cuid())
-  email         String   @unique
-  password_hash String   // Hashed via bcrypt
-  role          String
-  name          String
-  department    String
-  clearance     String
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id              String   @id @default(cuid())
+  email           String   @unique
+  password_hash   String   // Hashed via bcrypt
+  role            String
+  name            String
+  department      String
+  clearance       String
+  setupCode       String?  // 6-digit access code for first-time setup
+  isSetupComplete Boolean  @default(true) // false for newly provisioned accounts
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 }
