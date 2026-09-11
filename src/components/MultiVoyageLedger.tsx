@@ -144,13 +144,8 @@ export default function MultiVoyageLedger() {
                     onClick={() => setSelectedVoyageId(isSelected ? null : voyage.id)}
                     style={{ animationDelay: `${idx * 0.03}s` }}
                   >
-                    <td className="py-3 px-4 flex items-center gap-2">
-                      <span className="text-white font-bold">{voyage.id}</span>
-                    </td>
-                    <td className="py-3 px-4 flex items-center gap-2">
-                      <Ship className="w-3 h-3 text-neutral-500" />
-                      {voyage.vessel}
-                    </td>
+                    <td className="py-3 px-4"><div className="flex items-center gap-2"><span className="text-white font-bold">{voyage.id}</span></div></td>
+                    <td className="py-3 px-4"><div className="flex items-center gap-2"><Ship className="w-3 h-3 text-neutral-500" />{voyage.vessel}</div></td>
                     <td className="py-3 px-4">
                       <div className="flex flex-col">
                         <span className="text-white">{voyage.volume}</span>
