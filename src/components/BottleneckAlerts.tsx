@@ -43,7 +43,10 @@ interface Alert {
   time: string;
 }
 
+import { ChevronDown, ChevronUp } from "lucide-react";
+
 export default function BottleneckAlerts() {
+  const [isExpanded, setIsExpanded] = useState(false);
   const [alerts, setAlerts] = useState<Alert[]>([]);
   const [loading, setLoading] = useState(true);
   const [resolvingIds, setResolvingIds] = useState<Set<string>>(new Set());
@@ -87,17 +90,24 @@ export default function BottleneckAlerts() {
 
   return (
     <div className="minimal-panel hover:scale-[1.005] hover:border-neutral-700/60 transition-all duration-300 p-5">
-      <div className="flex items-center justify-between mb-3 border-b border-neutral-800 pb-2">
+      <div 
+        className="flex items-center justify-between mb-3 border-b border-neutral-800 pb-2 cursor-pointer group"
+        onClick={() => setIsExpanded(!isExpanded)}
+      >
         <h3 className="text-xs font-mono tracking-widest uppercase text-white border-l-2 border-cyan-500/40 pl-2">
           Active Bottlenecks
         </h3>
+        <div className="flex items-center gap-4">
         <span className="text-xs text-neutral-500 font-mono flex items-center gap-1 uppercase tracking-widest transition-all duration-200">
           <div className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse" />
           LIVE SCAN
         </span>
+        {isExpanded ? <ChevronUp className="w-4 h-4 text-neutral-500 group-hover:text-white" /> : <ChevronDown className="w-4 h-4 text-neutral-500 group-hover:text-white" />}
+        </div>
       </div>
       
-      <div className="space-y-3">
+      {isExpanded && (
+      <div className="space-y-3 animate-slide-in">
         {alerts.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-6 text-neutral-600">
             <p className="text-xs font-mono uppercase tracking-widest">No bottlenecks detected</p>
@@ -165,6 +175,7 @@ export default function BottleneckAlerts() {
           })
         )}
       </div>
+      )}
     </div>
   );
 }

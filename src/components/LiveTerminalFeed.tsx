@@ -1,9 +1,11 @@
 "use client";
 
+import { useState } from "react";
 import { useTelemetry } from "@/hooks/useTelemetry";
-import { Terminal, Radio, Ship, AlertCircle, Anchor } from "lucide-react";
+import { Terminal, Radio, Ship, AlertCircle, Anchor, ChevronDown, ChevronUp } from "lucide-react";
 
 export default function LiveTerminalFeed() {
+  const [isExpanded, setIsExpanded] = useState(false);
   const { events, isConnected } = useTelemetry();
 
   const getIcon = (type: string) => {
@@ -31,9 +33,12 @@ export default function LiveTerminalFeed() {
   };
 
   return (
-    <div className="minimal-panel hover:scale-[1.005] hover:border-neutral-700/60 transition-all duration-300 overflow-hidden flex flex-col h-[300px]">
+    <div className={`minimal-panel hover:scale-[1.005] hover:border-neutral-700/60 transition-all duration-300 overflow-hidden flex flex-col ${isExpanded ? "h-[300px]" : "h-auto"}`}>
       {/* Header */}
-      <div className="px-4 py-3 border-b border-neutral-800 flex items-center justify-between">
+      <div 
+        className="px-4 py-3 border-b border-neutral-800 flex items-center justify-between cursor-pointer group"
+        onClick={() => setIsExpanded(!isExpanded)}
+      >
         <div className="flex items-center gap-2">
           <Terminal className="w-4 h-4 text-white" />
           <h3 className="text-xs font-mono tracking-widest uppercase text-white border-l-2 border-cyan-500/40 pl-3">Global AIS & AI Dispatch Log</h3>
@@ -48,11 +53,13 @@ export default function LiveTerminalFeed() {
           <span className="text-xs font-mono text-neutral-500 uppercase tracking-widest transition-all duration-200">
             {isConnected ? "Connected" : "Disconnected"}
           </span>
+          {isExpanded ? <ChevronUp className="w-4 h-4 text-neutral-500 ml-2 group-hover:text-white" /> : <ChevronDown className="w-4 h-4 text-neutral-500 ml-2 group-hover:text-white" />}
         </div>
       </div>
 
       {/* Feed */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-3 hide-scrollbar relative">
+      {isExpanded && (
+        <div className="flex-1 overflow-y-auto p-4 space-y-3 hide-scrollbar relative animate-slide-in">
         {events.length === 0 ? (
           <div className="text-xs font-mono text-neutral-600 flex items-center justify-center h-full uppercase tracking-widest">
             Awaiting telemetry...
@@ -76,6 +83,7 @@ export default function LiveTerminalFeed() {
           ))
         )}
       </div>
+      )}
     </div>
   );
 }

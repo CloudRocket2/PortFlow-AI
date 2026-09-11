@@ -143,7 +143,7 @@ export default function DashboardPage() {
           <div className="w-full xl:w-1/3 flex flex-col gap-5">
             <DwellTimeChart />
             <BottleneckAlerts />
-            <div className="flex-1 min-h-[500px]">
+            <div className="flex-1">
               <LiveTerminalFeed />
             </div>
           </div>
