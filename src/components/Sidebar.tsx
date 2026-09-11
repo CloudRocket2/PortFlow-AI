@@ -110,7 +110,7 @@ export default function Sidebar() {
             <Anchor className="w-4 h-4 text-cyan-400" />
           </div>
           {!collapsed && (
-            <span className="font-semibold text-base tracking-wider uppercase text-white/90">
+            <span className="font-semibold text-base tracking-wider uppercase text-white opacity-90">
               PortFlow
             </span>
           )}

@@ -443,9 +443,17 @@ body {
 
 .light-mode .bg-emerald-500\/10,
 .light-mode .bg-emerald-500\/20 {
-  background-color: rgba(5, 150, 105, 0.1) !important;
+  background-color: #ecfdf5 !important; /* emerald-50 */
+  border-color: #a7f3d0 !important; /* emerald-200 */
+  color: #047857 !important; /* emerald-700 */
 }
 .light-mode .bg-rose-500\/10,
 .light-mode .bg-rose-500\/20 {
   background-color: rgba(225, 29, 72, 0.1) !important;
+}
+
+
+/* Soften the emerald variable in light mode */
+.light-mode {
+  --accent-emerald: #059669;
 }

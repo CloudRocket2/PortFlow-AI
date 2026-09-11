@@ -112,6 +112,13 @@ export default function RiskCentrePage() {
               </button>
             </form>
 
+            <div className="flex flex-wrap gap-2 mb-6">
+              <span className="text-xs text-neutral-500 mr-1 mt-1">Quick Filters:</span>
+              <button type="button" onClick={() => setVesselQuery('High-Risk Flags')} className="px-2.5 py-1 rounded border border-neutral-800 bg-black/20 text-xs text-neutral-400 hover:text-cyan-400 hover:border-cyan-500/30 transition-colors">High-Risk Flags</button>
+              <button type="button" onClick={() => setVesselQuery('Sanctions Check')} className="px-2.5 py-1 rounded border border-neutral-800 bg-black/20 text-xs text-neutral-400 hover:text-cyan-400 hover:border-cyan-500/30 transition-colors">Sanctions Check</button>
+              <button type="button" onClick={() => setVesselQuery('Recent Arrests')} className="px-2.5 py-1 rounded border border-neutral-800 bg-black/20 text-xs text-neutral-400 hover:text-cyan-400 hover:border-cyan-500/30 transition-colors">Recent Arrests</button>
+            </div>
+
             {isSearchingVessel && (
               <div className="flex flex-col items-center justify-center py-20 text-blue-400">
                 <Loader2 className="w-8 h-8 animate-spin drop-shadow-[0_0_8px_rgba(255,255,255,0.2)] mb-4" />
@@ -198,6 +205,13 @@ export default function RiskCentrePage() {
                 Search
               </button>
             </form>
+
+            <div className="flex flex-wrap gap-2 mb-6">
+              <span className="text-xs text-neutral-500 mr-1 mt-1">Suggested:</span>
+              <button type="button" onClick={() => setLawQuery('Force Majeure')} className="px-2.5 py-1 rounded border border-neutral-800 bg-black/20 text-xs text-neutral-400 hover:text-violet-400 hover:border-violet-500/30 transition-colors">Force Majeure</button>
+              <button type="button" onClick={() => setLawQuery('Demurrage Exceptions')} className="px-2.5 py-1 rounded border border-neutral-800 bg-black/20 text-xs text-neutral-400 hover:text-violet-400 hover:border-violet-500/30 transition-colors">Demurrage Exceptions</button>
+              <button type="button" onClick={() => setLawQuery('Safe Port Warranty')} className="px-2.5 py-1 rounded border border-neutral-800 bg-black/20 text-xs text-neutral-400 hover:text-violet-400 hover:border-violet-500/30 transition-colors">Safe Port Warranty</button>
+            </div>
 
             {isSearchingLaw && (
               <div className="flex flex-col items-center justify-center py-20 text-violet-400 flex-1">

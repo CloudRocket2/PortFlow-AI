@@ -123,7 +123,7 @@ export default function BottleneckAlerts() {
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between mb-0.5">
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 min-w-0">
                       <span className="text-sm font-mono font-bold text-white uppercase truncate transition-all duration-200">
                         {a.title}
                       </span>
