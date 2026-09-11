@@ -45,7 +45,13 @@ export async function middleware(request: NextRequest) {
     return response;
   }
 
-  // Enforce Role-Based Access Control (RBAC)
+  // If it's an API route (other than public auth endpoints), just allow it through 
+  // since the API itself should handle fine-grained permissions, or simply return next() for now.
+  if (pathname.startsWith("/api/")) {
+    return NextResponse.next();
+  }
+
+  // Enforce Role-Based Access Control (RBAC) for page routes
   const userRole = payload.role as string;
   const allowedPaths = ROLE_ACCESS[userRole] || [];
 

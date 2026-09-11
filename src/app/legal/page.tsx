@@ -40,6 +40,17 @@ export default function LegalCompliancePage() {
   };
 
   const [activeTab, setActiveTab] = useState<"vessel" | "charter">("vessel");
+  const [isAnalyzingCharter, setIsAnalyzingCharter] = useState(false);
+  const [charterResultsReady, setCharterResultsReady] = useState(false);
+
+  const handleAnalyzeCharter = () => {
+    setIsAnalyzingCharter(true);
+    setCharterResultsReady(false);
+    setTimeout(() => {
+      setIsAnalyzingCharter(false);
+      setCharterResultsReady(true);
+    }, 2000); // Simulate AI thinking
+  };
 
   const parameters: LegalParameter[] = [
     { name: "Vessel regulatory status", status: "Compliant", type: "success" },
@@ -262,14 +273,49 @@ export default function LegalCompliancePage() {
               defaultValue="14. Force Majeure: Neither party shall be liable for failure to perform due to Acts of God, war, strikes, or port congestion exceeding 5 days..."
             />
             <button 
-              className="w-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-lg py-3 text-sm font-mono font-bold uppercase tracking-wider hover:bg-emerald-500/20 transition-all flex items-center justify-center gap-2 focus-ring btn-sweep active:scale-[0.97]"
+              onClick={handleAnalyzeCharter}
+              disabled={isAnalyzingCharter}
+              className="w-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-lg py-3 text-sm font-mono font-bold uppercase tracking-wider hover:bg-emerald-500/20 transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed focus-ring btn-sweep active:scale-[0.97]"
             >
-              <Scale className="w-4 h-4" />
-              ANALYZE CLAUSE RISKS
+              {isAnalyzingCharter ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin drop-shadow-[0_0_8px_rgba(255,255,255,0.2)]" />
+                  ANALYZING CLAUSES...
+                </>
+              ) : (
+                <>
+                  <Scale className="w-4 h-4" />
+                  ANALYZE CLAUSE RISKS
+                </>
+              )}
             </button>
           </div>
 
-          <div className="minimal-panel p-6">
+          <div className="minimal-panel p-6 relative overflow-hidden flex flex-col">
+            {!charterResultsReady && !isAnalyzingCharter && (
+              <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6 bg-black/40 backdrop-blur-sm z-10">
+                <Scale className="w-12 h-12 text-neutral-800 mb-4" />
+                <p className="text-sm font-mono uppercase tracking-widest text-neutral-500">
+                  Awaiting clause input...
+                </p>
+              </div>
+            )}
+
+            {isAnalyzingCharter && (
+              <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6 bg-black/80 backdrop-blur-md z-10">
+                <div className="w-16 h-16 border-2 border-emerald-500/30 rounded-full flex items-center justify-center mb-6 relative">
+                  <div className="absolute inset-0 border-t-2 border-emerald-500 rounded-full animate-spin drop-shadow-[0_0_8px_rgba(52,211,153,0.6)]" style={{ animationDuration: '1s' }} />
+                  <Scale className="w-6 h-6 text-emerald-400 animate-pulse" />
+                </div>
+                <p className="text-sm font-mono uppercase tracking-widest text-emerald-400">
+                  Parsing Charter Party Clauses...
+                </p>
+                <p className="text-xs font-mono uppercase tracking-widest text-neutral-500 mt-2">
+                  Cross-referencing maritime law and precedents...
+                </p>
+              </div>
+            )}
+
             <div className="flex items-center justify-between border-b border-neutral-800 pb-4 mb-4">
               <h2 className="text-base font-medium text-white uppercase tracking-wide font-mono flex items-center gap-2">
                 <ShieldCheck className="w-4 h-4 text-emerald-400" />

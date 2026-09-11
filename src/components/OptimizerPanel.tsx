@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { BrainCircuit, Leaf, Activity, Loader2, Zap } from "lucide-react";
+import { BrainCircuit, Leaf, Activity, Loader2, Zap, CheckCircle2 } from "lucide-react";
 import { useTelemetry } from "@/hooks/useTelemetry";
 import { usePortFlowData } from "@/context/PortFlowContext";
 
@@ -10,6 +10,7 @@ export default function OptimizerPanel() {
   const { runFleetOptimization } = usePortFlowData();
   
   const [isOptimizing, setIsOptimizing] = useState(false);
+  const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
   // Mocking AI optimization events for bulk freight
   const aiEvents = [
@@ -22,10 +23,19 @@ export default function OptimizerPanel() {
 
   const handleOptimize = async () => {
     setIsOptimizing(true);
+    setSuccessMsg(null);
     // Simulate AI thinking time to make the button state visible
     await new Promise(resolve => setTimeout(resolve, 2000));
-    runFleetOptimization();
+    const result = runFleetOptimization();
     setIsOptimizing(false);
+    
+    if (result && result.updatedCount > 0) {
+      setSuccessMsg(`${result.updatedCount} CONTRACTS OPTIMIZED`);
+    } else {
+      setSuccessMsg(`FLEET ALREADY OPTIMAL`);
+    }
+    
+    setTimeout(() => setSuccessMsg(null), 3000);
   };
 
   return (
@@ -47,13 +57,22 @@ export default function OptimizerPanel() {
           </div>
           <button 
             onClick={handleOptimize}
-            disabled={isOptimizing}
-            className="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-4 py-1.5 text-sm font-mono font-bold uppercase tracking-wider hover:bg-emerald-500/20 transition-all duration-300 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg focus-ring btn-sweep active:scale-[0.97]"
+            disabled={isOptimizing || !!successMsg}
+            className={`px-4 py-1.5 text-sm font-mono font-bold uppercase tracking-wider transition-all duration-300 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg focus-ring active:scale-[0.97] ${
+              successMsg 
+                ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/40" 
+                : "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 hover:bg-emerald-500/20 btn-sweep"
+            }`}
           >
             {isOptimizing ? (
               <>
                 <Loader2 className="w-3 h-3 animate-spin" />
                 ANALYZING...
+              </>
+            ) : successMsg ? (
+              <>
+                <CheckCircle2 className="w-3 h-3" />
+                {successMsg}
               </>
             ) : (
               <>

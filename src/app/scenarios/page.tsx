@@ -248,38 +248,38 @@ export default function ScenariosPage() {
                 <div className="text-sm text-white">{scenario.strategy}</div>
               </div>
               
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-3">
                 <div className="p-3 bg-neutral-900/50 rounded-lg border border-neutral-800">
-                  <div className="text-sm text-neutral-500 mb-1">Total Volume</div>
-                  <div className="text-2xl font-mono tabular-nums text-white">{scenario.volume}</div>
+                  <div className="text-xs text-neutral-500 mb-1">Total Volume</div>
+                  <div className="text-xl font-mono tabular-nums text-white truncate">{scenario.volume}</div>
                 </div>
                 <div className="p-3 bg-neutral-900/50 rounded-lg border border-neutral-800">
-                  <div className="text-sm text-neutral-500 mb-1">Execution Timing</div>
-                  <div className={`text-2xl font-mono tabular-nums flex items-center gap-2 ${scenario.id === 'b' ? 'text-emerald-400' : 'text-white'}`}>
+                  <div className="text-xs text-neutral-500 mb-1">Execution Timing</div>
+                  <div className={`text-lg leading-tight font-mono break-words ${scenario.id === 'b' ? 'text-emerald-400' : 'text-white'}`}>
                     {scenario.timing}
                   </div>
                 </div>
                 <div className="p-3 bg-neutral-900/50 rounded-lg border border-neutral-800">
-                  <div className="text-sm text-neutral-500 mb-1">Avg Freight Rate</div>
-                  <div className={`text-2xl font-mono tabular-nums flex items-center gap-2 ${scenario.id === 'b' ? 'text-emerald-400' : 'text-white'}`}>
-                    {(scenario as any).hasTrendingIcon && <TrendingDown className="w-4 h-4" />} {scenario.rate}
+                  <div className="text-xs text-neutral-500 mb-1">Avg Freight Rate</div>
+                  <div className={`text-xl font-mono tabular-nums flex items-center gap-1.5 truncate ${scenario.id === 'b' ? 'text-emerald-400' : 'text-white'}`}>
+                    {(scenario as any).hasTrendingIcon && <TrendingDown className="w-4 h-4 shrink-0" />} {scenario.rate}
                   </div>
                 </div>
                 
                 {/* Dynamic Cost Panel based on color */}
-                <div className={`p-3 rounded-lg border ${
+                <div className={`p-3 rounded-lg border flex flex-col justify-center ${
                   scenario.costColor === 'rose' ? 'bg-rose-500/10 border-rose-500/20' : 
                   scenario.costColor === 'amber' ? 'bg-amber-500/10 border-amber-500/20' : 
                   'bg-blue-500/10 border-blue-500/20'
                 }`}>
-                  <div className={`text-sm mb-1 ${
+                  <div className={`text-xs mb-1 leading-tight ${
                     scenario.costColor === 'rose' ? 'text-rose-400' : 
                     scenario.costColor === 'amber' ? 'text-amber-400' : 
                     'text-blue-400'
                   }`}>
                     Total Logistics Cost
                   </div>
-                  <div className={`text-2xl font-mono tabular-nums ${
+                  <div className={`text-xl font-mono tabular-nums truncate ${
                     scenario.costColor === 'rose' ? 'text-rose-400' : 
                     scenario.costColor === 'amber' ? 'text-amber-400' : 
                     'text-blue-400'

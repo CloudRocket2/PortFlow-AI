@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { FileText, LineChart, Globe, AlertTriangle, Leaf } from "lucide-react";
 import MultiVoyageLedger from "@/components/MultiVoyageLedger";
+import DwellTimeChart from "@/components/DwellTimeChart";
 import BottleneckAlerts from "@/components/BottleneckAlerts";
 import OptimizerPanel from "@/components/OptimizerPanel";
 import LiveTerminalFeed from "@/components/LiveTerminalFeed";
@@ -10,33 +10,6 @@ import { usePortFlowData } from "@/context/PortFlowContext";
 import dynamic from "next/dynamic";
 
 const GlobeWrapper = dynamic(() => import("@/components/GlobeWrapper"), { ssr: false });
-
-/* ── KPI Metric Card ──────────────────────────────────── */
-interface KpiProps {
-  label: string;
-  value: string | number;
-  icon: React.ElementType;
-  accentBorder: string;
-  accentText: string;
-  subtitle?: string;
-}
-
-function KpiCard({ label, value, icon: Icon, accentBorder, accentText, subtitle }: KpiProps) {
-  return (
-    <div className={`minimal-panel flex items-center gap-3.5 px-4 py-3 border-l-2 ${accentBorder} hover:scale-[1.01] hover:border-opacity-80 transition-all duration-300 cursor-default`}>
-      <div className={`w-9 h-9 rounded-lg border ${accentBorder} ${accentText} flex items-center justify-center shrink-0 bg-black/40`}>
-        <Icon className="w-4 h-4" />
-      </div>
-      <div className="min-w-0">
-        <p className="text-xs font-mono uppercase tracking-widest text-neutral-500 leading-tight">{label}</p>
-        <p className="text-lg font-mono font-semibold text-white tabular-nums leading-tight">{value}</p>
-        {subtitle && (
-          <p className="text-xs text-neutral-600 leading-tight mt-0.5">{subtitle}</p>
-        )}
-      </div>
-    </div>
-  );
-}
 
 export default function DashboardPage() {
   const [bootSequence, setBootSequence] = useState(true);
@@ -162,56 +135,13 @@ export default function DashboardPage() {
           </p>
         </div>
 
-        {/* KPI Strip (moved from header) */}
-        <div className="grid grid-cols-2 xl:grid-cols-5 gap-3">
-          <KpiCard
-            label="Active Contracts"
-            value={multiVoyage}
-            icon={FileText}
-            accentBorder="border-amber-500/40"
-            accentText="text-amber-400"
-            subtitle={`${Math.max(0, spotRoutes)} spot routes remaining`}
-          />
-          <KpiCard
-            label="Forecast Accuracy"
-            value={`${accuracy.toFixed(1)}%`}
-            icon={LineChart}
-            accentBorder="border-emerald-500/40"
-            accentText="text-emerald-400"
-            subtitle="90-day moving avg"
-          />
-          <KpiCard
-            label="Vessels in Transit"
-            value={inTransit}
-            icon={Globe}
-            accentBorder="border-cyan-500/40"
-            accentText="text-cyan-400"
-            subtitle={`${(totalTonnage / 1000000).toFixed(2)}M MT cargo`}
-          />
-          <KpiCard
-            label="Anchorage Delays"
-            value={anchored}
-            icon={AlertTriangle}
-            accentBorder="border-rose-500/40"
-            accentText="text-rose-400"
-            subtitle=">24hr wait time"
-          />
-          <KpiCard
-            label="Emissions Avoided"
-            value={`${emissionsKtons.toFixed(1)}k`}
-            icon={Leaf}
-            accentBorder="border-emerald-500/40"
-            accentText="text-emerald-400"
-            subtitle="Tons via route optimization"
-          />
-        </div>
-
         {/* Row 1: Globe + Side Panels */}
         <div className="flex flex-col xl:flex-row gap-5">
           <div className="w-full xl:w-2/3 flex flex-col min-h-[800px] xl:h-[900px] shrink-0 minimal-panel relative overflow-hidden">
             <GlobeWrapper />
           </div>
           <div className="w-full xl:w-1/3 flex flex-col gap-5">
+            <DwellTimeChart />
             <BottleneckAlerts />
             <div className="flex-1 min-h-[500px]">
               <LiveTerminalFeed />

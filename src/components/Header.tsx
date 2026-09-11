@@ -1,6 +1,7 @@
 "use client";
 
 import { Bell, User } from "lucide-react";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 
@@ -14,11 +15,16 @@ const PAGE_TITLES: Record<string, { title: string; subtitle: string }> = {
   "/ai-logs": { title: "AI Insights", subtitle: "Operations intelligence assistant" },
 };
 
+import { usePortFlowData } from "@/context/PortFlowContext";
+import { FileText, LineChart, Globe, AlertTriangle, Leaf } from "lucide-react";
+
 export default function Header() {
   const pathname = usePathname();
   const [showNotifications, setShowNotifications] = useState(false);
   const [userInitials, setUserInitials] = useState("PF");
   const notifRef = useRef<HTMLDivElement>(null);
+  const { state } = usePortFlowData();
+  const { vessels, contracts, routes } = state;
 
   useEffect(() => {
     fetch("/api/auth/me")
@@ -57,12 +63,73 @@ export default function Header() {
     { id: 3, type: "low" as const, title: "DG Shipping Notification", desc: "Digital port clearance mandated for all major Indian ports effective next quarter.", time: "1 day ago" },
   ];
 
+  /* ── Compute KPI metrics ─────────────────────────────── */
+  const multiVoyage = contracts.length;
+  const executed = contracts.filter((c) => c.status === "AI Executed");
+  const spotRoutes = routes.length - executed.length;
+  const totalTonnage = routes.reduce((sum, r) => sum + r.volume, 0);
+  const inTransit = vessels.filter((v) => v.status === "In Transit").length;
+  const anchored = vessels.filter((v) => v.status === "Anchored").length;
+
+  let accuracy = 94.5;
+  if (executed.length > 0) {
+    const totalPred = executed.reduce((sum, c) => sum + c.predictedSavings, 0);
+    const totalReal = executed.reduce((sum, c) => sum + (c.realizedSavings || 0), 0);
+    if (totalPred > 0) {
+      const variance = Math.abs(totalReal - totalPred) / totalPred;
+      accuracy = 100 - variance * 100;
+    }
+  }
+
+  const emissionsKtons = 12.4 + executed.length * 2.1;
+
   return (
     <header className="flex items-center justify-between bg-[#060606] border-b border-neutral-800/60 px-6 h-14 shrink-0 z-50 relative">
       {/* Left: Dynamic Page Title */}
-      <div>
-        <h2 className="text-base font-semibold text-white">{pageInfo.title}</h2>
-        <p className="text-[11px] text-neutral-500 mt-0.5">{pageInfo.subtitle}</p>
+      <div className="flex-shrink-0 mr-8">
+        <h2 className="text-base font-semibold text-white whitespace-nowrap">{pageInfo.title}</h2>
+        <p className="text-[11px] text-neutral-500 mt-0.5 whitespace-nowrap">{pageInfo.subtitle}</p>
+      </div>
+
+      {/* Center: Global HUD Metrics (Only on large screens) */}
+      <div className="hidden lg:flex flex-1 items-center justify-center">
+        <div className="flex items-center divide-x divide-neutral-800/60">
+          <div className="px-4 flex items-center gap-2">
+            <FileText className="w-4 h-4 text-amber-400" />
+            <div className="flex flex-col">
+              <span className="text-[10px] uppercase font-mono text-neutral-500">Active</span>
+              <span className="text-sm font-mono font-semibold text-white">{multiVoyage} <span className="text-neutral-500 font-normal">CTs</span></span>
+            </div>
+          </div>
+          <div className="px-4 flex items-center gap-2">
+            <LineChart className="w-4 h-4 text-emerald-400" />
+            <div className="flex flex-col">
+              <span className="text-[10px] uppercase font-mono text-neutral-500">Accuracy</span>
+              <span className="text-sm font-mono font-semibold text-white">{accuracy.toFixed(1)}%</span>
+            </div>
+          </div>
+          <div className="px-4 flex items-center gap-2">
+            <Globe className="w-4 h-4 text-cyan-400" />
+            <div className="flex flex-col">
+              <span className="text-[10px] uppercase font-mono text-neutral-500">In Transit</span>
+              <span className="text-sm font-mono font-semibold text-white">{inTransit} <span className="text-neutral-500 font-normal">vessels</span></span>
+            </div>
+          </div>
+          <div className="px-4 flex items-center gap-2">
+            <AlertTriangle className="w-4 h-4 text-rose-400" />
+            <div className="flex flex-col">
+              <span className="text-[10px] uppercase font-mono text-neutral-500">Delayed</span>
+              <span className="text-sm font-mono font-semibold text-white">{anchored} <span className="text-neutral-500 font-normal">&gt;24h</span></span>
+            </div>
+          </div>
+          <div className="px-4 flex items-center gap-2">
+            <Leaf className="w-4 h-4 text-emerald-400" />
+            <div className="flex flex-col">
+              <span className="text-[10px] uppercase font-mono text-neutral-500">Saved</span>
+              <span className="text-sm font-mono font-semibold text-white">{emissionsKtons.toFixed(1)}k <span className="text-neutral-500 font-normal">CO2</span></span>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Right: Actions */}
@@ -79,9 +146,15 @@ export default function Header() {
 
           {/* Notifications Dropdown */}
           {showNotifications && (
-            <div className="absolute top-full right-0 mt-2 w-[380px] minimal-panel shadow-2xl overflow-hidden animate-slide-in">
-              <div className="p-4 border-b border-neutral-800/60 flex items-center justify-between">
-                <h3 className="text-sm font-semibold text-white flex items-center gap-2">
+            <>
+              {/* Invisible backdrop to capture click-away reliably */}
+              <div 
+                className="fixed inset-0 z-[40]" 
+                onClick={() => setShowNotifications(false)}
+              />
+              <div className="absolute top-full right-0 mt-2 w-[380px] minimal-panel shadow-2xl overflow-hidden animate-slide-in z-[50]">
+                <div className="p-4 border-b border-neutral-800/60 flex items-center justify-between">
+                  <h3 className="text-sm font-semibold text-white flex items-center gap-2">
                   <Bell className="w-3.5 h-3.5 text-cyan-400" />
                   Regulatory Intelligence
                 </h3>
@@ -116,11 +189,12 @@ export default function Header() {
                 ))}
               </div>
               <div className="p-2.5 border-t border-neutral-800/60 text-center">
-                <button className="text-[11px] text-cyan-400 hover:text-cyan-300 transition-colors font-medium">
+                <Link href="/risk" className="text-xs text-cyan-400 hover:text-cyan-300 transition-colors font-medium">
                   View all alerts →
-                </button>
+                </Link>
               </div>
-            </div>
+              </div>
+            </>
           )}
         </div>
 
