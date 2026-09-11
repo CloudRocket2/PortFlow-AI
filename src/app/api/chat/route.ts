@@ -1,19 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
-import { GoogleGenAI, Type } from "@google/genai";
+import Groq from "groq-sdk";
 import { INDIAN_EAST_COAST_PORTS, VESSEL_PROFILES, MOCK_FREIGHT_FORECAST } from "@/lib/maritime-data";
 
 export async function POST(request: NextRequest) {
   try {
     const { message, history } = await request.json();
 
-    if (!process.env.GEMINI_API_KEY) {
+    if (!process.env.GROQ_API_KEY) {
       return NextResponse.json(
-        { error: "GEMINI_API_KEY is not configured in .env.local" },
+        { error: "GROQ_API_KEY is not configured in .env.local" },
         { status: 500 }
       );
     }
 
-    const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+    const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
     const systemPrompt = `You are PortFlow AI, an enterprise intelligent agent specializing in Global Bulk Freight, Vessel Chartering, and Maritime Logistics. 
 You advise procurement managers on shipping bulk cargo (like Coal and Iron Ore) to India's East Coast.
@@ -27,50 +27,66 @@ CRITICAL INSTRUCTIONS (MUST FOLLOW OR SYSTEM WILL FAIL):
 
 Your knowledge base covers India's East Coast ports: Haldia, Sagar-Sandheads, Paradip, Dhamra, Vizag, Gangavaram, and Gopalpur.`;
 
-    const response = await ai.models.generateContent({
-      model: "gemini-3.6-flash",
-      contents: [
-        ...(history || []),
-        { role: "user", parts: [{ text: message }] }
+    // Map the Gemini-style history from the frontend to Groq/OpenAI style
+    // The frontend sends history as: { role: "user" | "model", parts: [{ text: "..." }] }
+    const formattedHistory = (history || []).map((msg: any) => ({
+      role: msg.role === "model" ? "assistant" : "user",
+      content: msg.parts[0].text
+    }));
+
+    const response = await groq.chat.completions.create({
+      model: "llama-3.1-70b-versatile", // Powerful, fast open-source model perfect for reasoning
+      temperature: 0.2,
+      messages: [
+        { role: "system", content: systemPrompt },
+        ...formattedHistory,
+        { role: "user", content: message }
       ],
-      config: {
-        systemInstruction: systemPrompt,
-        temperature: 0.2,
-        tools: [{
-          functionDeclarations: [
-            {
-              name: "get_freight_forecast",
-              description: "Retrieves the predictive freight forecast for bulk cargo routes to advise on optimal market entry timing.",
-            },
-            {
-              name: "optimize_vessel",
-              description: "Calculates the best vessel type (Handysize, Supramax, Panamax, Capesize) based on cargo volume and destination port infrastructure limits (draft, LOA).",
-              parameters: {
-                type: Type.OBJECT,
-                properties: {
-                  cargoVolumeMt: { type: Type.NUMBER, description: "Cargo volume in Metric Tonnes" },
-                  destinationPort: { type: Type.STRING, description: "Destination port on India's East Coast (e.g. Paradip, Vizag)" }
-                },
-                required: ["cargoVolumeMt", "destinationPort"]
-              }
+      tools: [
+        {
+          type: "function",
+          function: {
+            name: "get_freight_forecast",
+            description: "Retrieves the predictive freight forecast for bulk cargo routes to advise on optimal market entry timing.",
+            parameters: {
+              type: "object",
+              properties: {},
+              required: []
             }
-          ]
-        }]
-      }
+          }
+        },
+        {
+          type: "function",
+          function: {
+            name: "optimize_vessel",
+            description: "Calculates the best vessel type (Handysize, Supramax, Panamax, Capesize) based on cargo volume and destination port infrastructure limits (draft, LOA).",
+            parameters: {
+              type: "object",
+              properties: {
+                cargoVolumeMt: { type: "number", description: "Cargo volume in Metric Tonnes" },
+                destinationPort: { type: "string", description: "Destination port on India's East Coast (e.g. Paradip, Vizag)" }
+              },
+              required: ["cargoVolumeMt", "destinationPort"]
+            }
+          }
+        }
+      ]
     });
 
-    let reply = response.text || "";
+    const responseMessage = response.choices[0].message;
+    let reply = responseMessage.content || "";
 
-    if (response.functionCalls && response.functionCalls.length > 0) {
-      const call = response.functionCalls[0];
+    // Handle Tool Calls if the AI decided to use one
+    if (responseMessage.tool_calls && responseMessage.tool_calls.length > 0) {
+      const toolCall = responseMessage.tool_calls[0];
       
-      if (call.name === "get_freight_forecast") {
+      if (toolCall.function.name === "get_freight_forecast") {
         const current = MOCK_FREIGHT_FORECAST[5]; // Nov 05
         const lowest = MOCK_FREIGHT_FORECAST[10]; // Dec 10
         reply = `I have analyzed the ML time-series forecast for bulk freight. The current spot rate is **$${current.actual} USD/Ton**. However, our predictive model indicates rates will drop to **$${lowest.predicted} USD/Ton** by ${lowest.date} due to easing port congestion. **Recommendation:** Delay chartering by 3-4 weeks to secure optimal market entry.`;
       } 
-      else if (call.name === "optimize_vessel") {
-        const args = call.args as Record<string, unknown>;
+      else if (toolCall.function.name === "optimize_vessel") {
+        const args = JSON.parse(toolCall.function.arguments || "{}");
         const cargoVolumeMt = Number(args.cargoVolumeMt);
         const destinationPort = String(args.destinationPort);
         const port = INDIAN_EAST_COAST_PORTS[destinationPort];
@@ -92,8 +108,8 @@ Your knowledge base covers India's East Coast ports: Haldia, Sagar-Sandheads, Pa
     }
 
     return NextResponse.json({ reply });
-  } catch (error: unknown) {
-    console.error("AI Chat Error:", error);
-    return NextResponse.json({ error: (error as Error).message }, { status: 500 });
+  } catch (error: any) {
+    console.error("Groq Chat Error:", error);
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
