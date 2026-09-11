@@ -26,6 +26,30 @@ export default function Header() {
   const [showProfile, setShowProfile] = useState(false);
   const [showSettingsModal, setShowSettingsModal] = useState(false);
   const [theme, setTheme] = useState("dark");
+  
+  useEffect(() => {
+    const applyTheme = (t: string) => {
+      if (t === 'light') {
+        document.body.classList.add('light-mode');
+      } else if (t === 'dark') {
+        document.body.classList.remove('light-mode');
+      } else if (t === 'system') {
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+          document.body.classList.add('light-mode');
+        } else {
+          document.body.classList.remove('light-mode');
+        }
+      }
+    };
+    applyTheme(theme);
+    
+    if (theme === 'system') {
+      const listener = (e: MediaQueryListEvent) => applyTheme('system');
+      const mediaQuery = window.matchMedia('(prefers-color-scheme: light)');
+      mediaQuery.addEventListener('change', listener);
+      return () => mediaQuery.removeEventListener('change', listener);
+    }
+  }, [theme]);
   const [density, setDensity] = useState("cozy");
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
   const notifRef = useRef<HTMLDivElement>(null);
