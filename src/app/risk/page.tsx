@@ -6,6 +6,7 @@ import { Search, Radio, Target, AlertTriangle, ShieldCheck, Activity, Map, Globe
 export default function RiskCentrePage() {
   const [scanning, setScanning] = useState(false);
   const [scanned, setScanned] = useState(false);
+  const [isBlocklisted, setIsBlocklisted] = useState(false);
 
   const [threatFeed, setThreatFeed] = useState([
     { id: 1, type: "WARNING", region: "Red Sea", desc: "Elevated Houthi threat level. War-risk premiums up 45%.", time: "10m ago" },
