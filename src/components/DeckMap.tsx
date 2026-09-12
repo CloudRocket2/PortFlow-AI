@@ -5,7 +5,7 @@ import DeckGL from "@deck.gl/react";
 import { Map, useControl } from "react-map-gl/maplibre";
 import * as maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
-import { IconLayer, ArcLayer, TextLayer, ScatterplotLayer } from "@deck.gl/layers";
+import { IconLayer, ArcLayer, TextLayer, ScatterplotLayer, ColumnLayer } from "@deck.gl/layers";
 import { FlyToInterpolator } from "@deck.gl/core";
 import Supercluster from "supercluster";
 import { usePortFlowData } from "@/context/PortFlowContext";
@@ -43,6 +43,18 @@ function getBearing(start: [number, number], end: [number, number]) {
 
 export default function DeckMap() {
   const { state, selectedVoyageId, setSelectedVoyageId, isRedSeaClosed } = usePortFlowData();
+  const [time, setTime] = useState(0);
+
+  useEffect(() => {
+    let animationFrame: number;
+    const start = Date.now();
+    const animate = () => {
+      setTime((Date.now() - start) / 20); // speed coefficient
+      animationFrame = requestAnimationFrame(animate);
+    };
+    animate();
+    return () => cancelAnimationFrame(animationFrame);
+  }, []);
   const [viewState, setViewState] = useState<any>(INITIAL_VIEW_STATE);
   const [hoverInfo, setHoverInfo] = useState<any>(null);
   const [searchQuery, setSearchQuery] = useState("");
@@ -169,6 +181,56 @@ export default function DeckMap() {
 
   // Layers
   const layers = [
+    // 1. Geopolitical Threat Zone (Red Sea Blockade)
+    new ScatterplotLayer({
+      id: 'threat-zone',
+      data: [{ coordinates: [43.0, 14.0] }], // Gulf of Aden
+      getPosition: d => d.coordinates,
+      getRadius: d => isRedSeaClosed ? 800000 + Math.sin(time / 10) * 40000 : 0,
+      getFillColor: [244, 63, 94, isRedSeaClosed ? 80 : 0],
+      getLineColor: [244, 63, 94, isRedSeaClosed ? 200 : 0],
+      stroked: true,
+      lineWidthMinPixels: 2,
+      updateTriggers: {
+        getRadius: [isRedSeaClosed, time],
+        getFillColor: [isRedSeaClosed],
+        getLineColor: [isRedSeaClosed]
+      }
+    }),
+
+    // 2. 3D Port Volume Pillars
+    new ColumnLayer({
+      id: 'port-pillars',
+      data: state.ports,
+      diskResolution: 12,
+      radius: 35000,
+      extruded: true,
+      pickable: true,
+      elevationScale: 5,
+      getPosition: d => [d.lng, d.lat],
+      getFillColor: d => d.legalStatus === 'Compliant' ? [16, 185, 129, 180] : [245, 158, 11, 180],
+      getLineColor: [0, 0, 0],
+      getElevation: d => d.handlingRate,
+      onHover: info => setHoverInfo(info.object ? { ...info, type: 'port', object: { properties: info.object } } : null)
+    }),
+
+    // 3. Animated Radar Rings for Ships
+    new ScatterplotLayer({
+      id: 'ship-radar',
+      data: ships,
+      getPosition: d => d.coordinates,
+      getRadius: d => (time % 100) * 3000,
+      getFillColor: d => [52, 211, 153, Math.max(0, 80 - (time % 100))],
+      getLineColor: d => [52, 211, 153, Math.max(0, 255 - (time % 100) * 2.5)],
+      stroked: true,
+      lineWidthMinPixels: 1,
+      updateTriggers: {
+        getRadius: [time],
+        getFillColor: [time],
+        getLineColor: [time]
+      }
+    }),
+
     // Pulse animation beneath ships (mocked with Scatterplot for glowing effect)
     new ScatterplotLayer({
       id: 'ship-glow',
