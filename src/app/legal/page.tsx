@@ -42,14 +42,28 @@ export default function LegalCompliancePage() {
   const [activeTab, setActiveTab] = useState<"vessel" | "charter">("vessel");
   const [isAnalyzingCharter, setIsAnalyzingCharter] = useState(false);
   const [charterResultsReady, setCharterResultsReady] = useState(false);
+  const [charterRisks, setCharterRisks] = useState<any[]>([]);
+  const [clauseInput, setClauseInput] = useState("14. Force Majeure: Neither party shall be liable for failure to perform due to Acts of God, war, strikes, or port congestion exceeding 5 days...");
 
-  const handleAnalyzeCharter = () => {
+  const handleAnalyzeCharter = async () => {
     setIsAnalyzingCharter(true);
     setCharterResultsReady(false);
-    setTimeout(() => {
-      setIsAnalyzingCharter(false);
-      setCharterResultsReady(true);
-    }, 2000); // Simulate AI thinking
+    
+    try {
+      const res = await fetch("/api/legal", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ clauseText: clauseInput })
+      });
+      const data = await res.json();
+      setCharterRisks(data.risks || []);
+    } catch (e) {
+      console.error(e);
+      setCharterRisks([{ category: "High Risk", title: "API Error", description: "Failed to connect to the legal AI engine.", mitigation: "Check logs." }]);
+    }
+    
+    setIsAnalyzingCharter(false);
+    setCharterResultsReady(true);
   };
 
   const parameters: LegalParameter[] = [
@@ -268,10 +282,11 @@ export default function LegalCompliancePage() {
               </p>
             </div>
             <textarea 
-              placeholder="Paste charter party clauses here (e.g. Force Majeure, Demurrage, Arbitration)..."
-              className="flex-1 bg-neutral-900/50 border border-neutral-800 rounded-lg px-3 py-2.5 text-sm font-mono text-white focus:outline-none focus:border-cyan-500/50 transition-colors resize-none"
-              defaultValue="14. Force Majeure: Neither party shall be liable for failure to perform due to Acts of God, war, strikes, or port congestion exceeding 5 days..."
-            />
+                placeholder="Paste charter party clauses here (e.g. Force Majeure, Demurrage, Arbitration)..."
+                className="flex-1 bg-neutral-900/50 border border-neutral-800 rounded-lg px-3 py-2.5 text-sm font-mono text-white focus:outline-none focus:border-cyan-500/50 transition-colors resize-none"
+                value={clauseInput}
+                onChange={(e) => setClauseInput(e.target.value)}
+              />
             <button 
               onClick={handleAnalyzeCharter}
               disabled={isAnalyzingCharter}
@@ -326,28 +341,24 @@ export default function LegalCompliancePage() {
               </span>
             </div>
             <div className="space-y-4">
-              <div className="p-4 border border-rose-500/20 bg-rose-500/5 rounded-lg flex gap-3">
-                <AlertTriangle className="w-5 h-5 text-rose-400 shrink-0" />
-                <div>
-                  <h4 className="text-base font-medium text-white uppercase tracking-wide font-mono">High Risk: Force Majeure Ambiguity</h4>
-                  <p className="text-[11px] text-neutral-400 mt-1 leading-relaxed">
-                    Including "port congestion" in Force Majeure nullifies demurrage claims. Standard GENCON 94 does not excuse charterer from laytime/demurrage obligations due to congestion. 
-                  </p>
-                  <p className="text-[11px] text-emerald-400 mt-2">
-                    Recommendation: Strike "port congestion" from Clause 14.
-                  </p>
+              {charterResultsReady && charterRisks.map((risk, idx) => (
+                <div key={idx} className={`p-4 border rounded-lg flex gap-3 ${risk.category.includes('High') ? 'border-rose-500/20 bg-rose-500/5' : risk.category.includes('Medium') ? 'border-amber-500/20 bg-amber-500/5' : 'border-emerald-500/20 bg-emerald-500/5'}`}>
+                  {risk.category.includes('High') ? (
+                    <AlertTriangle className="w-5 h-5 text-rose-400 shrink-0" />
+                  ) : risk.category.includes('Medium') ? (
+                    <AlertTriangle className="w-5 h-5 text-amber-400 shrink-0" />
+                  ) : (
+                    <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
+                  )}
+                  <div>
+                    <h4 className="text-base font-medium text-white uppercase tracking-wide font-mono">{risk.category}: {risk.title}</h4>
+                    <p className="text-[11px] text-neutral-400 mt-1 leading-relaxed">{risk.description}</p>
+                    {risk.mitigation && risk.mitigation !== "N/A" && (
+                      <p className="text-[11px] text-emerald-400 mt-2">Recommendation: {risk.mitigation}</p>
+                    )}
+                  </div>
                 </div>
-              </div>
-
-              <div className="p-4 border border-emerald-500/20 bg-emerald-500/5 rounded-lg flex gap-3">
-                <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
-                <div>
-                  <h4 className="text-base font-medium text-white uppercase tracking-wide font-mono">Low Risk: Arbitration Venue</h4>
-                  <p className="text-[11px] text-neutral-400 mt-1 leading-relaxed">
-                    Arbitration in London (LMAA terms) is standard and acceptable. No deviation from standard maritime practice detected.
-                  </p>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
         </div>

@@ -210,8 +210,28 @@ export function PortFlowProvider({ children }: { children: ReactNode }) {
     return { updatedCount, totalAdded };
   };
 
+  const applyAiOptimization = (optimizedContracts: Partial<Contract>[]) => {
+    setState(prev => {
+      const newContracts = prev.contracts.map(c => {
+        const optimizedData = optimizedContracts.find(opt => opt.id === c.id);
+        if (optimizedData) {
+          return {
+            ...c,
+            status: "AI Executed" as Contract["status"],
+            predictedSavings: optimizedData.predictedSavings || c.predictedSavings,
+            realizedSavings: optimizedData.realizedSavings || c.predictedSavings * 1.05,
+            commercialScore: 99,
+            operationalScore: 99
+          };
+        }
+        return c;
+      });
+      return { ...prev, contracts: newContracts };
+    });
+  };
+
   return (
-    <PortFlowContext.Provider value={{ state, selectedVoyageId, setSelectedVoyageId, updateContractStatus, runFleetOptimization }}>
+    <PortFlowContext.Provider value={{ state, selectedVoyageId, setSelectedVoyageId, updateContractStatus, runFleetOptimization, applyAiOptimization }}>
       {children}
     </PortFlowContext.Provider>
   );
