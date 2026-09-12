@@ -193,7 +193,7 @@ export default function LegalCompliancePage() {
           )}
 
           {isScanning && (
-            <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6 bg-black/80 backdrop-blur-md z-10">
+            <div className="flex flex-col items-center justify-center text-center p-8 bg-neutral-900/10 border border-neutral-800 rounded-xl mb-6">
               <div className="w-16 h-16 border-2 border-emerald-500/30 rounded-full flex items-center justify-center mb-6 relative">
                 <div className="absolute inset-0 border-t-2 border-emerald-500 rounded-full animate-spin drop-shadow-[0_0_8px_rgba(255,255,255,0.2)] drop-shadow-[0_0_8px_rgba(52,211,153,0.6)]" style={{ animationDuration: '1s' }} />
                 <Scale className="w-6 h-6 text-emerald-400 animate-pulse" />
