@@ -153,14 +153,14 @@ export default function CharteringPage() {
         <div className="lg:col-span-8 minimal-panel hover:scale-[1.005] hover:border-neutral-700/60 transition-all duration-300 flex flex-col relative overflow-hidden">
           
           {status === "idle" && (
-            <div className="absolute inset-0 flex flex-col items-center justify-center text-neutral-600">
+            <div className="!absolute inset-0 w-full h-full flex flex-col items-center justify-center text-neutral-600">
               <Cpu className="w-12 h-12 mb-4 opacity-20" />
               <p className="font-mono text-xs uppercase tracking-widest transition-all duration-200">Awaiting Logistics Parameters</p>
             </div>
           )}
 
           {status === "calculating" && (
-            <div className="absolute inset-0 p-8 flex flex-col justify-end bg-black">
+            <div className="!absolute inset-0 w-full h-full p-8 flex flex-col justify-end bg-black">
               <div className="space-y-3">
                 {logs.map((log, i) => (
                   <div key={i} className="font-mono text-sm text-neutral-400 flex items-center gap-3 animate-slide-in" style={{ animationDelay: `${i * 0.1}s` }}>
@@ -175,7 +175,7 @@ export default function CharteringPage() {
           )}
 
           {status === "complete" && result && (
-            <div className="absolute inset-0 overflow-y-auto hide-scrollbar p-6 flex flex-col gap-6 animate-slide-in">
+            <div className="!absolute inset-0 w-full h-full overflow-y-auto hide-scrollbar p-6 flex flex-col gap-6 animate-slide-in">
               
               {/* Top: Vessel Recommendation */}
               <div className="border border-neutral-800 p-5 bg-neutral-900/30 animate-slide-in" style={{ animationDelay: '0.1s' }}>
