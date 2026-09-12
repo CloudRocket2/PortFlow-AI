@@ -1,171 +1,221 @@
 "use client";
 
-import React, { useState } from "react";
-import { Search, Anchor, FileText, Loader2, BookOpen, Scale, AlertTriangle, ShieldCheck } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { Search, Radio, Target, AlertTriangle, ShieldCheck, Activity, Map, Globe2, AlertOctagon, Lock, Loader2 } from "lucide-react";
 
 export default function RiskCentrePage() {
-  const [vesselQuery, setVesselQuery] = useState("");
-  const [isSearchingVessel, setIsSearchingVessel] = useState(false);
-  const [vesselResults, setVesselResults] = useState<any>(null);
+  const [scanning, setScanning] = useState(false);
+  const [scanned, setScanned] = useState(false);
 
-  const [lawQuery, setLawQuery] = useState("");
-  const [isSearchingLaw, setIsSearchingLaw] = useState(false);
-  const [lawResults, setLawResults] = useState<any>(null);
+  const [threatFeed, setThreatFeed] = useState([
+    { id: 1, type: "WARNING", region: "Red Sea", desc: "Elevated Houthi threat level. War-risk premiums up 45%.", time: "10m ago" },
+    { id: 2, type: "CRITICAL", region: "Strait of Malacca", desc: "Piracy boarding reported at 0200Z.", time: "1h ago" },
+    { id: 3, type: "INFO", region: "OFAC Sanctions", desc: "US Treasury added 4 entities to SDN list.", time: "3h ago" }
+  ]);
 
-  const handleVesselSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!vesselQuery.trim()) return;
-    
-    setIsSearchingVessel(true);
-    setVesselResults(null);
-    
+  const runGlobalScan = () => {
+    setScanning(true);
     setTimeout(() => {
-      setIsSearchingVessel(false);
-      setVesselResults({
-        name: vesselQuery.toUpperCase(),
-        imo: "IMO 9432810",
-        flag: "Liberia",
-        arrestStatus: "Clear",
-        claims: [
-          { date: "Oct 2024", type: "Bunker Lien", status: "Resolved", amount: "$145,000" },
-          { date: "Mar 2025", type: "Cargo Damage Claim", status: "Pending", amount: "$89,000" }
-        ],
-        admiraltyNotes: "No pending warrants of arrest under Admiralty (Jurisdiction and Settlement of Maritime Claims) Act, 2017."
-      });
-    }, 1500);
-  };
-
-  const handleLawSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!lawQuery.trim()) return;
-    
-    setIsSearchingLaw(true);
-    setLawResults(null);
-
-    setTimeout(() => {
-      setIsSearchingLaw(false);
-      setLawResults([
-        {
-          case: "The Johs Stove [1984] 1 Lloyd's Rep 38",
-          topic: "Demurrage & Port Congestion",
-          summary: "Established that 'always accessible' means the vessel must be able to reach the berth without delay. Congestion is the charterer's risk.",
-          relevance: "High - Directly applicable to your GENCON 94 queries."
-        },
-        {
-          case: "The Achilleas [2008] UKHL 48",
-          topic: "Damages for Late Redelivery",
-          summary: "Remoteness of damage in contract. Charterers are not generally liable for loss of a subsequent fixture due to late redelivery unless specifically assumed.",
-          relevance: "Medium - Relevant for time charter extensions."
-        }
+      setScanning(false);
+      setScanned(true);
+      // Inject a new critical threat dynamically
+      setThreatFeed(prev => [
+        { id: 4, type: "CRITICAL", region: "Global AIS", desc: "Dark Fleet Pattern Detected: 3 Vessels matching spoofing profiles.", time: "Just now" },
+        ...prev
       ]);
-    }, 2000);
+    }, 2500);
   };
 
   return (
-    <div className="max-w-[1600px] mx-auto space-y-6 animate-page-enter">
-      
+    <div className="max-w-[1600px] mx-auto space-y-6 animate-page-enter pb-10">
       {/* Header Info */}
-      <div className="minimal-panel px-4 py-3 flex items-center justify-between">
+      <div className="minimal-panel px-4 py-3 flex flex-col md:flex-row md:items-center justify-between border-l-2 border-l-rose-500">
         <div className="flex items-center gap-3">
-          <BookOpen className="w-4 h-4 text-emerald-400" />
+          <AlertOctagon className="w-5 h-5 text-rose-500" />
           <h1 className="text-lg font-semibold text-white">
-            Risk Centre & Law Library
+            Global Risk & Sanctions Radar
           </h1>
         </div>
-        <p className="text-xs font-mono uppercase tracking-widest text-neutral-500">
-          Global Maritime Case Law & Admiralty DB
+        <p className="text-xs font-mono uppercase tracking-widest text-neutral-500 mt-2 md:mt-0">
+          Dark Fleet Detection | AIS Spoofing | Compliance Watch
         </p>
       </div>
 
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 xl:grid-cols-12 gap-6">
         
-        {/* Left: Vessel Claims DB */}
-        <div className="minimal-panel flex flex-col h-[700px]">
-          <div className="p-6 border-b border-neutral-800 flex items-center gap-3">
-            <Anchor className="w-5 h-5 text-blue-400" />
+        {/* Left: Dark Fleet & AIS Spoofing Radar (Larger panel) */}
+        <div className="xl:col-span-8 minimal-panel flex flex-col h-[750px] relative overflow-hidden">
+          
+          <div className="p-6 border-b border-neutral-800 flex justify-between items-center bg-black/40 z-10">
             <div>
-              <h2 className="text-base font-medium text-white uppercase tracking-wide font-mono border-l-2 border-cyan-500/40 pl-3">
-                Vessel Admiralty Search
+              <h2 className="text-sm font-medium uppercase tracking-wide font-mono text-white flex items-center gap-2">
+                <Target className="w-4 h-4 text-cyan-400" />
+                AI Dark Fleet & AIS Spoofing Detector
               </h2>
-              <p className="text-sm text-neutral-500 mt-1">
-                Query global registries for arrest warrants & liens
+              <p className="text-xs text-neutral-500 mt-1">
+                Cross-referencing satellite telemetry gaps with OFAC/UN Sanctions lists
               </p>
             </div>
+            
+            <button 
+              onClick={runGlobalScan}
+              disabled={scanning || scanned}
+              className={`px-4 py-2 text-xs font-mono font-bold uppercase tracking-wider transition-all duration-300 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg focus-ring active:scale-[0.97] \${
+                scanned ? "bg-rose-500/20 text-rose-400 border border-rose-500/40" : "bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 hover:bg-cyan-500/20 btn-sweep"
+              }`}
+            >
+              {scanning ? (
+                <>
+                  <Loader2 className="w-3 h-3 animate-spin" />
+                  CALIBRATING SATELLITES...
+                </>
+              ) : scanned ? (
+                <>
+                  <AlertOctagon className="w-3 h-3" />
+                  THREATS DETECTED
+                </>
+              ) : (
+                <>
+                  <Radio className="w-3 h-3" />
+                  RUN DEEP RADAR SCAN
+                </>
+              )}
+            </button>
           </div>
 
-          <div className="p-6">
-            <form onSubmit={handleVesselSearch} className="flex gap-2 mb-6">
-              <input 
-                type="text"
-                value={vesselQuery}
-                onChange={(e) => setVesselQuery(e.target.value)}
-                placeholder="Enter Vessel Name or IMO (e.g. MV Pacific Horizon)"
-                className="flex-1 bg-neutral-900/50 border border-neutral-800 rounded-lg px-3 py-2.5 text-sm font-mono text-white focus:outline-none focus:border-cyan-500/50 transition-colors"
-              />
-              <button 
-                type="submit"
-                disabled={isSearchingVessel || !vesselQuery.trim()}
-                className="bg-blue-500/10 text-blue-400 border border-blue-500/20 rounded-lg px-6 py-2.5 text-sm font-mono font-bold uppercase tracking-wider hover:bg-blue-500/20 transition-all disabled:opacity-50 flex items-center gap-2 focus-ring btn-sweep active:scale-[0.97]"
-              >
-                {isSearchingVessel ? <Loader2 className="w-4 h-4 animate-spin drop-shadow-[0_0_8px_rgba(255,255,255,0.2)]" /> : <Search className="w-4 h-4" />}
-                Query
-              </button>
-            </form>
-
-            <div className="flex flex-wrap gap-2 mb-6">
-              <span className="text-xs text-neutral-500 mr-1 mt-1">Quick Filters:</span>
-              <button type="button" onClick={() => setVesselQuery('High-Risk Flags')} className="px-2.5 py-1 rounded border border-neutral-800 bg-black/20 text-xs text-neutral-400 hover:text-cyan-400 hover:border-cyan-500/30 transition-colors">High-Risk Flags</button>
-              <button type="button" onClick={() => setVesselQuery('Sanctions Check')} className="px-2.5 py-1 rounded border border-neutral-800 bg-black/20 text-xs text-neutral-400 hover:text-cyan-400 hover:border-cyan-500/30 transition-colors">Sanctions Check</button>
-              <button type="button" onClick={() => setVesselQuery('Recent Arrests')} className="px-2.5 py-1 rounded border border-neutral-800 bg-black/20 text-xs text-neutral-400 hover:text-cyan-400 hover:border-cyan-500/30 transition-colors">Recent Arrests</button>
+          <div className="flex-1 relative flex flex-col">
+            {/* Visual Radar Background */}
+            <div className="absolute inset-0 flex items-center justify-center opacity-30 pointer-events-none overflow-hidden">
+              <div className="w-[800px] h-[800px] rounded-full border border-cyan-900/50 relative">
+                <div className="absolute inset-0 rounded-full border border-cyan-900/40 scale-75"></div>
+                <div className="absolute inset-0 rounded-full border border-cyan-900/30 scale-50"></div>
+                <div className="absolute inset-0 rounded-full border border-cyan-900/20 scale-25"></div>
+                {/* Radar sweep line */}
+                {scanning && (
+                  <div className="absolute top-1/2 left-1/2 w-1/2 h-1 bg-gradient-to-r from-cyan-400/80 to-transparent origin-left animate-spin" style={{ animationDuration: '2s' }}></div>
+                )}
+              </div>
             </div>
 
-            {isSearchingVessel && (
-              <div className="flex flex-col items-center justify-center py-20 text-blue-400">
-                <Loader2 className="w-8 h-8 animate-spin drop-shadow-[0_0_8px_rgba(255,255,255,0.2)] mb-4" />
-                <p className="text-xs font-mono uppercase tracking-widest">Scanning Global Admiralty Databases...</p>
+            {!scanned && !scanning && (
+              <div className="flex-1 flex flex-col items-center justify-center text-center p-8 z-10">
+                <Globe2 className="w-16 h-16 text-neutral-600 mb-6 opacity-50" />
+                <h3 className="text-white font-mono uppercase tracking-widest text-sm mb-2">Systems Standby</h3>
+                <p className="text-xs text-neutral-500 max-w-md">
+                  Initiate a Deep Radar Scan to analyze 45,000+ active bulk carriers for AIS signal manipulation, 
+                  identity laundering, and dark port calls over the last 90 days.
+                </p>
               </div>
             )}
 
-            {vesselResults && !isSearchingVessel && (
-              <div className="animate-in fade-in slide-in-from-bottom-2 space-y-6">
-                <div className="flex items-start justify-between border-b border-neutral-800 pb-4">
-                  <div>
-                    <h3 className="text-2xl font-mono text-white tabular-nums">{vesselResults.name}</h3>
-                    <p className="text-sm text-neutral-500">{vesselResults.imo} • Flag: {vesselResults.flag}</p>
-                  </div>
-                  <div className="px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded text-emerald-400 text-xs font-mono uppercase tracking-widest flex items-center gap-2">
-                    <ShieldCheck className="w-4 h-4" />
-                    Arrest Status: {vesselResults.arrestStatus}
-                  </div>
+            {scanning && (
+              <div className="flex-1 flex flex-col items-center justify-center z-10 bg-black/60 backdrop-blur-sm">
+                <div className="relative mb-8">
+                  <div className="w-24 h-24 border-2 border-cyan-500/30 rounded-full"></div>
+                  <div className="w-24 h-24 border-t-2 border-cyan-400 rounded-full absolute inset-0 animate-spin" style={{ animationDuration: '1s' }}></div>
+                  <Activity className="w-8 h-8 text-cyan-400 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 animate-pulse" />
                 </div>
+                <div className="font-mono text-cyan-400 text-sm uppercase tracking-widest flex flex-col items-center gap-2">
+                  <span>Ping: INMARSAT Data Link</span>
+                  <span className="text-neutral-500 text-xs">Analyzing historical vessel tracks...</span>
+                  <span className="text-neutral-500 text-xs">Detecting GPS spoofing anomalies...</span>
+                </div>
+              </div>
+            )}
 
-                <div>
-                  <h4 className="text-xs font-mono uppercase tracking-widest text-neutral-500 mb-3">Recorded Claims & Liens</h4>
-                  <div className="space-y-2">
-                    {vesselResults.claims.map((claim: any, idx: number) => (
-                      <div key={idx} className="p-3 bg-neutral-900/30 border border-neutral-800 rounded-lg flex justify-between items-center animate-slide-in" style={{ animationDelay: `${idx * 0.05}s` }}>
-                        <div>
-                          <p className="text-base font-medium text-white">{claim.type}</p>
-                          <p className="text-sm text-neutral-500">{claim.date}</p>
-                        </div>
-                        <div className="text-right">
-                          <p className="text-2xl font-mono tabular-nums text-white">{claim.amount}</p>
-                          <p className={`text-xs font-mono uppercase tracking-widest ${claim.status === "Resolved" ? "text-emerald-400" : "text-amber-400"}`}>
-                            {claim.status}
-                          </p>
-                        </div>
+            {scanned && (
+              <div className="flex-1 overflow-y-auto p-6 z-10 space-y-4">
+                {/* Danger Card */}
+                <div className="bg-rose-950/30 border border-rose-500/30 rounded-xl p-5 hover:bg-rose-950/40 transition-colors cursor-pointer group">
+                  <div className="flex justify-between items-start mb-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-rose-500/20 flex items-center justify-center border border-rose-500/50 text-rose-500">
+                        <AlertTriangle className="w-5 h-5 group-hover:scale-110 transition-transform" />
                       </div>
-                    ))}
+                      <div>
+                        <h3 className="text-white font-bold text-lg font-mono tracking-wide">MV SHADOW TRADER <span className="text-rose-500 text-xs ml-2">[CRITICAL RISK]</span></h3>
+                        <p className="text-neutral-400 text-xs font-mono uppercase tracking-widest mt-1">IMO: 9345112 | Flag: Comoros</p>
+                      </div>
+                    </div>
+                    <div className="bg-rose-500/20 text-rose-400 px-3 py-1 rounded text-xs font-mono font-bold uppercase tracking-widest border border-rose-500/30">
+                      Dark Fleet Flag
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-black/40 rounded-lg p-4 border border-rose-900/50">
+                    <div>
+                      <h4 className="text-xs font-mono uppercase tracking-widest text-neutral-500 mb-2 border-b border-rose-900/50 pb-2">AI Detection Logic</h4>
+                      <ul className="text-[11px] text-neutral-300 space-y-2">
+                        <li className="flex items-start gap-2">
+                          <div className="w-1.5 h-1.5 bg-rose-500 rounded-full mt-1 shrink-0"></div>
+                          <span><strong>AIS Signal Lost:</strong> Transponder went dark for 72h on Feb 12th in the Arabian Sea.</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <div className="w-1.5 h-1.5 bg-rose-500 rounded-full mt-1 shrink-0"></div>
+                          <span><strong>GPS Spoofing Detected:</strong> Secondary satellite imagery contradicts AIS broadcast coordinates by 400nm.</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <div className="w-1.5 h-1.5 bg-rose-500 rounded-full mt-1 shrink-0"></div>
+                          <span><strong>STS Transfer:</strong> Highly probable Ship-to-Ship transfer of sanctioned cargo.</span>
+                        </li>
+                      </ul>
+                    </div>
+                    <div className="flex flex-col justify-between">
+                      <div>
+                        <h4 className="text-xs font-mono uppercase tracking-widest text-neutral-500 mb-2 border-b border-rose-900/50 pb-2">Compliance Action</h4>
+                        <p className="text-[11px] text-neutral-400">
+                          Chartering this vessel violates OFAC compliance guidelines and exposes the charterer to secondary sanctions and asset freezes.
+                        </p>
+                      </div>
+                      <button className="mt-4 w-full bg-rose-500/10 text-rose-400 border border-rose-500/20 py-2 rounded-lg text-xs font-mono uppercase tracking-widest font-bold hover:bg-rose-500/20 transition-colors flex items-center justify-center gap-2">
+                        <Lock className="w-3 h-3" /> Blocklist Vessel
+                      </button>
+                    </div>
                   </div>
                 </div>
 
-                <div className="p-4 bg-blue-500/5 border border-blue-500/20 rounded-lg flex gap-3">
-                  <Scale className="w-5 h-5 text-blue-400 shrink-0" />
-                  <div>
-                    <h4 className="text-base font-medium text-white uppercase tracking-wide font-mono">AI Legal Summary</h4>
-                    <p className="text-[11px] text-neutral-400 mt-1 leading-relaxed">
-                      {vesselResults.admiraltyNotes} Vessel is clear to enter Indian ports under current commercial terms.
-                    </p>
+                {/* Warning Card */}
+                <div className="bg-amber-950/20 border border-amber-500/20 rounded-xl p-5 hover:bg-amber-950/30 transition-colors cursor-pointer group">
+                  <div className="flex justify-between items-start mb-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-amber-500/10 flex items-center justify-center border border-amber-500/30 text-amber-500">
+                        <AlertTriangle className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                      </div>
+                      <div>
+                        <h3 className="text-white font-bold text-lg font-mono tracking-wide">MV BALTIC SPIRIT <span className="text-amber-500 text-xs ml-2">[ELEVATED RISK]</span></h3>
+                        <p className="text-neutral-400 text-xs font-mono uppercase tracking-widest mt-1">IMO: 9811200 | Flag: Panama</p>
+                      </div>
+                    </div>
+                    <div className="bg-amber-500/10 text-amber-400 px-3 py-1 rounded text-xs font-mono font-bold uppercase tracking-widest border border-amber-500/20">
+                      Identity Scrubbing
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-black/40 rounded-lg p-4 border border-amber-900/30">
+                    <div className="col-span-2">
+                      <h4 className="text-xs font-mono uppercase tracking-widest text-neutral-500 mb-2 border-b border-amber-900/30 pb-2">AI Detection Logic</h4>
+                      <p className="text-[11px] text-neutral-300">
+                        Vessel recently changed ownership 3 times in 6 months. Currently owned by a shell corporation registered in a non-cooperative jurisdiction. AIS data is consistent, but beneficial ownership is obscured. Requires manual Enhanced Due Diligence (EDD) before chartering.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Safe Card */}
+                <div className="bg-emerald-950/20 border border-emerald-500/20 rounded-xl p-5 opacity-70">
+                  <div className="flex justify-between items-center">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-emerald-500/10 flex items-center justify-center border border-emerald-500/30 text-emerald-500">
+                        <ShieldCheck className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <h3 className="text-white font-bold text-lg font-mono tracking-wide">41,208 OTHER VESSELS</h3>
+                        <p className="text-neutral-400 text-xs font-mono uppercase tracking-widest mt-1">Global Fleet Verification</p>
+                      </div>
+                    </div>
+                    <div className="bg-emerald-500/10 text-emerald-400 px-3 py-1 rounded text-xs font-mono font-bold uppercase tracking-widest border border-emerald-500/20">
+                      CLEARED
+                    </div>
                   </div>
                 </div>
               </div>
@@ -173,84 +223,42 @@ export default function RiskCentrePage() {
           </div>
         </div>
 
-        {/* Right: Case Law DB */}
-        <div className="minimal-panel flex flex-col h-[700px]">
-          <div className="p-6 border-b border-neutral-800 flex items-center gap-3">
-            <Scale className="w-5 h-5 text-violet-400" />
-            <div>
-              <h2 className="text-base font-medium text-white uppercase tracking-wide font-mono border-l-2 border-cyan-500/40 pl-3">
-                Maritime Case Law AI
-              </h2>
-              <p className="text-sm text-neutral-500 mt-1">
-                Semantic search across UKHL, LMAA, and Indian Admiralty Judgments
-              </p>
-            </div>
+        {/* Right: Threat Intel Feed */}
+        <div className="xl:col-span-4 minimal-panel flex flex-col h-[750px]">
+          <div className="p-6 border-b border-neutral-800">
+            <h2 className="text-sm font-medium uppercase tracking-wide font-mono text-white flex items-center gap-2">
+              <Globe2 className="w-4 h-4 text-rose-500" />
+              Live Threat Intelligence
+            </h2>
+            <p className="text-xs text-neutral-500 mt-1">
+              Geopolitical, Weather, & Sanctions Alerts
+            </p>
           </div>
-
-          <div className="p-6 flex flex-col h-full">
-            <form onSubmit={handleLawSearch} className="flex gap-2 mb-6 shrink-0">
-              <input 
-                type="text"
-                value={lawQuery}
-                onChange={(e) => setLawQuery(e.target.value)}
-                placeholder="Search topic (e.g. Demurrage exceptions, Force Majeure)"
-                className="flex-1 bg-neutral-900/50 border border-neutral-800 rounded-lg px-3 py-2.5 text-sm font-mono text-white focus:outline-none focus:border-cyan-500/50 transition-colors"
-              />
-              <button 
-                type="submit"
-                disabled={isSearchingLaw || !lawQuery.trim()}
-                className="bg-violet-500/10 text-violet-400 border border-violet-500/20 rounded-lg px-6 py-2.5 text-sm font-mono font-bold uppercase tracking-wider hover:bg-violet-500/20 transition-all disabled:opacity-50 flex items-center gap-2 focus-ring btn-sweep active:scale-[0.97]"
+          
+          <div className="flex-1 overflow-y-auto p-4 space-y-3">
+            {threatFeed.map((threat) => (
+              <div 
+                key={threat.id} 
+                className={`p-4 rounded-lg border flex flex-col gap-2 animate-slide-in \${
+                  threat.type === 'CRITICAL' ? 'bg-rose-500/10 border-rose-500/20' :
+                  threat.type === 'WARNING' ? 'bg-amber-500/10 border-amber-500/20' :
+                  'bg-cyan-500/5 border-cyan-500/20'
+                }`}
               >
-                {isSearchingLaw ? <Loader2 className="w-4 h-4 animate-spin drop-shadow-[0_0_8px_rgba(255,255,255,0.2)]" /> : <Search className="w-4 h-4" />}
-                Search
-              </button>
-            </form>
-
-            <div className="flex flex-wrap gap-2 mb-6">
-              <span className="text-xs text-neutral-500 mr-1 mt-1">Suggested:</span>
-              <button type="button" onClick={() => setLawQuery('Force Majeure')} className="px-2.5 py-1 rounded border border-neutral-800 bg-black/20 text-xs text-neutral-400 hover:text-violet-400 hover:border-violet-500/30 transition-colors">Force Majeure</button>
-              <button type="button" onClick={() => setLawQuery('Demurrage Exceptions')} className="px-2.5 py-1 rounded border border-neutral-800 bg-black/20 text-xs text-neutral-400 hover:text-violet-400 hover:border-violet-500/30 transition-colors">Demurrage Exceptions</button>
-              <button type="button" onClick={() => setLawQuery('Safe Port Warranty')} className="px-2.5 py-1 rounded border border-neutral-800 bg-black/20 text-xs text-neutral-400 hover:text-violet-400 hover:border-violet-500/30 transition-colors">Safe Port Warranty</button>
-            </div>
-
-            {isSearchingLaw && (
-              <div className="flex flex-col items-center justify-center py-20 text-violet-400 flex-1">
-                <Loader2 className="w-8 h-8 animate-spin drop-shadow-[0_0_8px_rgba(255,255,255,0.2)] mb-4" />
-                <p className="text-xs font-mono uppercase tracking-widest">Searching Legal Precedents...</p>
+                <div className="flex justify-between items-center">
+                  <span className={`text-[10px] font-mono font-bold uppercase tracking-widest px-2 py-0.5 rounded \${
+                    threat.type === 'CRITICAL' ? 'bg-rose-500/20 text-rose-400' :
+                    threat.type === 'WARNING' ? 'bg-amber-500/20 text-amber-400' :
+                    'bg-cyan-500/20 text-cyan-400'
+                  }`}>
+                    {threat.type}
+                  </span>
+                  <span className="text-[10px] font-mono text-neutral-500 uppercase tracking-widest">{threat.time}</span>
+                </div>
+                <h4 className="text-sm font-bold text-white font-mono tracking-wide">{threat.region}</h4>
+                <p className="text-xs text-neutral-400 leading-relaxed">{threat.desc}</p>
               </div>
-            )}
-
-            {lawResults && !isSearchingLaw && (
-              <div className="animate-in fade-in slide-in-from-bottom-2 flex-1 overflow-y-auto space-y-4 pr-2">
-                {lawResults.map((result: any, idx: number) => (
-                  <div key={idx} className="p-4 bg-neutral-900/30 border border-neutral-800 rounded-lg hover:border-violet-500/30 transition-all duration-300 animate-slide-in hover:scale-[1.01]" style={{ animationDelay: `${idx * 0.05}s` }}>
-                    <div className="flex justify-between items-start mb-2">
-                      <h3 className="text-base font-medium text-white">{result.case}</h3>
-                      <FileText className="w-4 h-4 text-neutral-500" />
-                    </div>
-                    <p className="text-xs font-mono text-violet-400 uppercase tracking-widest mb-3">Topic: {result.topic}</p>
-                    <p className="text-sm text-neutral-400 leading-relaxed mb-3 border-l-2 border-neutral-700 pl-3">
-                      "{result.summary}"
-                    </p>
-                    <div className="pt-3 border-t border-neutral-800/50">
-                      <p className="text-xs font-mono text-emerald-400 uppercase tracking-widest flex items-center gap-2">
-                        <ShieldCheck className="w-3 h-3" />
-                        AI Relevance: {result.relevance}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {!lawResults && !isSearchingLaw && (
-              <div className="flex-1 flex flex-col items-center justify-center text-neutral-600">
-                <Scale className="w-12 h-12 mb-4 opacity-20" />
-                <p className="text-xs font-mono uppercase tracking-widest text-center max-w-xs">
-                  Enter a legal concept to instantly pull relevant landmark cases and AI summaries.
-                </p>
-              </div>
-            )}
+            ))}
           </div>
         </div>
 

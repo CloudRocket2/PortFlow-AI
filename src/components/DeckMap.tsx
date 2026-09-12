@@ -102,6 +102,7 @@ export default function DeckMap() {
         vesselName: vessel?.name,
         cargo: route.cargo,
         eta: route.eta,
+          isSpoofed: vessel?.isSpoofed || false,
         originName: origin.name,
         destName: dest.name,
         waypoints,
@@ -139,7 +140,8 @@ export default function DeckMap() {
         routeStr: `${r.originName} -> ${r.destName}`,
         cargo: r.cargo,
         eta: r.eta,
-        isSelected: r.isSelected
+        isSelected: r.isSelected,
+          isSpoofed: r.isSpoofed
       };
     });
   }, [mapRoutes]);
@@ -258,7 +260,7 @@ export default function DeckMap() {
       getIcon: () => 'ship',
       sizeScale: 1,
       getSize: d => d.isSelected ? 55 : 40,
-        getColor: d => d.isSelected ? [52, 211, 153] : [255, 255, 255],
+        getColor: d => d.isSpoofed ? [244, 63, 94] : d.isSelected ? [52, 211, 153] : [255, 255, 255],
       getAngle: d => -d.bearing, // Rotate marker to face heading
       onClick: (info) => {
         if (info.object) setSelectedVoyageId(info.object.contractId);

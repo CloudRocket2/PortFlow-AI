@@ -15,6 +15,7 @@ export interface Port {
   handlingRate: number; // MT/day
   legalStatus?: string; // Phase 1: Port Legal Compliance
   legalIssues?: string[];
+  isSpoofed?: boolean;
 }
 
 export interface Vessel {
@@ -26,6 +27,7 @@ export interface Vessel {
   capacity: number; // MT
   legalScore?: number; // Phase 1: Vessel Legal Passport
   legalIssues?: string[];
+  isSpoofed?: boolean;
   imo?: string;
   flag?: string;
   owner?: string;
@@ -110,7 +112,7 @@ const SEED_VESSELS: Vessel[] = [
   { id: "V-PACIFIC", name: "MV Pacific Horizon", class: "Capesize", status: "In Transit", currentDraft: 17.2, capacity: 180000, legalScore: 98, imo: "9413286", flag: "Panama", owner: "Horizon Maritime", classSociety: "DNV", pni: "UK P&I" },
   { id: "V-GLOBAL", name: "Global Spirit", class: "Capesize", status: "Loading", currentDraft: 14.1, capacity: 160000, legalScore: 95, imo: "9601443", flag: "Liberia", owner: "Global Bulk Carriers", classSociety: "Lloyd's Register", pni: "Gard" },
   { id: "V-MAERSK", name: "Maersk Sentinel", class: "Panamax", status: "Idle", currentDraft: 12.0, capacity: 75000, legalScore: 82, imo: "9352763", flag: "Singapore", owner: "Maersk Tankers", classSociety: "ABS", pni: "Skuld", legalIssues: ["Missing Indian port clearance for next voyage"] },
-  { id: "V-OCEANIC", name: "Oceanic Pioneer", class: "Supramax", status: "In Transit", currentDraft: 11.2, capacity: 55000, legalScore: 71, imo: "9218529", flag: "Marshall Islands", owner: "Oceanic Fleet", classSociety: "ClassNK", pni: "NorthStandard", legalIssues: ["Pending maritime claim - Cargo damage 2024", "Foreign vessel charter licence required"] },
+  { id: "V-OCEANIC", name: "MV Shadow Trader", class: "Supramax", status: "In Transit", currentDraft: 11.2, capacity: 55000, legalScore: 12, imo: "9345112", flag: "Comoros", owner: "Unknown Shell Corp", classSociety: "Unknown", pni: "Unknown", legalIssues: ["AIS Signal Lost for 72h", "GPS Spoofing Detected", "Possible Sanctions Violation"], isSpoofed: true },
   { id: "V-STELLAR", name: "Stellar Dawn", class: "Handysize", status: "Discharging", currentDraft: 9.5, capacity: 35000, legalScore: 99, imo: "9832115", flag: "Bahamas", owner: "Stellar Navigation", classSociety: "Bureau Veritas", pni: "Britannia" },
   { id: "V-APOLLO", name: "Apollo Bulk", class: "Panamax", status: "Anchored", currentDraft: 13.5, capacity: 80000, legalScore: 88, imo: "9510001", flag: "Malta", owner: "Apollo Shipping", classSociety: "RINA", pni: "Steamship Mutual", legalIssues: ["Environmental compliance certificate expiring in 14 days"] },
 ];
@@ -137,7 +139,7 @@ const SEED_ALERTS: Alert[] = [
   { id: "alert-2", severity: "WARNING", title: "Demurrage Risk Detected", message: "42,000 MT of Coking Coal has been in the Vizag stockyard for 9 days \u2014 demurrage clock running, contact charterer.", time: "10m ago" },
   { id: "alert-3", severity: "WARNING", title: "Discharge Rate Shortfall", message: "Discharge rate at Haldia is running at 8,200 MT/day vs. the 12,000 MT/day assumed \u2014 laytime at risk of being exceeded.", time: "45m ago" },
   { id: "alert-4", severity: "INFO", title: "Vessel Approaching", message: "MV Global Spirit is arriving in 2h \u2014 confirm grab/conveyor discharge equipment and berth are ready.", time: "1h ago" },
-  { id: "alert-5", severity: "INFO", title: "Tidal Delay Risk", message: "Sagar-Sandheads anchorage: MV Oceanic Pioneer needs high tide to cross the bar \u2014 next window in 14h.", time: "2h ago" }
+  { id: "alert-5", severity: "INFO", title: "Tidal Delay Risk", message: "Sagar-Sandheads anchorage: MV Shadow Trader needs high tide to cross the bar \u2014 next window in 14h.", time: "2h ago" }
 ];
 
 // Mock freight forecast data (90 days)
