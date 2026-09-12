@@ -52,6 +52,8 @@ export interface Contract {
   realizedSavings: number | null;
   commercialScore?: number; // Phase 1: AI Explainability
   operationalScore?: number;
+  carbonSaved?: number;
+  fuelSaved?: number;
 }
 
 export interface Alert {
@@ -222,7 +224,9 @@ export function PortFlowProvider({ children }: { children: ReactNode }) {
             predictedSavings: optimizedData.predictedSavings || c.predictedSavings,
             realizedSavings: optimizedData.realizedSavings || c.predictedSavings * 1.05,
             commercialScore: 99,
-            operationalScore: 99
+            operationalScore: 99,
+            carbonSaved: optimizedData.carbonSaved,
+            fuelSaved: optimizedData.fuelSaved
           };
         }
         return c;

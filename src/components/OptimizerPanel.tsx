@@ -11,6 +11,7 @@ export default function OptimizerPanel() {
   
   const [isOptimizing, setIsOptimizing] = useState(false);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
+  const [ecoMode, setEcoMode] = useState(false);
 
   // Mocking AI optimization events for bulk freight
   const aiEvents = [
@@ -42,7 +43,8 @@ export default function OptimizerPanel() {
         body: JSON.stringify({
           pendingContracts,
           ports: state.ports,
-          vessels: state.vessels
+          vessels: state.vessels,
+          ecoMode
         })
       });
 
@@ -50,7 +52,13 @@ export default function OptimizerPanel() {
       
       if (data.optimizedContracts && data.optimizedContracts.length > 0) {
         applyAiOptimization(data.optimizedContracts);
-        setSuccessMsg(`${data.optimizedContracts.length} CONTRACTS OPTIMIZED`);
+        if (ecoMode) {
+          const totalFuelSaved = data.optimizedContracts.reduce((acc: number, c: any) => acc + (c.fuelSaved || 0), 0);
+          const totalCarbonSaved = data.optimizedContracts.reduce((acc: number, c: any) => acc + (c.carbonSaved || 0), 0);
+          setSuccessMsg(`${data.optimizedContracts.length} OPTIMIZED | ${(totalFuelSaved/1000).toFixed(0)}K USD SAVED | ${totalCarbonSaved}T CARBON REDUCED`);
+        } else {
+            setSuccessMsg(`${data.optimizedContracts.length} CONTRACTS OPTIMIZED`);
+          }
       } else {
         // Fallback to local optimization if API fails to return valid format
         const result = runFleetOptimization();

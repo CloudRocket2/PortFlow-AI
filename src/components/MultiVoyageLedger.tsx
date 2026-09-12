@@ -38,6 +38,8 @@ export default function MultiVoyageLedger() {
         realizedSavings: c.realizedSavings,
         commercialScore: c.commercialScore,
         operationalScore: c.operationalScore,
+          carbonSaved: c.carbonSaved,
+          fuelSaved: c.fuelSaved,
         legalScore: vessel.legalScore,
         legalIssues: vessel.legalIssues || [],
         vesselDetails: {
@@ -125,7 +127,8 @@ export default function MultiVoyageLedger() {
                 <th className="py-3 px-4 font-normal">Global Route (Origin &rarr; East Coast)</th>
                 <th className="py-3 px-4 font-normal">Contract Transition</th>
                 <th className="py-3 px-4 font-normal">Savings (Pred vs Realized)</th>
-                <th className="py-3 px-4 font-normal text-right">Status</th>
+                <th className="py-3 px-4 font-normal">Eco Impact</th>
+                  <th className="py-3 px-4 font-normal text-right">Status</th>
               </tr>
             </thead>
             <tbody className="text-sm font-mono text-neutral-300">
