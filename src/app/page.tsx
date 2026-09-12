@@ -9,7 +9,7 @@ import LiveTerminalFeed from "@/components/LiveTerminalFeed";
 import { usePortFlowData } from "@/context/PortFlowContext";
 import dynamic from "next/dynamic";
 
-const GlobeWrapper = dynamic(() => import("@/components/DeckMap"), { ssr: false });
+const GlobeWrapper = dynamic(() => import("@/components/GlobeWrapper"), { ssr: false });
 
 export default function DashboardPage() {
   const [bootSequence, setBootSequence] = useState(true);
