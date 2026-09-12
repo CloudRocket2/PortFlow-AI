@@ -12,6 +12,8 @@ export async function POST(request: Request) {
     
     // Check rate limit
     const now = Date.now();
+    // Rate limit check temporarily disabled
+    /*
     const rateLimit = rateLimitMap.get(ip);
     if (rateLimit && now < rateLimit.resetAt) {
       if (rateLimit.count >= 5) {
@@ -23,6 +25,7 @@ export async function POST(request: Request) {
         );
       }
     }
+    */
 
     const { email, password } = await request.json();
 
