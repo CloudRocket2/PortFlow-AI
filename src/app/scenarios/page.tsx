@@ -156,6 +156,16 @@ export default function ScenariosPage() {
                 <div className="text-xs text-neutral-500 mb-1">Execution</div>
                 <div className="text-lg leading-tight font-mono text-white">Oct 12-18</div>
               </div>
+              <div className="p-3 bg-neutral-900/50 rounded-lg border border-neutral-800">
+                <div className="text-xs text-neutral-500 mb-1">Avg Freight Rate</div>
+                <div className="text-xl font-mono tabular-nums flex items-center gap-1.5 truncate text-white">
+                  $18.50/MT
+                </div>
+              </div>
+              <div className="p-3 rounded-lg border flex flex-col justify-center bg-blue-500/10 border-blue-500/20">
+                <div className="text-xs mb-1 leading-tight text-blue-400">Total Logistics Cost</div>
+                <div className="text-xl font-mono tabular-nums truncate text-blue-400">$3.05M</div>
+              </div>
             </div>
 
             <div className="mt-4 pt-4 border-t border-white/10">
@@ -194,6 +204,16 @@ export default function ScenariosPage() {
               <div className="p-3 bg-neutral-900/50 rounded-lg border border-neutral-800">
                 <div className="text-xs text-neutral-500 mb-1">Execution</div>
                 <div className="text-lg leading-tight font-mono text-emerald-400">Oct 20-22</div>
+              </div>
+              <div className="p-3 bg-neutral-900/50 rounded-lg border border-neutral-800">
+                <div className="text-xs text-neutral-500 mb-1">Avg Freight Rate</div>
+                <div className="text-xl font-mono tabular-nums flex items-center gap-1.5 truncate text-emerald-400">
+                  <TrendingDown className="w-4 h-4 shrink-0" /> $10.20/MT
+                </div>
+              </div>
+              <div className="p-3 rounded-lg border flex flex-col justify-center bg-emerald-500/10 border-emerald-500/20">
+                <div className="text-xs mb-1 leading-tight text-emerald-400">Total Logistics Cost</div>
+                <div className="text-xl font-mono tabular-nums truncate text-emerald-400">$1.68M</div>
               </div>
             </div>
 
