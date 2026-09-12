@@ -23,7 +23,7 @@ export default function ScenariosPage() {
       <div className={`p-6 rounded-xl border transition-all duration-700 ${
         isRedSeaClosed ? "bg-rose-950/20 border-rose-500/40 shadow-[0_0_40px_rgba(244,63,94,0.1)]" : "minimal-panel border-neutral-800"
       }`}>
-        <div className="flex items-start justify-between">
+        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
           <div className="flex items-center gap-4">
             <div className={`w-12 h-12 rounded-full flex items-center justify-center ${
               isRedSeaClosed ? "bg-rose-500/20 text-rose-500 border border-rose-500/50" : "bg-neutral-800 border border-neutral-700 text-neutral-400"
@@ -48,7 +48,7 @@ export default function ScenariosPage() {
           <button 
             onClick={handleReroute}
             disabled={loading}
-            className={`px-6 py-3 rounded-lg text-xs font-mono font-bold uppercase tracking-widest transition-all duration-300 flex items-center gap-2 border focus-ring active:scale-95 ${
+            className={`px-6 py-3 shrink-0 rounded-lg text-xs font-mono font-bold uppercase tracking-widest transition-all duration-300 flex items-center gap-2 border focus-ring active:scale-95 whitespace-nowrap ${
               isRedSeaClosed 
                 ? "bg-neutral-800 text-neutral-300 border-neutral-700 hover:bg-neutral-700"
                 : "bg-rose-500/10 text-rose-400 border-rose-500/30 hover:bg-rose-500/20 btn-sweep shadow-[0_0_20px_rgba(244,63,94,0.15)]"
