@@ -83,6 +83,7 @@ export interface PortFlowContextType {
   setSelectedVoyageId: (id: string | null) => void;
   updateContractStatus: (contractId: string, newStatus: Contract["status"], realized: number | null) => void;
   runFleetOptimization: () => { updatedCount: number; totalAdded: number };
+  applyAiOptimization: (optimizedContracts: Partial<Contract>[]) => void;
 }
 
 // --- SEED DATA ---

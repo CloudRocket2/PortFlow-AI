@@ -1,6 +1,8 @@
 "use client";
 
 import { useRef, useEffect } from "react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { BrainCircuit, Send, Bot, User, AlertCircle, Trash2 } from "lucide-react";
 import { useChat, ChatMessage } from "@/context/ChatContext";
 
