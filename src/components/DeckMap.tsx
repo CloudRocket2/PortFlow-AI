@@ -168,11 +168,11 @@ export default function DeckMap() {
       id: 'ship-glow',
       data: ships,
       getPosition: d => d.coordinates,
-      getFillColor: d => d.isSelected ? [0, 255, 0, 100] : [0, 255, 255, 50],
+      getFillColor: d => d.isSelected ? [52, 211, 153, 150] : [0, 255, 255, 100],
       getRadius: 50000,
       radiusScale: 1,
-      radiusMinPixels: 10,
-      radiusMaxPixels: 50,
+      radiusMinPixels: 20,
+        radiusMaxPixels: 70,
       stroked: true,
       getLineColor: [0, 255, 255, 255],
       lineWidthMinPixels: 2,
@@ -257,8 +257,8 @@ export default function DeckMap() {
       },
       getIcon: () => 'ship',
       sizeScale: 1,
-      getSize: d => d.isSelected ? 35 : 25,
-      getColor: d => d.isSelected ? [0, 255, 0] : [0, 200, 255],
+      getSize: d => d.isSelected ? 55 : 40,
+        getColor: d => d.isSelected ? [52, 211, 153] : [255, 255, 255],
       getAngle: d => -d.bearing, // Rotate marker to face heading
       onClick: (info) => {
         if (info.object) setSelectedVoyageId(info.object.contractId);
