@@ -42,7 +42,7 @@ function getBearing(start: [number, number], end: [number, number]) {
 }
 
 export default function DeckMap() {
-  const { state, selectedVoyageId, setSelectedVoyageId } = usePortFlowData();
+  const { state, selectedVoyageId, setSelectedVoyageId, isRedSeaClosed } = usePortFlowData();
   const [viewState, setViewState] = useState<any>(INITIAL_VIEW_STATE);
   const [hoverInfo, setHoverInfo] = useState<any>(null);
   const [searchQuery, setSearchQuery] = useState("");
@@ -81,7 +81,11 @@ export default function DeckMap() {
       if (!origin || !dest) return null;
 
       const vessel = state.vessels.find(v => v.id === route.vesselId);
-      const intermediate = WAYPOINTS[origin.name] || [];
+      let intermediate = WAYPOINTS[origin.name] || [];
+        if (isRedSeaClosed && origin.name === "Norfolk, US") {
+          // Reroute around Cape of Good Hope
+          intermediate = [[-40.0, 30.0], [-25.0, 0.0], [-5.0, -20.0], [20.0, -40.0], [50.0, -25.0], [70.0, -10.0]];
+        }
       const isSelected = selectedVoyageId === c.id;
       
       const waypoints = [[origin.lng, origin.lat] as [number, number], ...intermediate, [dest.lng, dest.lat] as [number, number]];
@@ -110,7 +114,7 @@ export default function DeckMap() {
         isSelected
       };
     }).filter(Boolean) as any[];
-  }, [state.contracts, state.routes, state.ports, state.vessels, selectedVoyageId]);
+  }, [state.contracts, state.routes, state.ports, state.vessels, selectedVoyageId, isRedSeaClosed]);
 
   const allArcs = useMemo(() => mapRoutes.flatMap(r => r.arcs), [mapRoutes]);
 

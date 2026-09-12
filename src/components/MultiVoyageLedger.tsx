@@ -6,7 +6,7 @@ import { Ship, Search, ArrowRight, ShieldCheck, Route, Download, ChevronRight, S
 import { usePortFlowData } from "@/context/PortFlowContext";
 
 export default function MultiVoyageLedger() {
-  const { state, selectedVoyageId, setSelectedVoyageId } = usePortFlowData();
+  const { state, selectedVoyageId, setSelectedVoyageId, isRedSeaClosed } = usePortFlowData();
   const { contracts, routes, vessels, ports } = state;
 
   const [searchTerm, setSearchTerm] = useState("");
@@ -159,7 +159,14 @@ export default function MultiVoyageLedger() {
                       <div className="flex items-center gap-2 text-xs">
                         <span className="text-neutral-400">{voyage.origin}</span>
                         <ArrowRight className="w-3 h-3 text-neutral-600" />
-                        <span className="text-white">{voyage.destination}</span>
+                        <span className="text-white flex items-center gap-2">
+                            {voyage.destination}
+                            {isRedSeaClosed && voyage.origin === "Norfolk, US" && (
+                              <span className="text-[9px] bg-rose-500/20 text-rose-400 border border-rose-500/30 px-1 py-0.5 rounded uppercase tracking-widest whitespace-nowrap">
+                                Cape of Good Hope Reroute (+14 Days)
+                              </span>
+                            )}
+                          </span>
                       </div>
                     </td>
                     <td className="py-3 px-4">

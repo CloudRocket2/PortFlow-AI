@@ -88,6 +88,8 @@ export interface PortFlowContextType {
   updateContractStatus: (contractId: string, newStatus: Contract["status"], realized: number | null) => void;
   runFleetOptimization: () => { updatedCount: number; totalAdded: number };
   applyAiOptimization: (optimizedContracts: Partial<Contract>[]) => void;
+  isRedSeaClosed?: boolean;
+  toggleRedSeaReroute?: () => void;
 }
 
 // --- SEED DATA ---
@@ -122,7 +124,7 @@ const SEED_ROUTES: Route[] = [
   { id: "R-899", vesselId: "V-GLOBAL", originId: "P-MAPUTO", destinationId: "P-GANGAVARAM", cargo: "Thermal Coal", volume: 160000, eta: "in 2 days" },
   { id: "R-902", vesselId: "V-MAERSK", originId: "P-MAPUTO", destinationId: "P-PARADIP", cargo: "Thermal Coal", volume: 75000, eta: "in 4 days" },
   { id: "R-903", vesselId: "V-OCEANIC", originId: "P-VLADIVOSTOK", destinationId: "P-VIZAG", cargo: "Coking Coal", volume: 55000, eta: "in 12h" },
-  { id: "R-904", vesselId: "V-GLOBAL", originId: "P-MAPUTO", destinationId: "P-GANGAVARAM", cargo: "Iron Ore", volume: 160000, eta: "in 2h" },
+  { id: "R-904", vesselId: "V-STELLAR", originId: "P-NORFOLK", destinationId: "P-DHAMRA", cargo: "Coking Coal", volume: 35000, eta: "in 18 days" },
   { id: "R-905", vesselId: "V-APOLLO", originId: "P-KALIMANTAN", destinationId: "P-HALDIA", cargo: "Fertilizer", volume: 80000, eta: "in 5 days" },
 ];
 
@@ -172,6 +174,12 @@ const PortFlowContext = createContext<PortFlowContextType | undefined>(undefined
 export function PortFlowProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<PortFlowState>(INITIAL_STATE);
   const [selectedVoyageId, setSelectedVoyageId] = useState<string | null>(null);
+  const [isRedSeaClosed, setIsRedSeaClosed] = useState(false);
+
+  const toggleRedSeaReroute = () => {
+    setIsRedSeaClosed(prev => !prev);
+  };
+
 
   const updateContractStatus = (contractId: string, newStatus: Contract["status"], realized: number | null) => {
     setState(prev => ({
@@ -238,7 +246,7 @@ export function PortFlowProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <PortFlowContext.Provider value={{ state, selectedVoyageId, setSelectedVoyageId, updateContractStatus, runFleetOptimization, applyAiOptimization }}>
+    <PortFlowContext.Provider value={{ state, selectedVoyageId, setSelectedVoyageId, updateContractStatus, runFleetOptimization, applyAiOptimization, isRedSeaClosed, toggleRedSeaReroute }}>
       {children}
     </PortFlowContext.Provider>
   );
