@@ -291,10 +291,10 @@ async function main() {
   console.log("  Creating users...");
   const hashedPassword = await bcrypt.hash("admin123", 10);
   const users = [
-    { email: "chartering@portflow.com", role: "MGR-01", name: "Sufyan", department: "Commercial Chartering", clearance: "LEVEL 3 (DELTA)", password_hash: hashedPassword },
+    { email: "chartering@portflow.com", role: "MGR-01", name: "Dhruv", department: "Commercial Chartering", clearance: "LEVEL 3 (DELTA)", password_hash: hashedPassword },
     { email: "analyst@portflow.com", role: "ANL-04", name: "Krishna", department: "Market Intelligence", clearance: "LEVEL 3 (DELTA)", password_hash: hashedPassword },
     { email: "ops@portflow.com", role: "OPS-09", name: "Vaishnavi", department: "Terminal Logistics", clearance: "LEVEL 2 (SIGMA)", password_hash: hashedPassword },
-    { email: "director@portflow.com", role: "DIR-12", name: "Dhruv", department: "Executive Operations", clearance: "LEVEL 5 (OMEGA)", password_hash: hashedPassword },
+    { email: "director@portflow.com", role: "DIR-12", name: "Sufyan", department: "Executive Operations", clearance: "LEVEL 5 (OMEGA)", password_hash: hashedPassword },
     { email: "strategy@portflow.com", role: "STR-05", name: "Shresth", department: "Strategic Planning", clearance: "LEVEL 4 (GAMMA)", password_hash: hashedPassword },
     { email: "security@portflow.com", role: "SEC-01", name: "Saad", department: "Cybersecurity & Risk", clearance: "LEVEL 5 (OMEGA)", password_hash: hashedPassword },
   ];
