@@ -12,7 +12,8 @@ const WAYPOINTS: Record<string, [number, number][]> = {
   "Newcastle, Australia": [[153.0, -20.0], [142.0, -10.0], [115.0, -8.0]],
   "Kalimantan, Indonesia": [[104.0, 1.5]],
   "Maputo, Mozambique": [[50.0, -15.0], [75.0, 0.0]],
-  "Norfolk, US": [[-30.0, 35.0], [-5.0, 36.0], [15.0, 35.0], [32.0, 31.0], [43.0, 12.0], [60.0, 15.0]]
+  "Norfolk, US": [[-30.0, 35.0], [-5.0, 36.0], [15.0, 35.0], [32.0, 31.0], [43.0, 12.0], [60.0, 15.0]],
+  "Norfolk, US_REROUTED": [[-30.0, 35.0], [-25.0, 15.0], [-15.0, -10.0], [15.0, -38.0], [45.0, -30.0], [70.0, -5.0]]
 };
 
 export default function GlobeWrapper() {
@@ -56,7 +57,8 @@ export default function GlobeWrapper() {
 
       const vessel = state.vessels.find(v => v.id === route.vesselId);
 
-      const intermediate = WAYPOINTS[origin.name] || [];
+      const waypointKey = (isRedSeaClosed && origin.name === "Norfolk, US") ? "Norfolk, US_REROUTED" : origin.name;
+      const intermediate = WAYPOINTS[waypointKey] || [];
       const isSelected = selectedVoyageId === c.id;
 
       return {
@@ -72,7 +74,7 @@ export default function GlobeWrapper() {
         isSelected
       };
     }).filter(Boolean) as any[];
-  }, [state.contracts, state.routes, state.ports, state.vessels, selectedVoyageId]);
+  }, [state.contracts, state.routes, state.ports, state.vessels, selectedVoyageId, isRedSeaClosed]);
 
   // Derived ships based on routes
   const ships = useMemo(() => {

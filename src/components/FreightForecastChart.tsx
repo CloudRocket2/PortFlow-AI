@@ -15,16 +15,30 @@ import {
 } from "recharts";
 import { MOCK_FREIGHT_FORECAST, MULTI_YEAR_SEASONALITY_DATA } from "@/lib/maritime-data";
 import { TrendingDown, TrendingUp, Sparkles, Clock, CalendarDays, BrainCircuit, Activity, Flame } from "lucide-react";
+import { usePortFlowData } from "@/context/PortFlowContext";
 
 export default function FreightForecastChart() {
   const [viewMode, setViewMode] = useState<'short-term' | 'seasonality'>('short-term');
   const [showBacktest, setShowBacktest] = useState(false);
+  const { isRedSeaClosed } = usePortFlowData();
   
   // Format the data so Recharts can draw the confidence band using an array [lowerBound, upperBound]
-  const formattedShortTermData = MOCK_FREIGHT_FORECAST.map(d => ({
-    ...d,
-    confidenceRange: d.lowerBound && d.upperBound ? [d.lowerBound, d.upperBound] : null
-  }));
+  const formattedShortTermData = MOCK_FREIGHT_FORECAST.map(d => {
+    // Determine if this date is "future" (rough heuristic, we can just bump the later ones)
+    // presentDay is Nov 05, so let's spike everything from Nov 06 onwards.
+    const isFuture = ["Nov 06", "Nov 07", "Nov 08", "Nov 09", "Nov 10"].includes(d.date);
+    const spikeMultiplier = (isRedSeaClosed && isFuture) ? 1.45 : 1.0;
+    
+    return {
+      ...d,
+      actual: d.actual ? d.actual * spikeMultiplier : undefined,
+      predicted: d.predicted ? d.predicted * spikeMultiplier : undefined,
+      predictedBacktest: d.predictedBacktest ? d.predictedBacktest * spikeMultiplier : undefined,
+      lowerBound: d.lowerBound ? d.lowerBound * spikeMultiplier : undefined,
+      upperBound: d.upperBound ? d.upperBound * spikeMultiplier : undefined,
+      confidenceRange: d.lowerBound && d.upperBound ? [d.lowerBound * spikeMultiplier, d.upperBound * spikeMultiplier] : null
+    };
+  });
 
   const presentDay = "Nov 05";
 
@@ -182,11 +196,19 @@ export default function FreightForecastChart() {
           <div className="mt-2 text-sm font-mono text-neutral-300 leading-relaxed border-l-2 border-emerald-400 pl-3 py-1">
             <span className="text-emerald-400 font-bold uppercase tracking-widest text-xs block mb-1 transition-all duration-200">AI Recommendation</span>
             {viewMode === 'short-term' ? (
-              <span className="animate-in fade-in duration-300">
-                The neural forecasting model anticipates a sharp peak around mid-November due to seasonal congestion, followed by a sudden drop in rates as port queues clear. 
-                <br/><br/>
-                <strong>Action:</strong> Delay executing long-term charters for 3 weeks to secure the $14.90/t dip, projecting a structural savings of $120,000 per Capesize voyage.
-              </span>
+              isRedSeaClosed ? (
+                <span className="animate-in fade-in duration-300 text-rose-300">
+                  <strong className="text-rose-400">CRITICAL SHOCK DETECTED:</strong> Red Sea closure has triggered massive vessel rerouting via Cape of Good Hope, tightening global tonnage supply. Spot rates are projected to surge by 45%.
+                  <br/><br/>
+                  <strong className="text-white">Action:</strong> Immediately lock in remaining Q4 Spot requirements at current multi-voyage rates. Delaying execution will result in projected $450,000 extra cost per Capesize voyage.
+                </span>
+              ) : (
+                <span className="animate-in fade-in duration-300">
+                  The neural forecasting model anticipates a sharp peak around mid-November due to seasonal congestion, followed by a sudden drop in rates as port queues clear. 
+                  <br/><br/>
+                  <strong>Action:</strong> Delay executing long-term charters for 3 weeks to secure the $14.90/t dip, projecting a structural savings of $120,000 per Capesize voyage.
+                </span>
+              )
             ) : (
               <span className="animate-in fade-in duration-300">
                 Historical 3-year overlay confirms a persistent pre-monsoon freight spike starting in June, peaking mid-July due to major East Coast draft constraints.
