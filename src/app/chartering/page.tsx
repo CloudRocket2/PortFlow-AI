@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Ship, Anchor, Calculator, TrendingDown, Clock, ShieldAlert, Cpu, CheckCircle2, AlertTriangle, ArrowRight } from "lucide-react";
+import { Ship, Anchor, Calculator, TrendingDown, Clock, ShieldAlert, Cpu, CheckCircle2, AlertTriangle, ArrowRight, Database, RefreshCcw } from "lucide-react";
 import { ORIGIN_PORTS, INDIAN_EAST_COAST_PORTS } from "@/lib/maritime-data";
 import PortInfraTable from "@/components/PortInfraTable";
 
@@ -17,9 +17,13 @@ export default function CharteringPage() {
   const [logs, setLogs] = useState<string[]>([]);
 
   const [result, setResult] = useState<any>(null);
+  const [erpStatus, setErpStatus] = useState<"idle" | "pushing" | "success">("idle");
+  const [bookingId, setBookingId] = useState("");
 
   const handleOptimize = () => {
     setStatus("calculating");
+    setErpStatus("idle");
+    setBookingId(`BKG-${new Date().getFullYear()}-${Math.floor(Math.random() * 9000 + 1000)}`);
     setLogs(["Initializing Gemini AI Freight Model..."]);
 
     const dest = INDIAN_EAST_COAST_PORTS[destinationKey];
@@ -87,6 +91,13 @@ export default function CharteringPage() {
       
       setStatus("complete");
     }, 3200);
+  };
+
+  const handlePushToErp = () => {
+    setErpStatus("pushing");
+    setTimeout(() => {
+      setErpStatus("success");
+    }, 1500);
   };
 
   return (
@@ -256,6 +267,49 @@ export default function CharteringPage() {
                     </div>
                   </div>
                 </div>
+              </div>
+
+              {/* ERP Draft Booking */}
+              <div className="border border-neutral-800 p-5 bg-neutral-900/30 animate-slide-in" style={{ animationDelay: '0.4s' }}>
+                 <div className="flex items-center justify-between">
+                     <div>
+                       <h2 className="text-base font-medium uppercase tracking-wide font-mono text-white flex items-center gap-2 border-l-2 border-fuchsia-500/40 pl-3">
+                         <Database className="w-4 h-4 text-fuchsia-400" />
+                         Draft ERP Booking Ready
+                       </h2>
+                       <p className="text-xs font-mono text-neutral-500 uppercase tracking-widest mt-1">
+                         SAP Reference: {bookingId}
+                       </p>
+                     </div>
+                     <button 
+                       onClick={handlePushToErp}
+                       disabled={erpStatus !== "idle"}
+                       className={`px-4 py-2 text-xs font-mono uppercase tracking-widest transition-all flex items-center gap-2 ${
+                         erpStatus === "success" 
+                           ? "bg-emerald-500/10 border border-emerald-500/30 text-emerald-400" 
+                           : erpStatus === "pushing"
+                             ? "bg-amber-500/10 border border-amber-500/30 text-amber-400"
+                             : "bg-fuchsia-500/10 border border-fuchsia-500/30 text-fuchsia-400 hover:bg-fuchsia-500/20"
+                       }`}
+                     >
+                       {erpStatus === "success" ? (
+                         <>
+                           <CheckCircle2 className="w-4 h-4" />
+                           Synced to SAP
+                         </>
+                       ) : erpStatus === "pushing" ? (
+                         <>
+                           <RefreshCcw className="w-4 h-4 animate-spin" />
+                           Pushing...
+                         </>
+                       ) : (
+                         <>
+                           <Database className="w-4 h-4" />
+                           Approve & Push to SAP
+                         </>
+                       )}
+                     </button>
+                 </div>
               </div>
 
             </div>

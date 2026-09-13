@@ -7,6 +7,7 @@ import BottleneckAlerts from "@/components/BottleneckAlerts";
 import OptimizerPanel from "@/components/OptimizerPanel";
 import LiveTerminalFeed from "@/components/LiveTerminalFeed";
 import { usePortFlowData } from "@/context/PortFlowContext";
+import { Database, RefreshCcw } from "lucide-react";
 import dynamic from "next/dynamic";
 
 const GlobeWrapper = dynamic(() => import("@/components/GlobeWrapper"), { ssr: false });
@@ -14,7 +15,7 @@ const GlobeWrapper = dynamic(() => import("@/components/GlobeWrapper"), { ssr: f
 export default function DashboardPage() {
   const [bootSequence, setBootSequence] = useState(true);
   const [bootLog, setBootLog] = useState("Initializing PortFlow OS...");
-  const { state } = usePortFlowData();
+  const { state, syncErpOrders, isErpSyncing, hasSyncedErp } = usePortFlowData();
   const { vessels, contracts, routes } = state;
 
   useEffect(() => {
@@ -123,17 +124,37 @@ export default function DashboardPage() {
         } animate-page-enter`}
       >
         {/* Status Bar */}
-        <div className="minimal-panel px-4 py-2.5 flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_6px_rgba(52,211,153,0.5)]" />
-            <p className="text-sm font-mono uppercase tracking-widest text-emerald-400">
-              Global Bulk Radar Active
-            </p>
+          <div className="minimal-panel px-4 py-2.5 flex items-center justify-between">
+            <div className="flex items-center gap-2.5">
+              <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_6px_rgba(52,211,153,0.5)]" />
+              <p className="text-sm font-mono uppercase tracking-widest text-emerald-400">
+                Global Bulk Radar Active
+              </p>
+            </div>
+            
+            <button 
+              onClick={syncErpOrders}
+              disabled={hasSyncedErp || isErpSyncing}
+              className={`flex items-center gap-2 px-4 py-1.5 rounded-lg border text-xs font-mono uppercase tracking-widest transition-all ${hasSyncedErp ? 'bg-cyan-500/10 border-cyan-500/30 text-cyan-400 opacity-50 cursor-not-allowed' : isErpSyncing ? 'bg-amber-500/10 border-amber-500/30 text-amber-400' : 'bg-neutral-800 border-neutral-700 text-neutral-300 hover:bg-neutral-700 hover:text-white'}`}
+            >
+              {isErpSyncing ? (
+                <>
+                  <RefreshCcw className="w-3.5 h-3.5 animate-spin" />
+                  Syncing SAP ERP...
+                </>
+              ) : hasSyncedErp ? (
+                <>
+                  <Database className="w-3.5 h-3.5" />
+                  ERP Data Synced
+                </>
+              ) : (
+                <>
+                  <Database className="w-3.5 h-3.5 text-blue-400" />
+                  Pull Unallocated SAP Orders
+                </>
+              )}
+            </button>
           </div>
-          <p className="text-xs font-mono text-neutral-500">
-            AIS Fleet Architecture Ready
-          </p>
-        </div>
 
         {/* Row 1: Globe + Side Panels */}
         <div className="flex flex-col xl:flex-row gap-5">

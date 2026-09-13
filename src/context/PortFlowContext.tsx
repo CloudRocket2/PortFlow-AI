@@ -92,6 +92,9 @@ export interface PortFlowContextType {
   toggleRedSeaReroute?: () => void;
   isDeveloperMode: boolean;
   toggleDeveloperMode: () => void;
+  syncErpOrders: () => Promise<void>;
+  isErpSyncing: boolean;
+  hasSyncedErp: boolean;
 }
 
 // --- SEED DATA ---
@@ -178,6 +181,8 @@ export function PortFlowProvider({ children }: { children: ReactNode }) {
   const [selectedVoyageId, setSelectedVoyageId] = useState<string | null>(null);
   const [isRedSeaClosed, setIsRedSeaClosed] = useState(false);
   const [isDeveloperMode, setIsDeveloperMode] = useState(false);
+  const [isErpSyncing, setIsErpSyncing] = useState(false);
+  const [hasSyncedErp, setHasSyncedErp] = useState(false);
 
   const toggleRedSeaReroute = () => {
     setIsRedSeaClosed(prev => !prev);
@@ -185,6 +190,75 @@ export function PortFlowProvider({ children }: { children: ReactNode }) {
 
   const toggleDeveloperMode = () => {
     setIsDeveloperMode(prev => !prev);
+  };
+
+  const syncErpOrders = async () => {
+    if (hasSyncedErp || isErpSyncing) return;
+    setIsErpSyncing(true);
+    
+    // Simulate API delay for SAP ERP extraction and Groq LPU processing
+    await new Promise(resolve => setTimeout(resolve, 2500));
+
+    const newVessels: Vessel[] = [];
+    const newRoutes: Route[] = [];
+    const newContracts: Contract[] = [];
+
+    const origins = SEED_PORTS.filter(p => p.type === "Origin");
+    const destinations = SEED_PORTS.filter(p => p.type === "Destination");
+    const classes: VesselClass[] = ["Handysize", "Supramax", "Panamax", "Capesize"];
+    const statuses: VesselStatus[] = ["In Transit", "Loading", "Discharging"];
+
+    for (let i = 0; i < 45; i++) {
+      const vId = `V-ERP-${1000 + i}`;
+      const rId = `R-ERP-${1000 + i}`;
+      const cId = `CT-ERP-${8000 + i}`;
+
+      const o = origins[Math.floor(Math.random() * origins.length)];
+      const d = destinations[Math.floor(Math.random() * destinations.length)];
+      const vClass = classes[Math.floor(Math.random() * classes.length)];
+      const stat = statuses[Math.floor(Math.random() * statuses.length)];
+
+      newVessels.push({
+        id: vId,
+        name: `MV PortFlow ${i + 10}`,
+        class: vClass,
+        status: stat,
+        currentDraft: 10 + Math.random() * 4,
+        capacity: vClass === "Capesize" ? 180000 : vClass === "Panamax" ? 75000 : 55000,
+        legalScore: 85 + Math.random() * 15
+      });
+
+      newRoutes.push({
+        id: rId,
+        vesselId: vId,
+        originId: o.id,
+        destinationId: d.id,
+        cargo: "Iron Ore",
+        volume: vClass === "Capesize" ? 175000 : 70000,
+        eta: new Date(Date.now() + Math.random() * 10 * 86400000).toISOString()
+      });
+
+      newContracts.push({
+        id: cId,
+        routeId: rId,
+        type: "Spot",
+        status: "AI Executed",
+        predictedSavings: 45000 + Math.random() * 20000,
+        realizedSavings: null,
+        commercialScore: 80 + Math.random() * 15,
+        operationalScore: 85 + Math.random() * 10
+      });
+    }
+
+    setState(prev => ({
+      ...prev,
+      vessels: [...prev.vessels, ...newVessels],
+      routes: [...prev.routes, ...newRoutes],
+      contracts: [...prev.contracts, ...newContracts]
+    }));
+
+    setIsErpSyncing(false);
+    setHasSyncedErp(true);
   };
 
 
@@ -253,7 +327,7 @@ export function PortFlowProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <PortFlowContext.Provider value={{ state, selectedVoyageId, setSelectedVoyageId, updateContractStatus, runFleetOptimization, applyAiOptimization, isRedSeaClosed, toggleRedSeaReroute, isDeveloperMode, toggleDeveloperMode }}>
+    <PortFlowContext.Provider value={{ state, selectedVoyageId, setSelectedVoyageId, updateContractStatus, runFleetOptimization, applyAiOptimization, isRedSeaClosed, toggleRedSeaReroute, isDeveloperMode, toggleDeveloperMode, syncErpOrders, isErpSyncing, hasSyncedErp }}>
       {children}
     </PortFlowContext.Provider>
   );
