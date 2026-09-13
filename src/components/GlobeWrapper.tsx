@@ -84,7 +84,7 @@ export default function GlobeWrapper() {
         isSelected
       };
     }).filter(Boolean) as any[];
-  }, [state.contracts, state.routes, state.ports, state.vessels, selectedVoyageId, isRedSeaClosed]);
+  }, [state.contracts, state.routes, state.ports, state.vessels, selectedVoyageId, isRedSeaClosed, isCycloneActive]);
 
   // Derived ships based on routes
   const ships = useMemo(() => {
