@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 
 export type VesselClass = "Handysize" | "Supramax" | "Panamax" | "Capesize";
 export type VesselStatus = "In Transit" | "Loading" | "Discharging" | "Idle" | "Anchored";
@@ -183,6 +183,32 @@ export function PortFlowProvider({ children }: { children: ReactNode }) {
   const [isDeveloperMode, setIsDeveloperMode] = useState(false);
   const [isErpSyncing, setIsErpSyncing] = useState(false);
   const [hasSyncedErp, setHasSyncedErp] = useState(false);
+  const [hasHydrated, setHasHydrated] = useState(false);
+
+  // Hydrate from localStorage on mount
+  useEffect(() => {
+    const savedState = localStorage.getItem("portFlowState");
+    const savedRedSea = localStorage.getItem("isRedSeaClosed");
+    const savedDevMode = localStorage.getItem("isDeveloperMode");
+    const savedErp = localStorage.getItem("hasSyncedErp");
+
+    if (savedState) setState(JSON.parse(savedState));
+    if (savedRedSea) setIsRedSeaClosed(savedRedSea === "true");
+    if (savedDevMode) setIsDeveloperMode(savedDevMode === "true");
+    if (savedErp) setHasSyncedErp(savedErp === "true");
+    
+    setHasHydrated(true);
+  }, []);
+
+  // Persist state changes
+  useEffect(() => {
+    if (!hasHydrated) return; // Prevent overwriting with initial state on mount
+    
+    localStorage.setItem("portFlowState", JSON.stringify(state));
+    localStorage.setItem("isRedSeaClosed", isRedSeaClosed.toString());
+    localStorage.setItem("isDeveloperMode", isDeveloperMode.toString());
+    localStorage.setItem("hasSyncedErp", hasSyncedErp.toString());
+  }, [state, isRedSeaClosed, isDeveloperMode, hasSyncedErp, hasHydrated]);
 
   const toggleRedSeaReroute = () => {
     setIsRedSeaClosed(prev => !prev);

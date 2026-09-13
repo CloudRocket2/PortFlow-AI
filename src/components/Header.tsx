@@ -367,7 +367,7 @@ export default function Header() {
               </div>
 
               {/* Developer Mode */}
-              <div className="flex items-center justify-between py-2">
+              <div className="flex items-center justify-between py-2 border-b border-neutral-800/50">
                 <div>
                   <p className="text-sm font-medium text-white">Developer Metrics</p>
                   <p className="text-xs text-neutral-500 mt-0.5">Show Groq LPU latency & JSON payloads</p>
@@ -378,6 +378,20 @@ export default function Header() {
                 >
                   <div className={`absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white transition-transform ${isDeveloperMode ? 'translate-x-5' : 'translate-x-0'}`} />
                 </button>
+              </div>
+
+              {/* Reset Demo State */}
+              <div className="pt-4 mt-2">
+                <button 
+                  onClick={() => {
+                    localStorage.clear();
+                    window.location.reload();
+                  }}
+                  className="w-full bg-rose-500/10 border border-rose-500/30 text-rose-400 hover:bg-rose-500/20 py-2.5 rounded-lg text-sm font-mono uppercase tracking-widest transition-colors focus-ring flex items-center justify-center gap-2"
+                >
+                  Reset Demo State
+                </button>
+                <p className="text-[10px] text-neutral-500 text-center mt-2 font-mono">Clears local storage and reloads</p>
               </div>
 
             </div>
