@@ -86,6 +86,7 @@ export interface PortFlowContextType {
   selectedVoyageId: string | null;
   setSelectedVoyageId: (id: string | null) => void;
   updateContractStatus: (contractId: string, newStatus: Contract["status"], realized: number | null) => void;
+  autoCharterAll: () => void;
   runFleetOptimization: () => { updatedCount: number; totalAdded: number };
   applyAiOptimization: (optimizedContracts: Partial<Contract>[]) => void;
   isRedSeaClosed?: boolean;
@@ -327,6 +328,17 @@ export function PortFlowProvider({ children }: { children: ReactNode }) {
     }));
   };
 
+  const autoCharterAll = () => {
+    setState(prev => ({
+      ...prev,
+      contracts: prev.contracts.map(c => 
+        c.status !== "AI Executed" 
+          ? { ...c, status: "AI Executed", realizedSavings: c.predictedSavings * (0.95 + Math.random() * 0.1) } // Randomize realized savings slightly
+          : c
+      )
+    }));
+  };
+
   const runFleetOptimization = () => {
     let updatedCount = 0;
     let totalAdded = 0;
@@ -381,7 +393,7 @@ export function PortFlowProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <PortFlowContext.Provider value={{ state, selectedVoyageId, setSelectedVoyageId, updateContractStatus, runFleetOptimization, applyAiOptimization, isRedSeaClosed, toggleRedSeaReroute, isCycloneActive, toggleCyclone, isDeveloperMode, toggleDeveloperMode, syncErpOrders, isErpSyncing, hasSyncedErp, erpSyncPhase }}>
+    <PortFlowContext.Provider value={{ state, selectedVoyageId, setSelectedVoyageId, updateContractStatus, autoCharterAll, runFleetOptimization, applyAiOptimization, isRedSeaClosed, toggleRedSeaReroute, isCycloneActive, toggleCyclone, isDeveloperMode, toggleDeveloperMode, syncErpOrders, isErpSyncing, hasSyncedErp, erpSyncPhase }}>
       {children}
     </PortFlowContext.Provider>
   );

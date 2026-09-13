@@ -6,7 +6,7 @@ import { Ship, Search, ArrowRight, ShieldCheck, Route, Download, ChevronRight, S
 import { usePortFlowData } from "@/context/PortFlowContext";
 
 export default function MultiVoyageLedger() {
-  const { state, selectedVoyageId, setSelectedVoyageId, isRedSeaClosed } = usePortFlowData();
+  const { state, selectedVoyageId, setSelectedVoyageId, isRedSeaClosed, autoCharterAll } = usePortFlowData();
   const { contracts, routes, vessels, ports } = state;
 
   const [searchTerm, setSearchTerm] = useState("");
@@ -98,6 +98,9 @@ export default function MultiVoyageLedger() {
           </div>
           
           <div className="flex items-center gap-3">
+              <button onClick={autoCharterAll} className="text-sm font-mono text-emerald-400 hover:bg-emerald-500/10 transition-colors flex items-center gap-1 border border-emerald-500/50 px-2 py-1 rounded-lg">
+                <Zap className="w-3 h-3" /> Auto-Charter All
+              </button>
             <button onClick={exportCSV} className="text-sm font-mono text-neutral-400 hover:text-white transition-colors flex items-center gap-1 border border-neutral-700 px-2 py-1 rounded-lg">
               <Download className="w-3 h-3" /> CSV
             </button>
@@ -105,19 +108,19 @@ export default function MultiVoyageLedger() {
               <Download className="w-3 h-3" /> PDF
             </button>
             <div className="relative ml-2">
-              <Search className="w-3 h-3 absolute left-2 top-1/2 -translate-y-1/2 text-neutral-500" />
+              <Search className="w-4 h-4 text-neutral-500 absolute left-3 top-1/2 -translate-y-1/2" />
               <input 
                 type="text" 
-                placeholder="SEARCH VOYAGE ID..." 
+                placeholder="SEARCH VOYAGE ID" 
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="bg-neutral-900/50 border border-neutral-800 text-sm font-mono px-7 py-1.5 focus:outline-none focus:border-cyan-500/50 text-white w-48 rounded-lg transition-colors"
+                className="bg-neutral-900 border border-neutral-700 text-white text-xs font-mono py-1.5 pl-9 pr-4 rounded-lg focus:outline-none focus:border-cyan-500 w-48"
               />
             </div>
           </div>
         </div>
 
-        <div className="overflow-x-auto" id="ledger-table">
+        <div className="overflow-x-auto print-friendly" id="ledger-table">
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="border-b border-neutral-800 text-xs font-mono text-neutral-500 uppercase tracking-widest bg-neutral-900/30">
@@ -127,8 +130,7 @@ export default function MultiVoyageLedger() {
                 <th className="py-3 px-4 font-normal">Global Route (Origin &rarr; East Coast)</th>
                 <th className="py-3 px-4 font-normal">Contract Transition</th>
                 <th className="py-3 px-4 font-normal">Savings (Pred vs Realized)</th>
-                <th className="py-3 px-4 font-normal">Eco Impact</th>
-                  <th className="py-3 px-4 font-normal text-right">Status</th>
+                <th className="py-3 px-4 font-normal text-right">Status</th>
               </tr>
             </thead>
             <tbody className="text-sm font-mono text-neutral-300">
@@ -147,18 +149,18 @@ export default function MultiVoyageLedger() {
                     onClick={() => setSelectedVoyageId(isSelected ? null : voyage.id)}
                     style={{ animationDelay: `${idx * 0.03}s` }}
                   >
-                    <td className="py-3 px-4"><div className="flex items-center gap-2"><span className="text-white font-bold">{voyage.id}</span></div></td>
-                    <td className="py-3 px-4"><div className="flex items-center gap-2"><Ship className="w-3 h-3 text-neutral-500" />{voyage.vessel}</div></td>
+                    <td className="py-3 px-4"><div className="flex items-center gap-2"><span className="text-white font-bold whitespace-nowrap">{voyage.id}</span></div></td>
+                    <td className="py-3 px-4"><div className="flex items-center gap-2 whitespace-nowrap"><Ship className="w-3 h-3 text-neutral-500 shrink-0" />{voyage.vessel}</div></td>
                     <td className="py-3 px-4">
-                      <div className="flex flex-col">
+                      <div className="flex flex-col whitespace-nowrap">
                         <span className="text-white">{voyage.volume}</span>
                         <span className="text-[10px] text-neutral-500">{voyage.cargo}</span>
                       </div>
                     </td>
                     <td className="py-3 px-4">
-                      <div className="flex items-center gap-2 text-xs">
+                      <div className="flex items-center gap-2 text-xs whitespace-nowrap">
                         <span className="text-neutral-400">{voyage.origin}</span>
-                        <ArrowRight className="w-3 h-3 text-neutral-600" />
+                        <ArrowRight className="w-3 h-3 text-neutral-600 shrink-0" />
                         <span className="text-white flex items-center gap-2">
                             {voyage.destination}
                             {isRedSeaClosed && voyage.origin === "Norfolk, US" && (
@@ -166,19 +168,22 @@ export default function MultiVoyageLedger() {
                                 Cape of Good Hope Reroute (+14 Days)
                               </span>
                             )}
+                            {voyage.destination.includes("Sagar") && (
+                              <span className="px-1.5 py-0.5 rounded text-[8px] bg-amber-500/10 text-amber-500 border border-amber-500/20" title="Draft Restriction Zone">10m DRAFT</span>
+                            )}
                           </span>
                       </div>
                     </td>
                     <td className="py-3 px-4">
-                      <div className="flex items-center gap-1.5">
+                      <div className="flex items-center gap-1.5 whitespace-nowrap">
                         {voyage.type.includes("Spot") ? (
                           <>
-                            <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                            <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shrink-0" />
                             <span className="text-emerald-400 font-bold">{voyage.type}</span>
                           </>
                         ) : (
                           <>
-                            <div className="w-1.5 h-1.5 rounded-full bg-neutral-600" />
+                            <div className="w-1.5 h-1.5 rounded-full bg-neutral-600 shrink-0" />
                             <span className="text-neutral-500">{voyage.type}</span>
                           </>
                         )}
