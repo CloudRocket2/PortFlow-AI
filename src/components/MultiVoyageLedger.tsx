@@ -262,15 +262,15 @@ export default function MultiVoyageLedger() {
                 <div className="bg-black/50 border border-neutral-800 rounded-xl p-4 flex flex-col gap-3">
                   <div className="flex justify-between items-center text-sm">
                     <span className="text-neutral-400">Commercial Score</span>
-                    <span className="text-emerald-400 font-bold">{selectedVoyage.commercialScore}/100</span>
+                    <span className="text-emerald-400 font-bold">{Math.round(selectedVoyage.commercialScore!)}/100</span>
                   </div>
                   <div className="flex justify-between items-center text-sm">
                     <span className="text-neutral-400">Operational Score</span>
-                    <span className="text-emerald-400 font-bold">{selectedVoyage.operationalScore}/100</span>
+                    <span className="text-emerald-400 font-bold">{Math.round(selectedVoyage.operationalScore!)}/100</span>
                   </div>
                   <div className="flex justify-between items-center text-sm border-b border-neutral-800 pb-3">
                     <span className="text-neutral-400 flex items-center gap-1"><Scale className="w-3 h-3" /> Legal Score</span>
-                    <span className={`font-bold ${selectedVoyage.legalScore! >= 90 ? 'text-emerald-400' : selectedVoyage.legalScore! >= 80 ? 'text-amber-400' : 'text-red-400'}`}>{selectedVoyage.legalScore}/100</span>
+                    <span className={`font-bold ${selectedVoyage.legalScore! >= 90 ? 'text-emerald-400' : selectedVoyage.legalScore! >= 80 ? 'text-amber-400' : 'text-red-400'}`}>{Math.round(selectedVoyage.legalScore!)}/100</span>
                   </div>
                   <div className="flex justify-between items-center text-sm pt-1">
                     <span className="text-white font-bold uppercase">Overall AI Confidence</span>
