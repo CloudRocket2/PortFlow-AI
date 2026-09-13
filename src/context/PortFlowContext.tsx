@@ -258,9 +258,9 @@ export function PortFlowProvider({ children }: { children: ReactNode }) {
     const statuses: VesselStatus[] = ["In Transit", "Loading", "Discharging"];
 
     for (let i = 0; i < 45; i++) {
-      const vId = `V-ERP-${1000 + i}`;
-      const rId = `R-ERP-${1000 + i}`;
-      const cId = `CT-ERP-${8000 + i}`;
+      const vId = `V-ERP-${i}`;
+      const rId = `R-ERP-${i}`;
+      const cId = `MV-ERP-${i+1000}`;
 
       const o = origins[Math.floor(Math.random() * origins.length)];
       const d = destinations[Math.floor(Math.random() * destinations.length)];
@@ -269,17 +269,17 @@ export function PortFlowProvider({ children }: { children: ReactNode }) {
 
       newVessels.push({
         id: vId,
-        name: `MV PortFlow ${i + 10}`,
+        name: `MV Generated ${i}`,
         class: vClass,
         status: stat,
         currentDraft: 10 + Math.random() * 4,
         capacity: vClass === "Capesize" ? 180000 : vClass === "Panamax" ? 75000 : 55000,
-        legalScore: 85 + Math.random() * 15,
-        imo: `IMO${9000000 + i * 13}`,
-        flag: ["Panama", "Liberia", "Marshall Islands", "Malta", "Singapore"][i % 5],
-        owner: ["Oceanic Bulk Carriers", "Triton Maritime", "Atlas Shipping Co", "Neptune Lines"][i % 4],
-        classSociety: ["DNV", "Lloyd's Register", "ABS", "Bureau Veritas"][i % 4],
-        pni: ["Gard P&I", "UK P&I Club", "Skuld", "NorthStandard"][i % 4]
+        legalScore: 80 + Math.floor(Math.random() * 20),
+        imo: `941${Math.floor(Math.random() * 9000)}`,
+        flag: ["Liberia", "Panama", "Marshall Islands"][Math.floor(Math.random() * 3)],
+        owner: `Mock Owner ${i}`,
+        classSociety: "DNV",
+        pni: "UK P&I"
       });
 
       newRoutes.push({
@@ -296,11 +296,11 @@ export function PortFlowProvider({ children }: { children: ReactNode }) {
         id: cId,
         routeId: rId,
         type: "Spot",
-        status: "AI Executed",
+        status: "Mgt Approval Pending",
         predictedSavings: 45000 + Math.random() * 20000,
         realizedSavings: null,
-        commercialScore: 80 + Math.random() * 15,
-        operationalScore: 85 + Math.random() * 10
+        commercialScore: 70 + Math.random() * 25,
+        operationalScore: 70 + Math.random() * 25,
       });
     }
 
@@ -333,7 +333,12 @@ export function PortFlowProvider({ children }: { children: ReactNode }) {
       ...prev,
       contracts: prev.contracts.map(c => 
         c.status !== "AI Executed" 
-          ? { ...c, status: "AI Executed", realizedSavings: c.predictedSavings * (0.95 + Math.random() * 0.1) } // Randomize realized savings slightly
+          ? { 
+              ...c, 
+              status: "AI Executed", 
+              type: "Spot → 3-Voyage Contract",
+              realizedSavings: c.predictedSavings * (0.95 + Math.random() * 0.1) 
+            } 
           : c
       )
     }));
