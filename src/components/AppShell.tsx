@@ -3,6 +3,7 @@
 import { usePathname } from "next/navigation";
 import Sidebar from "@/components/Sidebar";
 import Header from "@/components/Header";
+import DeveloperMetricsOverlay from "@/components/DeveloperMetricsOverlay";
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -18,6 +19,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         <Header />
         <main className="flex-1 overflow-y-auto p-6">{children}</main>
       </div>
+      <DeveloperMetricsOverlay />
     </>
   );
 }

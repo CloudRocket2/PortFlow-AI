@@ -90,6 +90,8 @@ export interface PortFlowContextType {
   applyAiOptimization: (optimizedContracts: Partial<Contract>[]) => void;
   isRedSeaClosed?: boolean;
   toggleRedSeaReroute?: () => void;
+  isDeveloperMode: boolean;
+  toggleDeveloperMode: () => void;
 }
 
 // --- SEED DATA ---
@@ -175,9 +177,14 @@ export function PortFlowProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<PortFlowState>(INITIAL_STATE);
   const [selectedVoyageId, setSelectedVoyageId] = useState<string | null>(null);
   const [isRedSeaClosed, setIsRedSeaClosed] = useState(false);
+  const [isDeveloperMode, setIsDeveloperMode] = useState(false);
 
   const toggleRedSeaReroute = () => {
     setIsRedSeaClosed(prev => !prev);
+  };
+
+  const toggleDeveloperMode = () => {
+    setIsDeveloperMode(prev => !prev);
   };
 
 
@@ -246,7 +253,7 @@ export function PortFlowProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <PortFlowContext.Provider value={{ state, selectedVoyageId, setSelectedVoyageId, updateContractStatus, runFleetOptimization, applyAiOptimization, isRedSeaClosed, toggleRedSeaReroute }}>
+    <PortFlowContext.Provider value={{ state, selectedVoyageId, setSelectedVoyageId, updateContractStatus, runFleetOptimization, applyAiOptimization, isRedSeaClosed, toggleRedSeaReroute, isDeveloperMode, toggleDeveloperMode }}>
       {children}
     </PortFlowContext.Provider>
   );

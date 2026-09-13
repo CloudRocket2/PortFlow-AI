@@ -76,7 +76,7 @@ export default function Header() {
     localStorage.setItem("pf_notifs", String(notificationsEnabled));
   }, [notificationsEnabled]);
   const notifRef = useRef<HTMLDivElement>(null);
-  const { state } = usePortFlowData();
+  const { state, isDeveloperMode, toggleDeveloperMode } = usePortFlowData();
   const { vessels, contracts, routes } = state;
 
   useEffect(() => {
@@ -356,13 +356,27 @@ export default function Header() {
               </div>
 
               {/* Data Sync */}
-              <div className="flex items-center justify-between py-2">
+              <div className="flex items-center justify-between py-2 border-b border-neutral-800/50">
                 <div>
                   <p className="text-sm font-medium text-white">Live AIS Sync</p>
                   <p className="text-xs text-neutral-500 mt-0.5">Update vessel positions in real-time</p>
                 </div>
                 <button className="w-10 h-5 rounded-full relative transition-colors focus-ring bg-cyan-500">
                   <div className="absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white transition-transform translate-x-5" />
+                </button>
+              </div>
+
+              {/* Developer Mode */}
+              <div className="flex items-center justify-between py-2">
+                <div>
+                  <p className="text-sm font-medium text-white">Developer Metrics</p>
+                  <p className="text-xs text-neutral-500 mt-0.5">Show Groq LPU latency & JSON payloads</p>
+                </div>
+                <button 
+                  onClick={toggleDeveloperMode}
+                  className={`w-10 h-5 rounded-full relative transition-colors focus-ring ${isDeveloperMode ? 'bg-fuchsia-500' : 'bg-neutral-700'}`}
+                >
+                  <div className={`absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white transition-transform ${isDeveloperMode ? 'translate-x-5' : 'translate-x-0'}`} />
                 </button>
               </div>
 
