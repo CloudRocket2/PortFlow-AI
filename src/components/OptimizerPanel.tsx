@@ -13,6 +13,9 @@ export default function OptimizerPanel() {
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
   const [ecoMode, setEcoMode] = useState(false);
 
+  const executedCount = state.contracts.filter(c => c.status === "AI Executed").length;
+  const emissionsKtons = 12.4 + executedCount * 2.1;
+
   // Mocking AI optimization events for bulk freight
   const aiEvents = [
     { message: "Rerouted Panamax to Dhamra to avoid 48hr port congestion" },
@@ -140,7 +143,7 @@ export default function OptimizerPanel() {
             CO2 Equivalents Saved
           </div>
           <div className="text-2xl font-mono text-white tabular-nums">
-            18.2 <span className="text-xs text-emerald-400 ml-1 transition-all duration-200">KILOTONS</span>
+            {emissionsKtons.toFixed(1)} <span className="text-xs text-emerald-400 ml-1 transition-all duration-200">KILOTONS</span>
           </div>
           <p className="text-[10px] font-mono text-neutral-500 uppercase transition-all duration-200">
             Via multi-voyage empty transit reduction
