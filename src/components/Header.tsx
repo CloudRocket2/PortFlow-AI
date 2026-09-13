@@ -76,7 +76,7 @@ export default function Header() {
     localStorage.setItem("pf_notifs", String(notificationsEnabled));
   }, [notificationsEnabled]);
   const notifRef = useRef<HTMLDivElement>(null);
-  const { state, isDeveloperMode, toggleDeveloperMode } = usePortFlowData();
+  const { state, isDeveloperMode, toggleDeveloperMode, isCycloneActive, toggleCyclone } = usePortFlowData();
   const { vessels, contracts, routes } = state;
 
   useEffect(() => {
@@ -366,19 +366,33 @@ export default function Header() {
                 </button>
               </div>
 
-              {/* Developer Mode */}
-              <div className="flex items-center justify-between py-2 border-b border-neutral-800/50">
-                <div>
-                  <p className="text-sm font-medium text-white">Developer Metrics</p>
-                  <p className="text-xs text-neutral-500 mt-0.5">Show Groq LPU latency & JSON payloads</p>
+                {/* Cyclone Kyarr Toggle */}
+                <div className="flex items-center justify-between pb-4 border-b border-neutral-800">
+                  <div>
+                    <p className="text-sm font-medium text-white">Simulate Cyclone Kyarr</p>
+                    <p className="text-xs text-neutral-500 mt-0.5">Toggle Category 4 weather anomaly in Bay of Bengal</p>
+                  </div>
+                  <button 
+                    onClick={toggleCyclone}
+                    className={`w-10 h-5 rounded-full relative transition-colors focus-ring ${isCycloneActive ? 'bg-emerald-500' : 'bg-neutral-700'}`}
+                  >
+                    <div className={`absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white transition-transform ${isCycloneActive ? 'translate-x-5' : 'translate-x-0'}`} />
+                  </button>
                 </div>
-                <button 
-                  onClick={toggleDeveloperMode}
-                  className={`w-10 h-5 rounded-full relative transition-colors focus-ring ${isDeveloperMode ? 'bg-fuchsia-500' : 'bg-neutral-700'}`}
-                >
-                  <div className={`absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white transition-transform ${isDeveloperMode ? 'translate-x-5' : 'translate-x-0'}`} />
-                </button>
-              </div>
+
+                {/* Developer Mode Toggle */}
+                <div className="flex items-center justify-between pb-4 border-b border-neutral-800">
+                  <div>
+                    <p className="text-sm font-medium text-white">Developer Metrics</p>
+                    <p className="text-xs text-neutral-500 mt-0.5">Show Groq LPU latency & JSON payloads</p>
+                  </div>
+                  <button 
+                    onClick={toggleDeveloperMode}
+                    className={`w-10 h-5 rounded-full relative transition-colors focus-ring ${isDeveloperMode ? 'bg-fuchsia-500' : 'bg-neutral-700'}`}
+                  >
+                    <div className={`absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white transition-transform ${isDeveloperMode ? 'translate-x-5' : 'translate-x-0'}`} />
+                  </button>
+                </div>
 
               {/* Reset Demo State */}
               <div className="pt-4 mt-2">

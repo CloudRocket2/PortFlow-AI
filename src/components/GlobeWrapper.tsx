@@ -7,9 +7,9 @@ import { ZoomIn, ZoomOut, RotateCcw, X, Anchor, ShieldAlert, Ship, Search } from
 import { usePortFlowData } from "@/context/PortFlowContext";
 
 // Pre-calculated intermediate waypoints so lines don't cross landmasses
-const WAYPOINTS: Record<string, [number, number][]> = {
+const WAYPOINTS_BASE: Record<string, [number, number][]> = {
   "Vladivostok, Russia": [[129.0, 34.0], [120.0, 20.0], [104.0, 1.5]],
-  "Newcastle, Australia": [[153.0, -20.0], [142.0, -10.0], [115.0, -8.0]],
+  "Newcastle, Australia": [[153.0, -20.0], [142.0, -10.0], [115.0, -8.0], [104.0, 1.5]],
   "Kalimantan, Indonesia": [[104.0, 1.5]],
   "Maputo, Mozambique": [[50.0, -15.0], [75.0, 0.0]],
   "Norfolk, US": [[-30.0, 35.0], [-5.0, 36.0], [15.0, 35.0], [32.0, 31.0], [43.0, 12.0], [60.0, 15.0]],
@@ -17,7 +17,7 @@ const WAYPOINTS: Record<string, [number, number][]> = {
 };
 
 export default function GlobeWrapper() {
-  const { state, selectedVoyageId, setSelectedVoyageId, isRedSeaClosed } = usePortFlowData();
+  const { state, selectedVoyageId, setSelectedVoyageId, isRedSeaClosed, isCycloneActive } = usePortFlowData();
   
   const [mounted, setMounted] = useState(false);
   const [hoveredNode, setHoveredNode] = useState<string | null>(null);
@@ -58,7 +58,17 @@ export default function GlobeWrapper() {
       const vessel = state.vessels.find(v => v.id === route.vesselId);
 
       const waypointKey = (isRedSeaClosed && origin.name === "Norfolk, US") ? "Norfolk, US_REROUTED" : origin.name;
-      const intermediate = WAYPOINTS[waypointKey] || [];
+      let intermediate = [...(WAYPOINTS_BASE[waypointKey] || [])];
+
+      // Apply Cyclone Kyarr evasion dynamically
+      if (isCycloneActive) {
+        if (["Vladivostok, Russia", "Newcastle, Australia", "Kalimantan, Indonesia"].includes(origin.name)) {
+          intermediate.push([93.0, 15.0]);
+        } else if (["Maputo, Mozambique", "Norfolk, US"].includes(origin.name)) {
+          intermediate.push([84.0, 14.0]);
+        }
+      }
+
       const isSelected = selectedVoyageId === c.id;
 
       return {
@@ -284,30 +294,53 @@ export default function GlobeWrapper() {
               ))
             }
           </Geographies>
+          
+          {/* 1. Meteorological Threat Zone (Cyclone Kyarr) */}
+          {isCycloneActive && (
+            <Marker coordinates={[88.5, 17.5]}>
+              {/* Animated radar rings (fixed geographical size) */}
+              <circle r={6} fill="#f59e0b" opacity={0.15} className="animate-ping" style={{ pointerEvents: "none" }} />
+              <circle r={4} fill="#f59e0b" opacity={0.2} className="animate-pulse" style={{ pointerEvents: "none" }} />
+              <circle r={2.5} fill="transparent" stroke="#f59e0b" strokeWidth={0.2} opacity={0.8} style={{ pointerEvents: "none" }} />
+              
+              <g transform={`translate(4, -4)`} style={{ pointerEvents: "none" }}>
+                <rect x="0" y="-1.5" width="22" height="2" fill="rgba(0,0,0,0.7)" rx="0.5" stroke="#f59e0b" strokeWidth="0.1" />
+                <text x="0.8" y="0" fill="#f59e0b" fontSize={1.1} fontWeight="bold" fontFamily="monospace" style={{ letterSpacing: "0.1px" }}>
+                  ⚠️ CYCLONE KYARR
+                </text>
+              </g>
+            </Marker>
+          )}
 
-          {/* 1. Geopolitical Threat Zone */}
+          {/* 2. Geopolitical Threat Zone */}
           <Marker coordinates={[43.0, 14.0]}>
             <circle 
-              r={25 / position.zoom} 
+              r={4} 
               fill="#f43f5e" 
               opacity={isRedSeaClosed ? 0.2 : 0} 
               className={isRedSeaClosed ? "animate-pulse" : ""}
               style={{ pointerEvents: "none", transition: "opacity 0.5s ease" }}
             />
             <circle 
-              r={25 / position.zoom} 
+              r={4} 
               fill="transparent" 
               stroke="#f43f5e" 
-              strokeWidth={1.5 / position.zoom}
+              strokeWidth={0.2}
               opacity={isRedSeaClosed ? 0.8 : 0}
               style={{ pointerEvents: "none", transition: "opacity 0.5s ease" }}
             />
             {isRedSeaClosed && (
-              <circle r="0" fill="none" stroke="#f43f5e" strokeWidth={1 / position.zoom} style={{ pointerEvents: "none" }}>
-                <animate attributeName="r" from="0" to={45 / position.zoom} dur="3s" repeatCount="indefinite" />
-                <animate attributeName="opacity" from="0.5" to="0" dur="3s" repeatCount="indefinite" />
+              <circle r="0" fill="none" stroke="#f43f5e" strokeWidth={0.1} style={{ pointerEvents: "none" }}>
+                <animate attributeName="r" from="0" to="4" dur="2s" repeatCount="indefinite" />
+                <animate attributeName="opacity" from="1" to="0" dur="2s" repeatCount="indefinite" />
               </circle>
             )}
+            <g transform={`translate(4, -4)`} style={{ pointerEvents: "none", opacity: isRedSeaClosed ? 1 : 0, transition: "opacity 0.5s ease" }}>
+              <rect x="0" y="-1.5" width="18" height="2" fill="rgba(0,0,0,0.7)" rx="0.5" stroke="#f43f5e" strokeWidth="0.1" />
+              <text x="0.8" y="0" fill="#f43f5e" fontSize={1.1} fontWeight="bold" fontFamily="monospace" style={{ letterSpacing: "0.1px" }}>
+                PIRACY / CONFLICT
+              </text>
+            </g>
           </Marker>
 
 

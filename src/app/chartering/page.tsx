@@ -17,7 +17,7 @@ export default function CharteringPage() {
   const [logs, setLogs] = useState<string[]>([]);
 
   const [result, setResult] = useState<any>(null);
-  const [erpStatus, setErpStatus] = useState<"idle" | "pushing" | "success">("idle");
+  const [erpStatus, setErpStatus] = useState<"idle" | "pushing" | "error" | "success">("idle");
   const [bookingId, setBookingId] = useState("");
 
   const handleOptimize = () => {
@@ -94,6 +94,13 @@ export default function CharteringPage() {
   };
 
   const handlePushToErp = () => {
+    setErpStatus("pushing");
+    setTimeout(() => {
+      setErpStatus("error"); // Simulated Exception
+    }, 1500);
+  };
+
+  const handleForceOverride = () => {
     setErpStatus("pushing");
     setTimeout(() => {
       setErpStatus("success");
@@ -277,39 +284,60 @@ export default function CharteringPage() {
                          <Database className="w-4 h-4 text-fuchsia-400" />
                          Draft ERP Booking Ready
                        </h2>
-                       <p className="text-xs font-mono text-neutral-500 uppercase tracking-widest mt-1">
-                         SAP Reference: {bookingId}
-                       </p>
                      </div>
-                     <button 
-                       onClick={handlePushToErp}
-                       disabled={erpStatus !== "idle"}
-                       className={`px-4 py-2 text-xs font-mono uppercase tracking-widest transition-all flex items-center gap-2 ${
-                         erpStatus === "success" 
-                           ? "bg-emerald-500/10 border border-emerald-500/30 text-emerald-400" 
-                           : erpStatus === "pushing"
-                             ? "bg-amber-500/10 border border-amber-500/30 text-amber-400"
-                             : "bg-fuchsia-500/10 border border-fuchsia-500/30 text-fuchsia-400 hover:bg-fuchsia-500/20"
-                       }`}
-                     >
-                       {erpStatus === "success" ? (
-                         <>
-                           <CheckCircle2 className="w-4 h-4" />
-                           Synced to SAP
-                         </>
-                       ) : erpStatus === "pushing" ? (
-                         <>
-                           <RefreshCcw className="w-4 h-4 animate-spin" />
-                           Pushing...
-                         </>
+                     <div className="flex items-center gap-4">
+                       <div>
+                         <p className="text-sm font-semibold text-white">Draft ERP Booking Ready</p>
+                         <p className="text-xs font-mono text-neutral-500 uppercase tracking-widest mt-1">
+                           SAP Reference: {bookingId}
+                         </p>
+                       </div>
+                       
+                       {erpStatus === "error" ? (
+                         <div className="flex flex-col items-end gap-2">
+                           <div className="bg-rose-500/10 border border-rose-500/20 px-3 py-1.5 rounded text-xs font-mono text-rose-400">
+                             [ERR_SAP_503] SAP REJECTED: Charterer Credit Limit Exceeded by $145,000.
+                           </div>
+                           <button 
+                             onClick={handleForceOverride}
+                             className="px-4 py-2 text-xs font-mono uppercase tracking-widest transition-all flex items-center gap-2 bg-rose-500 border border-rose-600 text-white hover:bg-rose-600 focus-ring shadow-[0_0_10px_rgba(244,63,94,0.3)] rounded-lg"
+                           >
+                             <ShieldAlert className="w-4 h-4" />
+                             Force Override & Push (VP Approval Req)
+                           </button>
+                         </div>
                        ) : (
-                         <>
-                           <Database className="w-4 h-4" />
-                           Approve & Push to SAP
-                         </>
+                         <button 
+                           onClick={handlePushToErp}
+                           disabled={erpStatus !== "idle"}
+                           className={`px-4 py-2 text-xs font-mono uppercase tracking-widest transition-all flex items-center gap-2 rounded-lg ${
+                             erpStatus === "success" 
+                               ? "bg-emerald-500/10 border border-emerald-500/30 text-emerald-400" 
+                               : erpStatus === "pushing"
+                                 ? "bg-amber-500/10 border border-amber-500/30 text-amber-400"
+                                 : "bg-fuchsia-500/10 border border-fuchsia-500/30 text-fuchsia-400 hover:bg-fuchsia-500/20"
+                           }`}
+                         >
+                           {erpStatus === "success" ? (
+                             <>
+                               <CheckCircle2 className="w-4 h-4" />
+                               Synced to SAP
+                             </>
+                           ) : erpStatus === "pushing" ? (
+                             <>
+                               <RefreshCcw className="w-4 h-4 animate-spin" />
+                               Processing...
+                             </>
+                           ) : (
+                             <>
+                               <Database className="w-4 h-4" />
+                               Approve & Push to SAP
+                             </>
+                           )}
+                         </button>
                        )}
-                     </button>
-                 </div>
+                   </div>
+                </div>
               </div>
 
             </div>

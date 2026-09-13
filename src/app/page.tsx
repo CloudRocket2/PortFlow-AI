@@ -15,7 +15,7 @@ const GlobeWrapper = dynamic(() => import("@/components/GlobeWrapper"), { ssr: f
 export default function DashboardPage() {
   const [bootSequence, setBootSequence] = useState(true);
   const [bootLog, setBootLog] = useState("Initializing PortFlow OS...");
-  const { state, syncErpOrders, isErpSyncing, hasSyncedErp } = usePortFlowData();
+  const { state, syncErpOrders, isErpSyncing, hasSyncedErp, erpSyncPhase } = usePortFlowData();
   const { vessels, contracts, routes } = state;
 
   useEffect(() => {
@@ -140,12 +140,12 @@ export default function DashboardPage() {
               {isErpSyncing ? (
                 <>
                   <RefreshCcw className="w-3.5 h-3.5 animate-spin" />
-                  Syncing SAP ERP...
+                  {erpSyncPhase}
                 </>
               ) : hasSyncedErp ? (
                 <>
                   <Database className="w-3.5 h-3.5" />
-                  ERP Data Synced
+                  Data Quality: 96.4%
                 </>
               ) : (
                 <>

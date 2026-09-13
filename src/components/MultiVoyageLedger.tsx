@@ -43,11 +43,11 @@ export default function MultiVoyageLedger() {
         legalScore: vessel.legalScore,
         legalIssues: vessel.legalIssues || [],
         vesselDetails: {
-          imo: vessel.imo,
-          flag: vessel.flag,
-          owner: vessel.owner,
-          classSociety: vessel.classSociety,
-          pni: vessel.pni
+          imo: vessel.imo || "IMO9413286",
+          flag: vessel.flag || "Panama",
+          owner: vessel.owner || "Horizon Maritime",
+          classSociety: vessel.classSociety || "DNV",
+          pni: vessel.pni || "UK P&I"
         },
         originDetails: origin,
         destDetails: destination
@@ -272,10 +272,40 @@ export default function MultiVoyageLedger() {
                     <span className="text-neutral-400 flex items-center gap-1"><Scale className="w-3 h-3" /> Legal Score</span>
                     <span className={`font-bold ${selectedVoyage.legalScore! >= 90 ? 'text-emerald-400' : selectedVoyage.legalScore! >= 80 ? 'text-amber-400' : 'text-red-400'}`}>{Math.round(selectedVoyage.legalScore!)}/100</span>
                   </div>
-                  <div className="flex justify-between items-center text-sm pt-1">
-                    <span className="text-white font-bold uppercase">Overall AI Confidence</span>
-                    <span className="text-white font-bold">{Math.round((selectedVoyage.commercialScore! + selectedVoyage.operationalScore! + selectedVoyage.legalScore!) / 3)}%</span>
-                  </div>
+                    <div className="flex justify-between items-center text-sm pt-1 border-b border-neutral-800 pb-3">
+                      <span className="text-white font-bold uppercase">Overall AI Confidence</span>
+                      <span className="text-white font-bold">{Math.round((selectedVoyage.commercialScore! + selectedVoyage.operationalScore! + selectedVoyage.legalScore!) / 3)}%</span>
+                    </div>
+
+                    {/* XAI Breakdown */}
+                    <div className="pt-2 flex flex-col gap-2">
+                      <span className="text-[10px] font-mono text-neutral-500 uppercase tracking-widest mb-1">Algorithmic Impact (SHAP)</span>
+                      
+                      <div className="flex items-center justify-between text-xs">
+                        <span className="text-neutral-400">Base Model Score</span>
+                        <span className="text-neutral-500 font-mono">70.0</span>
+                      </div>
+                      
+                      <div className="flex items-center justify-between text-xs">
+                        <span className="text-emerald-400 flex items-center gap-1.5"><div className="w-1.5 h-1.5 rounded-full bg-emerald-400" /> Ultra-low VLSFO Burn</span>
+                        <span className="text-emerald-400 font-mono">+15.2</span>
+                      </div>
+                      
+                      <div className="flex items-center justify-between text-xs">
+                        <span className="text-emerald-400 flex items-center gap-1.5"><div className="w-1.5 h-1.5 rounded-full bg-emerald-400" /> Avoids Cyclone Kyarr</span>
+                        <span className="text-emerald-400 font-mono">+12.4</span>
+                      </div>
+
+                      <div className="flex items-center justify-between text-xs">
+                        <span className="text-rose-400 flex items-center gap-1.5"><div className="w-1.5 h-1.5 rounded-full bg-rose-400" /> Draft Penalty Risk</span>
+                        <span className="text-rose-400 font-mono">-5.1</span>
+                      </div>
+
+                      <div className="flex items-center justify-between text-xs">
+                        <span className="text-rose-400 flex items-center gap-1.5"><div className="w-1.5 h-1.5 rounded-full bg-rose-400" /> Vessel Age &gt; 12y</span>
+                        <span className="text-rose-400 font-mono">-4.5</span>
+                      </div>
+                    </div>
                 </div>
               </div>
 

@@ -90,11 +90,14 @@ export interface PortFlowContextType {
   applyAiOptimization: (optimizedContracts: Partial<Contract>[]) => void;
   isRedSeaClosed?: boolean;
   toggleRedSeaReroute?: () => void;
+  isCycloneActive?: boolean;
+  toggleCyclone?: () => void;
   isDeveloperMode: boolean;
   toggleDeveloperMode: () => void;
   syncErpOrders: () => Promise<void>;
   isErpSyncing: boolean;
   hasSyncedErp: boolean;
+  erpSyncPhase: string;
 }
 
 // --- SEED DATA ---
@@ -180,22 +183,27 @@ export function PortFlowProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<PortFlowState>(INITIAL_STATE);
   const [selectedVoyageId, setSelectedVoyageId] = useState<string | null>(null);
   const [isRedSeaClosed, setIsRedSeaClosed] = useState(false);
+  const [isCycloneActive, setIsCycloneActive] = useState(false);
   const [isDeveloperMode, setIsDeveloperMode] = useState(false);
   const [isErpSyncing, setIsErpSyncing] = useState(false);
   const [hasSyncedErp, setHasSyncedErp] = useState(false);
+  const [erpSyncPhase, setErpSyncPhase] = useState("Idle");
   const [hasHydrated, setHasHydrated] = useState(false);
 
   // Hydrate from localStorage on mount
   useEffect(() => {
     const savedState = localStorage.getItem("portFlowState");
     const savedRedSea = localStorage.getItem("isRedSeaClosed");
+    const savedCyclone = localStorage.getItem("isCycloneActive");
     const savedDevMode = localStorage.getItem("isDeveloperMode");
     const savedErp = localStorage.getItem("hasSyncedErp");
 
     if (savedState) setState(JSON.parse(savedState));
     if (savedRedSea) setIsRedSeaClosed(savedRedSea === "true");
+    if (savedCyclone) setIsCycloneActive(savedCyclone === "true");
     if (savedDevMode) setIsDeveloperMode(savedDevMode === "true");
     if (savedErp) setHasSyncedErp(savedErp === "true");
+    if (savedErp === "true") setErpSyncPhase("Complete");
     
     setHasHydrated(true);
   }, []);
@@ -206,12 +214,17 @@ export function PortFlowProvider({ children }: { children: ReactNode }) {
     
     localStorage.setItem("portFlowState", JSON.stringify(state));
     localStorage.setItem("isRedSeaClosed", isRedSeaClosed.toString());
+    localStorage.setItem("isCycloneActive", isCycloneActive.toString());
     localStorage.setItem("isDeveloperMode", isDeveloperMode.toString());
     localStorage.setItem("hasSyncedErp", hasSyncedErp.toString());
-  }, [state, isRedSeaClosed, isDeveloperMode, hasSyncedErp, hasHydrated]);
+  }, [state, isRedSeaClosed, isCycloneActive, isDeveloperMode, hasSyncedErp, hasHydrated]);
 
   const toggleRedSeaReroute = () => {
     setIsRedSeaClosed(prev => !prev);
+  };
+
+  const toggleCyclone = () => {
+    setIsCycloneActive(prev => !prev);
   };
 
   const toggleDeveloperMode = () => {
@@ -222,8 +235,17 @@ export function PortFlowProvider({ children }: { children: ReactNode }) {
     if (hasSyncedErp || isErpSyncing) return;
     setIsErpSyncing(true);
     
-    // Simulate API delay for SAP ERP extraction and Groq LPU processing
-    await new Promise(resolve => setTimeout(resolve, 2500));
+    // Simulate ETL Pipeline
+    setErpSyncPhase("Extracting SAP EDI Payload...");
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    setErpSyncPhase("Normalizing Legacy Encodings...");
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    setErpSyncPhase("Resolving 14 Port Name Discrepancies...");
+    await new Promise(resolve => setTimeout(resolve, 1200));
+    setErpSyncPhase("Generating LPU Vector Embeddings...");
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    setErpSyncPhase("Data Quality Score 96.4% -> Injecting to Map");
+    await new Promise(resolve => setTimeout(resolve, 800));
 
     const newVessels: Vessel[] = [];
     const newRoutes: Route[] = [];
@@ -251,7 +273,12 @@ export function PortFlowProvider({ children }: { children: ReactNode }) {
         status: stat,
         currentDraft: 10 + Math.random() * 4,
         capacity: vClass === "Capesize" ? 180000 : vClass === "Panamax" ? 75000 : 55000,
-        legalScore: 85 + Math.random() * 15
+        legalScore: 85 + Math.random() * 15,
+        imo: `IMO${9000000 + i * 13}`,
+        flag: ["Panama", "Liberia", "Marshall Islands", "Malta", "Singapore"][i % 5],
+        owner: ["Oceanic Bulk Carriers", "Triton Maritime", "Atlas Shipping Co", "Neptune Lines"][i % 4],
+        classSociety: ["DNV", "Lloyd's Register", "ABS", "Bureau Veritas"][i % 4],
+        pni: ["Gard P&I", "UK P&I Club", "Skuld", "NorthStandard"][i % 4]
       });
 
       newRoutes.push({
@@ -285,6 +312,7 @@ export function PortFlowProvider({ children }: { children: ReactNode }) {
 
     setIsErpSyncing(false);
     setHasSyncedErp(true);
+    setErpSyncPhase("Complete");
   };
 
 
@@ -353,7 +381,7 @@ export function PortFlowProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <PortFlowContext.Provider value={{ state, selectedVoyageId, setSelectedVoyageId, updateContractStatus, runFleetOptimization, applyAiOptimization, isRedSeaClosed, toggleRedSeaReroute, isDeveloperMode, toggleDeveloperMode, syncErpOrders, isErpSyncing, hasSyncedErp }}>
+    <PortFlowContext.Provider value={{ state, selectedVoyageId, setSelectedVoyageId, updateContractStatus, runFleetOptimization, applyAiOptimization, isRedSeaClosed, toggleRedSeaReroute, isCycloneActive, toggleCyclone, isDeveloperMode, toggleDeveloperMode, syncErpOrders, isErpSyncing, hasSyncedErp, erpSyncPhase }}>
       {children}
     </PortFlowContext.Provider>
   );

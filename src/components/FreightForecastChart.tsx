@@ -216,6 +216,14 @@ export default function FreightForecastChart() {
                 <strong>Action:</strong> Front-load Capesize Q2 volumes before May. Shift July/August allocations to Panamax vessels to avoid structural lightering penalties at Sagar.
               </span>
             )}
+
+            {/* Financial Hedging Action (New) */}
+            {isRedSeaClosed && viewMode === 'short-term' && (
+              <div className="mt-2 bg-rose-500/10 border border-rose-500/30 rounded-lg p-3 flex flex-col gap-1">
+                <span className="text-xs font-mono text-rose-400 uppercase tracking-widest font-bold">HEDGE RECOMMENDATION:</span>
+                <span className="text-sm text-rose-300">Execute purchase of <strong>$2.4M in Q3 Capesize FFAs</strong> (Forward Freight Agreements) via SGX. Locks in current baseline rates and physically hedges against the predicted 45% spot rate spike.</span>
+              </div>
+            )}
           </div>
 
           {/* Model Inputs Legend */}
